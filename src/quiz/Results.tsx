@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check } from 'lucide-react'
+import { Check, Quote } from 'lucide-react'
 import type { QuizAnswers, Therapist } from '../types'
-import type { MatchResult } from '../lib/matching'
+import { quoteFromAnswers, type MatchResult } from '../lib/matching'
 import { topicById } from '../data/topics'
 import { experienceLabel, formatPrice } from '../lib/format'
 import { track } from '../lib/analytics'
+import { clarityVars } from '../lib/clarity'
+import { useCalmMotion } from '../care/CareContext'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -38,6 +40,29 @@ function Avatar({ therapist }: { therapist: Therapist }) {
         }}
       />
     </span>
+  )
+}
+
+/**
+ * Проявление «из тумана в фокус»: --clarity 0 → 1 после монтирования
+ * (стаггер задаётся снаружи). При calmMotion — сразу финальное состояние.
+ */
+function ClarityIn({ delay, children }: { delay: number; children: ReactNode }) {
+  const calmMotion = useCalmMotion()
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setRevealed(true), delay)
+    return () => window.clearTimeout(id)
+  }, [delay])
+
+  // При calmMotion ясность полная с первого кадра — без переходов
+  const clarity = calmMotion || revealed ? 1 : 0
+
+  return (
+    <div className="clarity-reveal relative h-full" style={clarityVars(clarity)}>
+      {children}
+    </div>
   )
 }
 
@@ -107,10 +132,12 @@ export default function Results({
       </p>
 
       <div className="mt-8 grid gap-5 md:grid-cols-3">
-        {ranked.slice(0, visible).map((r, i) => (
+        {ranked.slice(0, visible).map((r, i) => {
+          const quote = quoteFromAnswers(r.therapist, answers, i)
+          return (
+          <ClarityIn key={r.therapist.id} delay={80 + (i % 3) * 150}>
           <motion.article
-            key={r.therapist.id}
-            className={`card relative flex flex-col p-5 ${i === 0 ? 'ring-2 ring-sun/70' : ''}`}
+            className={`card relative flex h-full flex-col p-5 ${i === 0 ? 'ring-2 ring-sun/70' : ''}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: Math.min(i, 2) * 0.08, ease: EASE }}
@@ -136,6 +163,13 @@ export default function Results({
                 </p>
               </div>
             </div>
+
+            {quote && (
+              <p className="mt-4 flex items-start gap-2 rounded-xl bg-sky/25 px-3 py-2 text-[13.5px] leading-snug">
+                <Quote size={14} className="mt-0.5 shrink-0 text-ink-soft" aria-hidden />
+                <span>{quote}</span>
+              </p>
+            )}
 
             <p className="mt-4 text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
               Почему именно {r.therapist.gender === 'f' ? 'она' : 'он'}
@@ -187,7 +221,9 @@ export default function Results({
               )}
             </AnimatePresence>
           </motion.article>
-        ))}
+          </ClarityIn>
+          )
+        })}
       </div>
 
       <div className="mt-10 flex flex-col items-center gap-6">

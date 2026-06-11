@@ -1,4 +1,4 @@
-import type { QuizAnswers, Therapist } from '../types'
+import type { QuizAnswers, Therapist, TimePref, TopicId } from '../types'
 import { topicById } from '../data/topics'
 import { experienceLabel } from './format'
 
@@ -108,4 +108,69 @@ export function explainMatch(t: Therapist, a: QuizAnswers): string[] {
   }
 
   return reasons.slice(0, 3)
+}
+
+/** Родительный падеж имени: «у Дарьи», «у Павла». Покрывает все имена каталога. */
+function genitiveName(name: string): string {
+  if (name === 'Павел') return 'Павла'
+  if (name.endsWith('я')) return `${name.slice(0, -1)}и`
+  if (name.endsWith('а')) {
+    const prev = name[name.length - 2]
+    return `${name.slice(0, -1)}${'гкхжчшщ'.includes(prev) ? 'и' : 'ы'}`
+  }
+  if (name.endsWith('й')) return `${name.slice(0, -1)}я`
+  return `${name}а`
+}
+
+/**
+ * Одна человечная строка, которая цитирует ответы пользователя и связывает
+ * их с конкретным психологом. index карточки смещает выбор среди применимых
+ * вариантов, чтобы у трёх карточек по возможности были разные строки.
+ */
+export function quoteFromAnswers(t: Therapist, a: QuizAnswers, index = 0): string | null {
+  /** Винительный падеж тем: «Вы отметили тревогу…» */
+  const topicAccusative: Record<TopicId, string> = {
+    anxiety: 'тревогу',
+    burnout: 'выгорание',
+    relationships: 'сложности в отношениях',
+    'self-esteem': 'тему самооценки',
+    loss: 'потерю и перемены',
+    family: 'семейные вопросы',
+    unknown: 'что сейчас тяжело',
+  }
+
+  const timeLabel: Record<TimePref, string> = {
+    morning: 'утром',
+    day: 'днём',
+    evening: 'вечером',
+    weekend: 'в выходные',
+  }
+
+  const firstName = t.name.split(' ')[0]
+  const variants: string[] = []
+
+  const matchedTopic = a.topics.find((topic) => t.topics.includes(topic))
+  if (matchedTopic) {
+    variants.push(
+      matchedTopic === 'unknown'
+        ? `Вы отметили, что сейчас тяжело\u00A0— ${firstName} работает именно с этим`
+        : `Вы отметили ${topicAccusative[matchedTopic]}\u00A0— ${firstName} работает именно с этим`,
+    )
+  }
+
+  if (a.hadTherapy === false) {
+    variants.push(`Вы впервые в терапии\u00A0— ${firstName} бережно помогает освоиться`)
+  }
+
+  if (a.duration === 'always' || a.duration === 'year') {
+    variants.push(`Вы живёте с этим давно\u00A0— ${firstName} умеет работать с долгими историями`)
+  }
+
+  const matchedTime = a.schedule.find((s) => t.schedule.includes(s))
+  if (matchedTime) {
+    variants.push(`Вам удобно ${timeLabel[matchedTime]}\u00A0— у ${genitiveName(firstName)} как раз есть это время`)
+  }
+
+  if (variants.length === 0) return null
+  return variants[index % variants.length]
 }
