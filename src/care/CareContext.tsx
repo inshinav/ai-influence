@@ -36,19 +36,6 @@ const DEFAULTS: CareSettings = {
   sound: false,
 }
 
-const STORAGE_KEY = 'yasno-care-v1'
-
-function load(): CareSettings {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return DEFAULTS
-    const parsed = JSON.parse(raw) as Partial<CareSettings>
-    return { ...DEFAULTS, ...parsed }
-  } catch {
-    return DEFAULTS
-  }
-}
-
 type CareContextValue = {
   settings: CareSettings
   setSetting: <K extends keyof CareSettings>(key: K, value: CareSettings[K]) => void
@@ -61,20 +48,13 @@ type CareContextValue = {
 const CareContext = createContext<CareContextValue | null>(null)
 
 export function CareProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<CareSettings>(load)
+  // Состояние только в React — прототип ничего не пишет на устройство
+  const [settings, setSettings] = useState<CareSettings>(DEFAULTS)
   const systemReduced = useReducedMotion() ?? false
 
   const setSetting = useCallback(
     <K extends keyof CareSettings>(key: K, value: CareSettings[K]) => {
-      setSettings((prev) => {
-        const next = { ...prev, [key]: value }
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-        } catch {
-          /* приватный режим — живём без сохранения */
-        }
-        return next
-      })
+      setSettings((prev) => ({ ...prev, [key]: value }))
     },
     [],
   )

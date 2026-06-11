@@ -159,7 +159,7 @@ export default function CarePanel() {
               Панель заботы
             </h3>
             <p className="mt-1 text-[13px] leading-snug text-ink-soft">
-              {'Настройте сайт под себя — всё сохранится на этом устройстве'}
+              {'Настройте сайт под себя — действует, пока открыта страница'}
             </p>
 
             <div className="mt-4 flex flex-col gap-1">

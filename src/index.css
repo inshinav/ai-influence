@@ -1,25 +1,40 @@
 @import 'tailwindcss';
 
-/* ── Дизайн-система «Прояснение» ─────────────────────────────── */
+/* ── Бренд-система «Ясное небо 2.0» ───────────────────────────────
+   Настоящий бренд Ясно, сдвинутый в 2027: белый воздух, фирменный
+   голубой, гротеск, рукописные завитки. Свет и ясность как материал. */
 
 @theme {
-  --color-paper: #fbfaf7;
-  --color-ink: #15171c;
-  --color-ink-soft: #5b5f68;
-  --color-line: rgba(21, 23, 28, 0.08);
-  --color-sun: #ffc83d;
-  --color-sun-deep: #f5a623;
-  --color-peach: #ffb39b;
-  --color-sky: #bfd9ff;
-  --color-mist: #edeff2;
-  --color-ok: #2e7d5b;
+  /* Канонические токены */
+  --color-white: #ffffff;
+  --color-mist: #f4f7fa;
+  --color-ink: #16181d;
+  --color-ink-soft: #5a6573;
+  --color-line: rgba(22, 24, 29, 0.07);
 
-  --font-display: 'Piazzolla', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-sky: #279be0; /* фирменный голубой Ясно — акценты, графика, ссылки */
+  --color-sky-deep: #1873b5; /* CTA-фон: AA-контраст с белым текстом (5.0:1) */
+  --color-sky-deeper: #135f96; /* hover/нажатие CTA */
+  --color-sky-soft: #d6ecfb; /* подложки, чипы, подсветки */
+  --color-azure: #5fc2f0; /* светлый край градиентов неба */
+  --color-dawn: #ffd9a8; /* тёплый рассветный край — дозированно, только в атмосфере */
+  --color-ok: #1fa971;
+
+  /* Алиасы прежних имён — весь существующий код переезжает на новый бренд */
+  --color-paper: #ffffff;
+  --color-sun: #1873b5; /* бывший жёлтый CTA → глубокое небо */
+  --color-sun-deep: #135f96;
+  --color-peach: #5fc2f0; /* бывшие рассветные градиенты → лазурь */
+
+  --font-display: 'Geologica', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand: 'Caveat', 'Segoe Script', cursive;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --shadow-lift: 0 12px 32px rgba(21, 23, 28, 0.08);
+  --shadow-lift: 0 16px 40px rgba(22, 24, 29, 0.1);
+  --shadow-soft: 0 1px 2px rgba(22, 24, 29, 0.04), 0 8px 24px rgba(22, 24, 29, 0.05);
+  --shadow-sky: 0 8px 28px rgba(39, 155, 224, 0.35);
 }
 
 /* «Станет ясно»: 0 = туман, 1 = полная ясность. Регистрируем для плавных переходов. */
@@ -29,19 +44,24 @@
   initial-value: 0;
 }
 
-/* Алиасы из брифа — для рукописного CSS */
+/* Алиасы для рукописного CSS */
 :root {
   --clarity: 0;
-  --paper: #fbfaf7;
-  --ink: #15171c;
-  --ink-soft: #5b5f68;
-  --line: rgba(21, 23, 28, 0.08);
-  --sun: #ffc83d;
-  --sun-deep: #f5a623;
-  --peach: #ffb39b;
-  --sky: #bfd9ff;
-  --mist: #edeff2;
-  --ok: #2e7d5b;
+  --paper: #ffffff;
+  --ink: #16181d;
+  --ink-soft: #5a6573;
+  --line: rgba(22, 24, 29, 0.07);
+  --sky: #279be0;
+  --sky-deep: #1873b5;
+  --sky-soft: #d6ecfb;
+  --azure: #5fc2f0;
+  --dawn: #ffd9a8;
+  --mist: #f4f7fa;
+  --ok: #1fa971;
+  /* прежние имена */
+  --sun: #1873b5;
+  --sun-deep: #135f96;
+  --peach: #5fc2f0;
 }
 
 @layer base {
@@ -51,15 +71,15 @@
   }
 
   body {
-    @apply bg-paper text-ink font-sans antialiased;
+    @apply bg-white text-ink font-sans antialiased;
     font-size: 17px;
-    line-height: 1.6;
+    line-height: 1.65;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: var(--sun);
-    color: var(--ink);
+    background: var(--sky);
+    color: #fff;
   }
 
   :focus-visible {
@@ -71,16 +91,16 @@
   h1,
   h2 {
     font-family: var(--font-display);
-    font-weight: 550;
-    letter-spacing: -0.02em;
-    line-height: 1.08;
-    font-optical-sizing: auto;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
   }
 
   h3,
   h4 {
+    font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -110,10 +130,10 @@
 
   /* Больше контраста: темнее вторичный текст и линии (перекрывает токены темы) */
   html.care-contrast {
-    --color-ink-soft: #41454d;
-    --color-line: rgba(21, 23, 28, 0.22);
-    --ink-soft: #41454d;
-    --line: rgba(21, 23, 28, 0.22);
+    --color-ink-soft: #3f4856;
+    --color-line: rgba(22, 24, 29, 0.22);
+    --ink-soft: #3f4856;
+    --line: rgba(22, 24, 29, 0.22);
   }
 
   /* Крупнее текст */
@@ -123,92 +143,125 @@
 }
 
 @layer components {
-  /* Кнопки */
+  /* Кнопки: голубые pill, белый текст (AA на sky-deep) */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sun text-ink font-semibold;
-    padding: 16px 28px;
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold text-white;
+    background: var(--sky-deep);
+    padding: 15px 28px;
     font-size: 16px;
     line-height: 1.2;
     border: none;
     cursor: pointer;
+    box-shadow: 0 2px 10px rgba(24, 115, 181, 0.25);
     transition:
-      background-color 0.2s var(--ease-out-soft),
-      transform 0.2s var(--ease-out-soft),
-      box-shadow 0.2s var(--ease-out-soft);
+      background-color 0.25s var(--ease-out-soft),
+      transform 0.25s var(--ease-out-soft),
+      box-shadow 0.25s var(--ease-out-soft);
   }
   .btn-primary:hover {
     background: var(--sun-deep);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(245, 166, 35, 0.35);
+    box-shadow: var(--shadow-sky);
   }
   .btn-primary:active {
     transform: scale(0.98);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-ink font-medium;
-    padding: 15px 26px;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white font-medium text-ink;
+    padding: 14px 26px;
     font-size: 16px;
     line-height: 1.2;
     border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(22, 24, 29, 0.03);
     cursor: pointer;
     transition:
-      background-color 0.2s var(--ease-out-soft),
-      border-color 0.2s var(--ease-out-soft);
+      background-color 0.25s var(--ease-out-soft),
+      border-color 0.25s var(--ease-out-soft),
+      transform 0.25s var(--ease-out-soft),
+      box-shadow 0.25s var(--ease-out-soft);
   }
   .btn-secondary:hover {
     background: var(--mist);
+    border-color: rgba(22, 24, 29, 0.14);
+    transform: translateY(-1px);
   }
   .btn-secondary:active {
     transform: scale(0.98);
   }
 
-  /* Чипы: выбранное состояние — инверсия в ink, не жёлтый */
+  /* Чипы: стекло; hover подсвечивается небом; выбранное — инверсия в ink */
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full bg-mist text-ink;
+    @apply inline-flex items-center gap-2 rounded-full text-ink;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
     padding: 10px 18px;
     font-size: 15px;
     font-weight: 500;
     line-height: 1.3;
-    border: 1px solid transparent;
     cursor: pointer;
     transition:
-      background-color 0.2s var(--ease-out-soft),
-      color 0.2s var(--ease-out-soft),
-      transform 0.2s var(--ease-out-soft);
+      background-color 0.25s var(--ease-out-soft),
+      border-color 0.25s var(--ease-out-soft),
+      color 0.25s var(--ease-out-soft),
+      transform 0.25s var(--ease-out-soft),
+      box-shadow 0.25s var(--ease-out-soft);
   }
   .chip:hover {
-    background: #e3e6ea;
+    background: var(--sky-soft);
+    border-color: rgba(39, 155, 224, 0.35);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(39, 155, 224, 0.18);
   }
   .chip:active {
     transform: scale(0.97);
   }
   .chip-active {
     background: var(--ink) !important;
-    color: var(--paper) !important;
+    border-color: var(--ink) !important;
+    color: #fff !important;
   }
 
-  /* Карточки */
+  /* Карточки: всегда лёгкая глубина, на hover — подъём */
   .card {
     @apply bg-white;
     border: 1px solid var(--line);
-    border-radius: 24px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
     transition:
-      box-shadow 0.25s var(--ease-out-soft),
-      transform 0.25s var(--ease-out-soft);
+      box-shadow 0.3s var(--ease-out-soft),
+      transform 0.3s var(--ease-out-soft);
   }
   .card-hover:hover {
     box-shadow: var(--shadow-lift);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+  }
+
+  /* Стекло */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: var(--shadow-soft);
   }
 
   /* Eyebrow-лейбл */
   .eyebrow {
-    @apply text-ink-soft;
+    @apply text-sky;
+    font-family: var(--font-display);
     font-size: 12.5px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
+  }
+
+  /* Рукописный акцент в духе фирменных надписей Ясно */
+  .hand {
+    font-family: var(--font-hand);
+    color: var(--sky);
+    font-weight: 600;
+    transform: rotate(-2deg);
   }
 
   /* Контейнер */
@@ -225,9 +278,9 @@
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(60% 50% at 20% 30%, rgba(237, 239, 242, 0.95), transparent 70%),
-      radial-gradient(55% 45% at 80% 20%, rgba(251, 250, 247, 0.9), transparent 70%),
-      radial-gradient(70% 60% at 50% 80%, rgba(237, 239, 242, 0.92), transparent 72%);
+      radial-gradient(60% 50% at 20% 30%, rgba(244, 247, 250, 0.96), transparent 70%),
+      radial-gradient(55% 45% at 80% 20%, rgba(255, 255, 255, 0.92), transparent 70%),
+      radial-gradient(70% 60% at 50% 80%, rgba(232, 240, 247, 0.94), transparent 72%);
     opacity: calc(0.92 - var(--clarity) * 0.92);
     backdrop-filter: blur(calc((1 - var(--clarity)) * 9px));
     transition:
@@ -245,13 +298,13 @@
       opacity 1.1s var(--ease-out-soft);
   }
 
-  /* Зерно поверх градиента */
+  /* Зерно поверх градиента — едва заметная фактура воздуха */
   .grain::after {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.4;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
