@@ -43,7 +43,7 @@ export default function StepMethod({
             sub={o.hint}
             badge={
               o.recommended ? (
-                <span className="rounded-full bg-sun px-2 py-0.5 text-[11px] font-semibold text-ink">
+                <span className="rounded-full bg-sky-soft px-2 py-0.5 text-[11px] font-semibold text-ink">
                   Рекомендуем
                 </span>
               ) : undefined

@@ -23,7 +23,7 @@ const SLIDER_CSS = `
 .clearing-range::-webkit-slider-runnable-track {
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--mist), rgba(255, 200, 61, 0.4));
+  background: linear-gradient(90deg, var(--mist), rgba(39, 155, 224, 0.35));
 }
 .clearing-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -46,7 +46,7 @@ const SLIDER_CSS = `
 .clearing-range::-moz-range-track {
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--mist), rgba(255, 200, 61, 0.4));
+  background: linear-gradient(90deg, var(--mist), rgba(39, 155, 224, 0.35));
 }
 .clearing-range::-moz-range-thumb {
   width: 28px;

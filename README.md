@@ -12,7 +12,7 @@ npm run build    # production-сборка без ошибок TypeScript
 ```
 
 Стек: Vite · React 18 · TypeScript (strict) · Tailwind CSS v4 · motion · lucide-react.
-Без UI-китов — весь визуал кастомный. Шрифты: Piazzolla (display) + Onest (UI), Google Fonts.
+Без UI-китов — весь визуал кастомный. Бренд «Ясное небо 2.0»: белый воздух, фирменный голубой #279BE0 (CTA на #1873B5 — AA с белым), Geologica (display) + Inter (body) + Caveat (рукописные завитки-подписи в духе Ясно).
 
 ## Система «Станет ясно»
 

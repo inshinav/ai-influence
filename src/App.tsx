@@ -2,15 +2,15 @@ import { useCallback, useState } from 'react'
 import type { QuizLaunch, Therapist, TopicId } from './types'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import BigStat from './components/BigStat'
 import PressMarquee from './components/PressMarquee'
 import HowItWorks from './components/HowItWorks'
 import TherapistsSection from './components/TherapistsSection'
 import BreathWidget from './components/BreathWidget'
 import ClearingSection from './clearing/ClearingSection'
-import Pricing from './components/Pricing'
 import SelectionFunnel from './components/SelectionFunnel'
+import Pricing from './components/Pricing'
 import Reviews from './components/Reviews'
-import BigStat from './components/BigStat'
 import FAQ from './components/FAQ'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
@@ -18,6 +18,11 @@ import StickyCTA from './components/StickyCTA'
 import CarePanel from './care/CarePanel'
 import QuizOverlay from './quiz/QuizOverlay'
 
+/**
+ * Драматургия страницы — лестница уверенности: каждая секция снимает
+ * конкретный страх (это не для меня → дорого → не поможет → сложно начать)
+ * и заканчивается микро-входом в воронку.
+ */
 export default function App() {
   const [launch, setLaunch] = useState<QuizLaunch | null>(null)
 
@@ -33,17 +38,25 @@ export default function App() {
     <>
       <Header onOpenQuiz={() => openQuiz('header')} />
       <main>
+        {/* Страх «это не для меня»: эмоциональное узнавание + мгновенный вход */}
         <Hero onOpenQuiz={(topic) => openQuiz(topic ? 'hero_chip' : 'hero', topic)} />
+        {/* «Я один такой»: живое доказательство масштаба */}
+        <BigStat />
         <PressMarquee />
+        {/* «Сложно начать»: подбор за 2 минуты, видно до регистрации */}
         <HowItWorks />
-        <TherapistsSection onBook={bookTherapist} />
+        {/* «Кот в мешке»: открытые анкеты до записи */}
+        <TherapistsSection onBook={bookTherapist} onOpenQuiz={() => openQuiz('therapists_cta')} />
+        {/* Почувствовать продукт до покупки */}
         <BreathWidget onOpenQuiz={() => openQuiz('breath_widget')} />
         <ClearingSection onOpenQuiz={(topic) => openQuiz('clearing_test', topic)} />
-        <Pricing />
+        {/* «Дорого» и «не поможет»: прозрачность отбора и цены */}
         <SelectionFunnel />
-        <Reviews />
-        <BigStat onOpenQuiz={() => openQuiz('big_stat')} />
+        <Pricing onOpenQuiz={() => openQuiz('pricing_cta')} />
+        {/* «Не поможет»: живые истории результата */}
+        <Reviews onOpenQuiz={() => openQuiz('reviews_cta')} />
         <FAQ />
+        {/* Пик уверенности: лёгкий быстрый старт */}
         <FinalCTA onOpenQuiz={() => openQuiz('final_cta')} />
       </main>
       <Footer />

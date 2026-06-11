@@ -7,14 +7,14 @@ const W = 1080
 const H = 1350
 const PAD = 96
 
-const INK = '#15171c'
-const INK_SOFT = '#5b5f68'
-const PAPER = '#fbfaf7'
-const SUN = '#ffc83d'
-const LINE = 'rgba(21, 23, 28, 0.12)'
+const INK = '#16181d'
+const INK_SOFT = '#5a6573'
+const PAPER = '#ffffff'
+const SKY = '#279be0'
+const LINE = 'rgba(22, 24, 29, 0.12)'
 
-const FONT_DISPLAY = 'Piazzolla, Georgia, "Times New Roman", serif'
-const FONT_SANS = 'Onest, system-ui, sans-serif'
+const FONT_DISPLAY = 'Geologica, Inter, system-ui, sans-serif'
+const FONT_SANS = 'Inter, system-ui, sans-serif'
 
 export type ResultCardOptions = {
   /** Название теста, например «Уровень тревоги» */
@@ -77,10 +77,10 @@ function spaced(text: string): string {
 }
 
 export async function downloadResultCard(opts: ResultCardOptions): Promise<void> {
-  // Дожидаемся шрифтов документа, чтобы Piazzolla/Onest попали в карточку
+  // Дожидаемся шрифтов документа, чтобы Geologica/Inter попали в карточку
   try {
     await Promise.all([
-      document.fonts.load(`550 72px ${FONT_DISPLAY}`),
+      document.fonts.load(`650 72px ${FONT_DISPLAY}`),
       document.fonts.load(`400 34px ${FONT_SANS}`),
       document.fonts.load(`600 26px ${FONT_SANS}`),
       document.fonts.ready,
@@ -98,19 +98,19 @@ export async function downloadResultCard(opts: ResultCardOptions): Promise<void>
   // Бумага + мягкий рассветный градиент (sun / peach / sky с низкой альфой)
   ctx.fillStyle = PAPER
   ctx.fillRect(0, 0, W, H)
-  glow(ctx, W * 0.82, H * 0.12, 640, 'rgba(255, 200, 61, 0.20)', 'rgba(255, 200, 61, 0)')
-  glow(ctx, W * 0.12, H * 0.34, 560, 'rgba(255, 179, 155, 0.16)', 'rgba(255, 179, 155, 0)')
-  glow(ctx, W * 0.5, H * 0.97, 700, 'rgba(191, 217, 255, 0.22)', 'rgba(191, 217, 255, 0)')
+  glow(ctx, W * 0.82, H * 0.12, 640, 'rgba(39, 155, 224, 0.18)', 'rgba(39, 155, 224, 0)')
+  glow(ctx, W * 0.12, H * 0.34, 560, 'rgba(95, 194, 240, 0.16)', 'rgba(95, 194, 240, 0)')
+  glow(ctx, W * 0.5, H * 0.97, 700, 'rgba(255, 217, 168, 0.20)', 'rgba(255, 217, 168, 0)')
 
   ctx.textBaseline = 'alphabetic'
 
   // Логотип «ясно·» — жёлтая точка после серифного слова
   ctx.fillStyle = INK
-  ctx.font = `550 64px ${FONT_DISPLAY}`
+  ctx.font = `800 64px ${FONT_DISPLAY}`
   const logoBaseline = PAD + 52
-  ctx.fillText('ясно', PAD, logoBaseline)
-  const logoWidth = ctx.measureText('ясно').width
-  ctx.fillStyle = SUN
+  ctx.fillText('ЯСНО', PAD, logoBaseline)
+  const logoWidth = ctx.measureText('ЯСНО').width
+  ctx.fillStyle = SKY
   ctx.beginPath()
   ctx.arc(PAD + logoWidth + 22, logoBaseline - 9, 11, 0, Math.PI * 2)
   ctx.fill()
@@ -122,7 +122,7 @@ export async function downloadResultCard(opts: ResultCardOptions): Promise<void>
 
   // Заголовок результата
   ctx.fillStyle = INK
-  ctx.font = `550 72px ${FONT_DISPLAY}`
+  ctx.font = `650 72px ${FONT_DISPLAY}`
   const titleLines = wrapLines(ctx, opts.title, W - PAD * 2, 3)
   let y = 430
   for (const line of titleLines) {

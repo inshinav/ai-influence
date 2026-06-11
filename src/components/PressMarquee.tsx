@@ -3,11 +3,11 @@ import { useCalmMotion } from '../care/CareContext'
 
 /** Стилизованные текстовые «логотипы» — без чужих графических знаков */
 const STYLE: Record<string, string> = {
-  Forbes: 'font-display font-semibold',
+  Forbes: 'font-display font-bold',
   РБК: 'font-bold tracking-wide',
-  'Афиша Daily': 'font-display italic',
+  'Афиша Daily': 'font-medium tracking-wide',
   'Т—Ж': 'font-extrabold',
-  'Inc.': 'font-display',
+  'Inc.': 'font-display font-semibold',
   'VC.ru': 'font-bold',
 }
 

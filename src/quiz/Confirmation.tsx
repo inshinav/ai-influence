@@ -53,7 +53,7 @@ export default function Confirmation({
         className="absolute -top-20 left-1/2 -z-10 h-72 w-[560px] max-w-full -translate-x-1/2 rounded-full opacity-50 blur-3xl"
         style={{
           background:
-            'radial-gradient(circle at 30% 50%, rgba(255,200,61,0.45), transparent 65%), radial-gradient(circle at 70% 50%, rgba(191,217,255,0.5), transparent 65%)',
+            'radial-gradient(circle at 30% 50%, rgba(95,194,240,0.40), transparent 65%), radial-gradient(circle at 70% 50%, rgba(214,236,251,0.7), transparent 65%), radial-gradient(circle at 50% 95%, rgba(255,217,168,0.25), transparent 60%)',
         }}
       />
 

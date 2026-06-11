@@ -32,8 +32,8 @@ export default function Footer() {
       <div className="container-x">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,2fr)]">
           <div>
-            <a href="#hero" className="text-[22px] font-semibold tracking-tight" aria-label="Ясно — к началу страницы">
-              ясно<span className="font-bold text-sun">·</span>
+            <a href="#hero" className="font-display text-[20px] font-extrabold uppercase tracking-[-0.01em]" aria-label="Ясно — к началу страницы">
+              ЯСНО<span className="text-sky">•</span>
             </a>
             <p className="mt-3 max-w-[260px] text-[15px] text-ink-soft">
               Онлайн-психотерапия, которой можно доверять

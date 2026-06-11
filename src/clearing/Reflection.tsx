@@ -21,7 +21,7 @@ export default function Reflection({ text }: { text: string }) {
       transition={{ duration: calm ? 0 : 0.45, ease: EASE }}
       className="flex items-start gap-2.5"
     >
-      <Sparkles className="mt-1 h-4 w-4 shrink-0 text-sun-deep" aria-hidden="true" />
+      <Sparkles className="mt-1 h-4 w-4 shrink-0 text-sky" aria-hidden="true" />
       <span className="text-[15px] leading-relaxed text-ink-soft">{text}</span>
     </motion.p>
   )

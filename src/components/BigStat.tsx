@@ -1,58 +1,140 @@
 import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'motion/react'
-import { track } from '../lib/analytics'
+import { AnimatePresence, motion, useInView } from 'motion/react'
 import { useCalmMotion } from '../care/CareContext'
+import { reveal, revealParent, VIEWPORT_ONCE } from '../lib/motionPresets'
 
-export default function BigStat({ onOpenQuiz }: { onOpenQuiz: () => void }) {
-  const reduced = useCalmMotion()
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+/**
+ * Живое доказательство масштаба: не статичные цифры, а ощущение, что
+ * прямо сейчас тысячи людей получают помощь. Снимает «я один такой».
+ * Без фейк-уведомлений — только обобщённое настоящее время сервиса.
+ */
+
+const STATS: { value: number; suffix: string; label: string; main?: boolean }[] = [
+  { value: 81, suffix: '%', label: 'чувствуют результат уже после пятой сессии', main: true },
+  { value: 420_000, suffix: '+', label: 'человек уже выбрали Ясно' },
+  { value: 4_700, suffix: '', label: 'проверенных специалистов' },
+  { value: 7, suffix: ' лет', label: 'средний опыт психолога' },
+]
+
+const PULSE_LINES = [
+  'кто-то начал терапию пару минут назад',
+  'сессии идут прямо сейчас — онлайн',
+  'из Москвы, Алматы, Берлина — отовсюду',
+  'каждый день — сотни первых сессий',
+]
+
+function useCountUp(target: number, run: boolean, durationMs = 1400): number {
   const [value, setValue] = useState(0)
-
   useEffect(() => {
-    if (!inView || reduced) return
-    const duration = 1200
+    if (!run) return
     let raf = 0
-    let startTime: number | null = null
+    let start: number | null = null
     const step = (now: number) => {
-      if (startTime === null) startTime = now
-      const t = Math.min((now - startTime) / duration, 1)
+      if (start === null) start = now
+      const t = Math.min((now - start) / durationMs, 1)
       const eased = 1 - Math.pow(1 - t, 3)
-      setValue(Math.round(eased * 81))
+      setValue(Math.round(eased * target))
       if (t < 1) raf = requestAnimationFrame(step)
     }
     raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
-  }, [inView, reduced])
+  }, [run, target, durationMs])
+  return value
+}
+
+function format(n: number): string {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
+function StatCell({ stat, run }: { stat: (typeof STATS)[number]; run: boolean }) {
+  const calm = useCalmMotion()
+  const counted = useCountUp(stat.value, run && !calm)
+  const display = calm ? stat.value : counted
+
+  if (stat.main) {
+    return (
+      <motion.div variants={reveal} className="relative md:col-span-2 md:row-span-2">
+        <div
+          aria-hidden
+          className="absolute -inset-8 rounded-full bg-sky/15 blur-3xl"
+        />
+        <p className="relative font-display text-[clamp(88px,11vw,150px)] font-bold leading-none tracking-[-0.04em] text-ink">
+          {display}
+          <span className="text-sky">%</span>
+        </p>
+        <p className="relative mt-3 max-w-[300px] text-[17px] leading-snug text-ink-soft">
+          {stat.label}
+        </p>
+      </motion.div>
+    )
+  }
 
   return (
-    <section className="relative overflow-hidden py-24 text-center md:py-32">
-      <div
-        aria-hidden
-        className="absolute left-1/2 top-1/2 h-[420px] w-[640px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[110px]"
-        style={{
-          background:
-            'radial-gradient(circle at 35% 40%, var(--sun), transparent 60%), radial-gradient(circle at 70% 60%, var(--peach), transparent 60%)',
-        }}
-      />
-      <div ref={ref} className="container-x relative">
-        <p className="font-display text-[clamp(96px,18vw,200px)] leading-none tracking-tight">
-          {reduced ? 81 : value}%
-        </p>
-        <p className="mx-auto mt-4 max-w-md text-xl text-ink-soft md:text-2xl">
-          клиентов чувствуют результат уже после пятой сессии
-        </p>
-        <button
-          type="button"
-          className="btn-primary mt-9"
-          onClick={() => {
-            track('cta_click', { section: 'big_stat' })
-            onOpenQuiz()
-          }}
+    <motion.div variants={reveal}>
+      <p className="font-display text-[clamp(34px,4vw,46px)] font-semibold leading-none tracking-[-0.02em]">
+        {format(display)}
+        {stat.suffix}
+      </p>
+      <p className="mt-2 text-[14.5px] leading-snug text-ink-soft">{stat.label}</p>
+    </motion.div>
+  )
+}
+
+export default function BigStat() {
+  const calm = useCalmMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-120px' })
+  const [line, setLine] = useState(0)
+
+  // Деликатная ротация живой ленты; calm — статичная первая строка
+  useEffect(() => {
+    if (calm) return
+    const id = window.setInterval(() => setLine((l) => (l + 1) % PULSE_LINES.length), 3500)
+    return () => window.clearInterval(id)
+  }, [calm])
+
+  return (
+    <section className="overflow-hidden bg-mist/60 py-20 md:py-24">
+      <motion.div
+        ref={ref}
+        className="container-x"
+        variants={revealParent}
+        initial="hidden"
+        whileInView="show"
+        viewport={VIEWPORT_ONCE}
+      >
+        <div className="grid items-center gap-x-12 gap-y-10 md:grid-cols-4 md:grid-rows-2">
+          <StatCell stat={STATS[0]} run={inView} />
+          {STATS.slice(1).map((s) => (
+            <StatCell key={s.label} stat={s} run={inView} />
+          ))}
+        </div>
+
+        {/* Живая лента: ощущение сервиса, который работает прямо сейчас */}
+        <motion.div
+          variants={reveal}
+          className="mt-12 flex items-center gap-2.5 border-t border-line pt-6"
         >
-          Начать сейчас
-        </button>
-      </div>
+          <span className="relative flex size-2 shrink-0" aria-hidden>
+            <span className="absolute inline-flex size-full rounded-full bg-ok/50 motion-safe:animate-ping" />
+            <span className="relative inline-flex size-2 rounded-full bg-ok" />
+          </span>
+          <span className="h-[20px] overflow-hidden text-[14px] text-ink-soft" aria-live="off">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={line}
+                className="block"
+                initial={calm ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={calm ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {PULSE_LINES[line]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

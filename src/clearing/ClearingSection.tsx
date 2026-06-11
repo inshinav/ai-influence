@@ -73,7 +73,7 @@ function SkyProgress({
             transition={{ duration: 0.5, ease: EASE }}
             className="inline-flex"
           >
-            <Sun className="h-4 w-4 text-sun-deep" aria-hidden="true" />
+            <Sun className="h-4 w-4 text-sky" aria-hidden="true" />
           </motion.span>
         ) : (
           <span key={i} className="inline-flex">
@@ -287,7 +287,7 @@ function TestFlow({
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-mist"
                 aria-hidden="true"
               >
-                <Sparkles className="h-5 w-5 text-sun-deep" />
+                <Sparkles className="h-5 w-5 text-sky" />
               </div>
               <h3 className="mt-4 font-display text-2xl md:text-[28px]">{result.title}</h3>
               <p className="mt-2 max-w-xl text-ink-soft">{result.text}</p>
