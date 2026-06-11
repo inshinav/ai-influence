@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import type { TopicId } from '../types'
+import { useCalmMotion } from '../care/CareContext'
+import { useDawnPhase } from '../lib/dawn'
 import { heroChips } from '../data/topics'
 import { track } from '../lib/analytics'
 import DawnBackdrop from './DawnBackdrop'
@@ -16,14 +18,15 @@ const PHRASES = [
 const EASE = [0.22, 1, 0.36, 1] as const
 
 export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => void }) {
-  const reduced = useReducedMotion()
+  const calm = useCalmMotion()
+  const { palette } = useDawnPhase()
   const [phrase, setPhrase] = useState(0)
 
   useEffect(() => {
-    if (reduced) return
+    if (calm) return
     const id = window.setInterval(() => setPhrase((p) => (p + 1) % PHRASES.length), 2800)
     return () => window.clearInterval(id)
-  }, [reduced])
+  }, [calm])
 
   const reveal = (delay: number) => ({
     initial: { opacity: 0, y: 16 },
@@ -110,6 +113,17 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
         <motion.p {...reveal(0.3)} className="mt-10 text-[13.5px] text-ink-soft">
           4{' '}700 проверенных специалистов · 81% чувствуют результат к{' '}5-й сессии ·
           от{' '}3{' '}150{' '}₽
+        </motion.p>
+
+        {/* Строка-настроение фазы суток: min-h резервирует место, днём пусто */}
+        <motion.p
+          key={palette.heroLine ?? 'silent'}
+          initial={calm || !palette.heroLine ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, ease: EASE }}
+          className="mt-3 min-h-[22px] text-[13.5px] text-ink-soft/90"
+        >
+          {palette.heroLine ?? ''}
         </motion.p>
       </div>
     </section>
