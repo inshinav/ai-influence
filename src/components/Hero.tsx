@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import type { Variants } from 'motion/react'
 import type { TopicId } from '../types'
 import { useCalmMotion } from '../care/CareContext'
 import { useDawnPhase } from '../lib/dawn'
 import { heroChips } from '../data/topics'
 import { track } from '../lib/analytics'
+import { EASE_SOFT, SPRING, SPRING_SNAPPY, reveal, revealParent } from '../lib/motionPresets'
+import { ScribbleArrow, ScribbleUnderline } from './Scribble'
 import DawnBackdrop from './DawnBackdrop'
 
 const PHRASES = [
@@ -15,7 +18,16 @@ const PHRASES = [
   'как пережить перемены',
 ]
 
-const EASE = [0.22, 1, 0.36, 1] as const
+/** Чипы боли: лёгкий blur-pop с плотной пружиной */
+const chipPop: Variants = {
+  hidden: { opacity: 0, y: 10, filter: 'blur(4px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: SPRING_SNAPPY },
+}
+
+const chipRow: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+}
 
 export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => void }) {
   const calm = useCalmMotion()
@@ -28,52 +40,60 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
     return () => window.clearInterval(id)
   }, [calm])
 
-  const reveal = (delay: number) => ({
-    initial: { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, delay, ease: EASE },
-  })
-
   return (
     <section id="hero" className="relative overflow-hidden">
       <DawnBackdrop />
-      <div className="container-x relative z-10 flex min-h-[92svh] flex-col justify-center pb-24 pt-32">
-        <motion.p {...reveal(0)} className="eyebrow">
+      <motion.div
+        variants={revealParent}
+        initial={calm ? false : 'hidden'}
+        animate="show"
+        className="container-x relative z-10 flex min-h-[92svh] flex-col justify-center pb-24 pt-32"
+      >
+        <motion.p variants={reveal} className="eyebrow">
           Онлайн-психотерапия · 420{' '}000+ клиентов
         </motion.p>
 
         <motion.h1
-          {...reveal(0.06)}
+          variants={reveal}
           className="mt-5 text-[clamp(40px,7vw,84px)] leading-[1.05] tracking-[-0.02em]"
         >
           Станет ясно,
-          <span className="block min-h-[2.1em] overflow-hidden sm:min-h-[1.05em]">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={phrase}
-                className="block"
-                initial={{ y: '0.6em', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-0.6em', opacity: 0 }}
-                transition={{ duration: 0.45, ease: EASE }}
-              >
-                {PHRASES[phrase]}
-              </motion.span>
-            </AnimatePresence>
+          {/* min-h резервирует место под ротацию — нулевой CLS */}
+          <span className="block min-h-[2.1em] sm:min-h-[1.05em]">
+            <span className="relative inline-block">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={phrase}
+                  className="block"
+                  initial={{ opacity: 0, y: '0.4em', filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: '-0.4em', filter: 'blur(8px)' }}
+                  transition={SPRING}
+                >
+                  {PHRASES[phrase]}
+                </motion.span>
+              </AnimatePresence>
+              {/* Завиток перерисовывается при каждой смене фразы */}
+              <ScribbleUnderline
+                replayKey={phrase}
+                className="absolute -bottom-[0.06em] left-0"
+              />
+            </span>
           </span>
         </motion.h1>
 
-        <motion.p {...reveal(0.12)} className="mt-6 max-w-xl text-lg text-ink-soft md:text-xl">
-          Подберём психолога под ваш запрос за 2{' '}минуты. Сначала покажем, кто вам
+        <motion.p variants={reveal} className="mt-6 max-w-xl text-lg text-ink-soft md:text-xl">
+          Подберём вашего психолога за 2{' '}минуты. Сначала покажем, кто вам
           подходит,{' '}— регистрация потом.
         </motion.p>
 
-        <motion.div {...reveal(0.18)} className="mt-9">
+        <motion.div variants={reveal} className="mt-9">
           <p className="text-[13px] font-medium text-ink-soft">С чем хотите разобраться?</p>
-          <div className="mt-3 flex flex-wrap gap-2.5">
+          <motion.div variants={chipRow} className="mt-3 flex flex-wrap gap-2.5">
             {heroChips.map((c) => (
-              <button
+              <motion.button
                 key={c.id}
+                variants={chipPop}
                 type="button"
                 className="chip"
                 onClick={() => {
@@ -82,35 +102,42 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
                 }}
               >
                 {c.label}
-              </button>
+              </motion.button>
             ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.div variants={reveal} className="mt-10">
+          {/* Рукописный акцент: подпись и стрелочка-росчерк к CTA */}
+          <div aria-hidden className="mb-2 flex items-center gap-1.5 pl-2">
+            <span className="hand text-[22px] leading-none">подберём за 2 минуты</span>
+            <ScribbleArrow delay={700} className="w-12 shrink-0 translate-y-2 rotate-[70deg]" />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={() => {
+                track('cta_click', { section: 'hero' })
+                onOpenQuiz()
+              }}
+            >
+              Подобрать психолога{' '}— 2{' '}минуты
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => {
+                track('cta_click', { section: 'hero_secondary' })
+                document.getElementById('therapists')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              Посмотреть психологов
+            </button>
           </div>
         </motion.div>
 
-        <motion.div {...reveal(0.24)} className="mt-9 flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => {
-              track('cta_click', { section: 'hero' })
-              onOpenQuiz()
-            }}
-          >
-            Подобрать психолога{' '}— 2{' '}минуты
-          </button>
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => {
-              track('cta_click', { section: 'hero_secondary' })
-              document.getElementById('therapists')?.scrollIntoView({ behavior: 'smooth' })
-            }}
-          >
-            Посмотреть психологов
-          </button>
-        </motion.div>
-
-        <motion.p {...reveal(0.3)} className="mt-10 text-[13.5px] text-ink-soft">
+        <motion.p variants={reveal} className="mt-10 text-[13.5px] text-ink-soft">
           4{' '}700 проверенных специалистов · 81% чувствуют результат к{' '}5-й сессии ·
           от{' '}3{' '}150{' '}₽
         </motion.p>
@@ -120,12 +147,12 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
           key={palette.heroLine ?? 'silent'}
           initial={calm || !palette.heroLine ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, ease: EASE }}
+          transition={{ duration: 0.9, ease: EASE_SOFT }}
           className="mt-3 min-h-[22px] text-[13.5px] text-ink-soft/90"
         >
           {palette.heroLine ?? ''}
         </motion.p>
-      </div>
+      </motion.div>
     </section>
   )
 }

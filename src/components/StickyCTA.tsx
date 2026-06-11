@@ -28,7 +28,7 @@ export default function StickyCTA({
     <AnimatePresence>
       {heroGone && !hidden && (
         <motion.div
-          className="fixed bottom-0 inset-x-0 z-40 border-t border-line bg-paper/90 p-3 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-md md:hidden"
+          className="fixed bottom-0 inset-x-0 z-40 border-t border-line bg-white/85 p-3 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-xl md:hidden"
           initial={reduceMotion ? { y: 0 } : { y: 80 }}
           animate={{ y: 0 }}
           exit={reduceMotion ? { y: 0 } : { y: 80 }}

@@ -23,13 +23,19 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
     <header
       className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
         scrolled
-          ? 'bg-paper/85 backdrop-blur-md border-b border-line'
+          ? 'bg-white/75 backdrop-blur-xl border-b border-line'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="container-x flex h-16 items-center justify-between md:h-[72px]">
-        <a href="#hero" className="text-[22px] font-semibold tracking-tight" aria-label="Ясно — к началу страницы">
-          ясно<span className="font-bold text-sun">·</span>
+        <a
+          href="#hero"
+          className="font-display text-[20px] font-extrabold uppercase tracking-[-0.01em]"
+          aria-label="Ясно — к началу страницы"
+        >
+          ЯСНО
+          {/* Точка-солнце: чуть крупнее и приподнята оптически */}
+          <span className="ml-px align-[0.04em] text-[22px] leading-none text-sky">•</span>
         </a>
 
         <nav className="hidden items-center gap-7 md:flex" aria-label="Основная навигация">
