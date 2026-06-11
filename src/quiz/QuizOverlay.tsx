@@ -318,17 +318,20 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
 
   return (
     <motion.div
-      ref={dialogRef}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Подбор психолога"
-      tabIndex={-1}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 overflow-y-auto bg-paper outline-none"
+      className="fixed inset-0 z-50 overflow-y-auto bg-paper"
     >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Подбор психолога"
+        tabIndex={-1}
+        className="min-h-full outline-none"
+      >
       {/* Верхняя панель */}
       <div className="sticky top-0 z-10 bg-paper/85 backdrop-blur-md">
         <div className="container-x flex h-16 items-center justify-between gap-4">
@@ -407,6 +410,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </motion.div>
   )
 }

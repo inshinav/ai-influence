@@ -127,17 +127,20 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
+      className="fixed inset-0 z-[70] overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: calmMotion ? 0 : 0.45, ease: EASE }}
+    >
+      <div
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label="Момент тишины — дыхание 4–7–8"
       tabIndex={-1}
-      className="fixed inset-0 z-[70] overflow-hidden outline-none"
+      className="h-full outline-none"
       onClick={onClose}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: calmMotion ? 0 : 0.45, ease: EASE }}
     >
       {/* Фон: мягкий рассветный градиент от бумаги к небу */}
       <div className="absolute inset-0 bg-paper" aria-hidden />
@@ -293,6 +296,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
             </>
           )}
         </div>
+      </div>
       </div>
     </motion.div>
   )

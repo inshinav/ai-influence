@@ -270,16 +270,19 @@ function TestFlow({
       <div className="min-h-[380px]">
         <AnimatePresence mode="wait" initial={false}>
           {done && heavy ? (
-            <motion.div key="support" {...slide} ref={resultRef} tabIndex={-1} className="outline-none">
-              <SupportScreen
-                testId={test.id}
-                lead={test.heavy?.lead}
-                onFindTherapist={() => onOpenQuiz(test.topic)}
-                onRestart={restart}
-              />
+            <motion.div key="support" {...slide}>
+              <div ref={resultRef} tabIndex={-1} className="outline-none">
+                <SupportScreen
+                  testId={test.id}
+                  lead={test.heavy?.lead}
+                  onFindTherapist={() => onOpenQuiz(test.topic)}
+                  onRestart={restart}
+                />
+              </div>
             </motion.div>
           ) : done ? (
-            <motion.div key="result" {...slide} ref={resultRef} tabIndex={-1} className="outline-none">
+            <motion.div key="result" {...slide}>
+              <div ref={resultRef} tabIndex={-1} className="outline-none">
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-mist"
                 aria-hidden="true"
@@ -330,6 +333,7 @@ function TestFlow({
                 >
                   Подобрать психолога, который работает с этим
                 </button>
+              </div>
               </div>
             </motion.div>
           ) : question ? (

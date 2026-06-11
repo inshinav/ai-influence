@@ -108,7 +108,8 @@ export default function CarePanel() {
   }
 
   return (
-    <div ref={rootRef} className="fixed bottom-4 left-4 z-[80]">
+    // На мобайле — выше закреплённой CTA-панели, чтобы не перекрывать её
+    <div ref={rootRef} className="fixed bottom-24 left-4 z-[80] md:bottom-4">
       <button
         ref={buttonRef}
         type="button"
