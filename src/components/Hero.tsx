@@ -58,13 +58,14 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
           className="mt-5 text-[clamp(40px,7vw,84px)] leading-[1.05] tracking-[-0.02em]"
         >
           Станет ясно,
-          {/* min-h резервирует место под ротацию — нулевой CLS */}
-          <span className="block min-h-[2.1em] sm:min-h-[1.05em]">
-            <span className="relative inline-block">
+          {/* Всегда две строки под ротацию: высота блока не «скачет»,
+              когда длинная фраза переносится, а короткая — нет */}
+          <span className="block min-h-[2.1em]">
+            <span className="relative inline-block max-w-full">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={phrase}
-                  className="block"
+                  className="block [text-wrap:balance]"
                   initial={{ opacity: 0, y: '0.4em', filter: 'blur(8px)' }}
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   exit={{ opacity: 0, y: '-0.4em', filter: 'blur(8px)' }}
