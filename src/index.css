@@ -1,0 +1,198 @@
+@import 'tailwindcss';
+
+/* ── Дизайн-система «Прояснение» ─────────────────────────────── */
+
+@theme {
+  --color-paper: #fbfaf7;
+  --color-ink: #15171c;
+  --color-ink-soft: #5b5f68;
+  --color-line: rgba(21, 23, 28, 0.08);
+  --color-sun: #ffc83d;
+  --color-sun-deep: #f5a623;
+  --color-peach: #ffb39b;
+  --color-sky: #bfd9ff;
+  --color-mist: #edeff2;
+  --color-ok: #2e7d5b;
+
+  --font-display: 'Piazzolla', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --shadow-lift: 0 12px 32px rgba(21, 23, 28, 0.08);
+}
+
+/* Алиасы из брифа — для рукописного CSS */
+:root {
+  --paper: #fbfaf7;
+  --ink: #15171c;
+  --ink-soft: #5b5f68;
+  --line: rgba(21, 23, 28, 0.08);
+  --sun: #ffc83d;
+  --sun-deep: #f5a623;
+  --peach: #ffb39b;
+  --sky: #bfd9ff;
+  --mist: #edeff2;
+  --ok: #2e7d5b;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 17px;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--sun);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sky);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 550;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    font-optical-sizing: auto;
+  }
+
+  h3,
+  h4 {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Кнопки */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sun text-ink font-semibold;
+    padding: 16px 28px;
+    font-size: 16px;
+    line-height: 1.2;
+    border: none;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      transform 0.2s var(--ease-out-soft),
+      box-shadow 0.2s var(--ease-out-soft);
+  }
+  .btn-primary:hover {
+    background: var(--sun-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(245, 166, 35, 0.35);
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-ink font-medium;
+    padding: 15px 26px;
+    font-size: 16px;
+    line-height: 1.2;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft);
+  }
+  .btn-secondary:hover {
+    background: var(--mist);
+  }
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+
+  /* Чипы: выбранное состояние — инверсия в ink, не жёлтый */
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full bg-mist text-ink;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-out-soft),
+      color 0.2s var(--ease-out-soft),
+      transform 0.2s var(--ease-out-soft);
+  }
+  .chip:hover {
+    background: #e3e6ea;
+  }
+  .chip:active {
+    transform: scale(0.97);
+  }
+  .chip-active {
+    background: var(--ink) !important;
+    color: var(--paper) !important;
+  }
+
+  /* Карточки */
+  .card {
+    @apply bg-white;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    transition:
+      box-shadow 0.25s var(--ease-out-soft),
+      transform 0.25s var(--ease-out-soft);
+  }
+  .card-hover:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+  }
+
+  /* Eyebrow-лейбл */
+  .eyebrow {
+    @apply text-ink-soft;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  /* Контейнер */
+  .container-x {
+    width: 100%;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 4vw, 40px);
+  }
+
+  /* Зерно поверх градиента */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
