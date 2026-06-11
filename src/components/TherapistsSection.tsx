@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'motion/react'
 import type { Therapist, TopicId } from '../types'
 import { useCalmMotion } from '../care/CareContext'
 import { therapists } from '../data/therapists'
+import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
+import { NBSP } from '../lib/format'
+import { track } from '../lib/analytics'
 import TherapistCard from './TherapistCard'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
@@ -20,7 +23,13 @@ const filterOptions: { id: Filter; label: string }[] = [
 
 const INITIAL_VISIBLE = 6
 
-export default function TherapistsSection({ onBook }: { onBook: (t: Therapist) => void }) {
+export default function TherapistsSection({
+  onBook,
+  onOpenQuiz,
+}: {
+  onBook: (t: Therapist) => void
+  onOpenQuiz: () => void
+}) {
   const [filter, setFilter] = useState<Filter>('all')
   const [visible, setVisible] = useState(INITIAL_VISIBLE)
   const reduceMotion = useCalmMotion()
@@ -39,17 +48,22 @@ export default function TherapistsSection({ onBook }: { onBook: (t: Therapist) =
     setVisible(INITIAL_VISIBLE)
   }
 
+  const handleQuizCta = () => {
+    track('cta_click', { section: 'therapists_cta' })
+    onOpenQuiz()
+  }
+
   return (
     <section id="therapists" className="py-20 md:py-28">
       <div className="container-x">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.3, ease: EASE }}
+          variants={reveal}
+          initial={reduceMotion ? false : 'hidden'}
+          whileInView="show"
+          viewport={VIEWPORT_ONCE}
         >
           <p className="eyebrow">Психологи</p>
-          <h2 className="mt-3 text-4xl md:text-5xl">{'Знакомьтесь — до записи'}</h2>
+          <h2 className="mt-3 text-4xl md:text-5xl">{'Знакомьтесь — до записи'}</h2>
           <p className="mt-4 max-w-xl text-lg text-ink-soft">
             Открытые анкеты: метод, опыт, темы и ближайшее свободное время.
           </p>
@@ -93,7 +107,7 @@ export default function TherapistsSection({ onBook }: { onBook: (t: Therapist) =
         ) : (
           <div className="card mt-10 p-10 text-center">
             <p className="text-ink-soft">
-              {'Под этот фильтр пока никого — посмотрите всех специалистов'}
+              {'Под этот фильтр пока никого — посмотрите всех специалистов'}
             </p>
             <button type="button" className="btn-secondary mt-5" onClick={() => selectFilter('all')}>
               Показать всех
@@ -108,6 +122,23 @@ export default function TherapistsSection({ onBook }: { onBook: (t: Therapist) =
             </button>
           </div>
         )}
+
+        {/* Микро-CTA: для тех, кому выбор вручную не в радость */}
+        <motion.div
+          className="mt-12 text-center"
+          variants={reveal}
+          initial={reduceMotion ? false : 'hidden'}
+          whileInView="show"
+          viewport={VIEWPORT_ONCE}
+        >
+          <p className="text-[15px] text-ink-soft">Не хочется выбирать вручную?</p>
+          <button type="button" className="btn-primary mt-4" onClick={handleQuizCta}>
+            {`Подобрать под мой запрос${NBSP}— 2${NBSP}минуты`}
+          </button>
+          <p className="mt-3 text-[13px] text-ink-soft">
+            Без регистрации. Покажем трёх подходящих и объясним почему.
+          </p>
+        </motion.div>
       </div>
     </section>
   )
