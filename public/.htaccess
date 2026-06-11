@@ -1,12 +1,12 @@
 AddDefaultCharset utf-8
 
-# SPA-fallback: все пути без файла отдают index.html (нужно для /qa и прямых ссылок)
+# SPA-fallback: пути без файла отдают index.html ТЕКУЩЕЙ папки.
+# Подстановка относительная — работает и в корне домена, и в подпапке /yasno/.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  RewriteRule ^ index.html [L]
 </IfModule>
 
 # Кэш для собранных ассетов (у Vite в именах хэши — можно кэшировать надолго)

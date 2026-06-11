@@ -60,11 +60,14 @@ export default function QAPage() {
         <p className="text-[14.5px] text-ink-soft">
           Сейчас: час {hour}, фаза «{DAWN[phaseForHour(hour)].label}». Форсировать:{' '}
           {HOUR_LINKS.map((h) => (
-            <a key={h} className="mr-2 underline underline-offset-4" href={`/qa?hour=${h}`}>
+            <a key={h} className="mr-2 underline underline-offset-4" href={`?hour=${h}`}>
               ?hour={h}
             </a>
           ))}
-          <a className="underline underline-offset-4" href={`/?hour=${hour === 23 ? 8 : 23}`}>
+          <a
+            className="underline underline-offset-4"
+            href={`${import.meta.env.BASE_URL}?hour=${hour === 23 ? 8 : 23}`}
+          >
             (посмотреть в hero)
           </a>
         </p>

@@ -5,7 +5,8 @@ import App from './App.tsx'
 import QAPage from './qa/QAPage.tsx'
 import { CareProvider } from './care/CareContext.tsx'
 
-const isQA = window.location.pathname.replace(/\/+$/, '') === '/qa'
+// Срабатывает и в корне (/qa), и в подпапке (/yasno/qa)
+const isQA = window.location.pathname.replace(/\/+$/, '').endsWith('/qa')
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
