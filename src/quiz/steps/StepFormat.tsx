@@ -15,12 +15,12 @@ export default function StepFormat({
   value: TherapyFormat | null
   onSelect: (v: TherapyFormat) => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
 
   return (
     <div>
       <StepHeading title="Для кого подбираем психолога?" />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-col gap-3">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
         {OPTIONS.map((o) => (
           <OptionCard
             key={o.value}

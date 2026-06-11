@@ -14,7 +14,7 @@ export default function StepGender({
   value: GenderPref | null
   onSelect: (v: GenderPref) => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
 
   return (
     <div>
@@ -22,7 +22,7 @@ export default function StepGender({
         title="Есть предпочтения по психологу?"
         sub="Пол специалиста — некоторым так комфортнее"
       />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-col gap-3">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
         {OPTIONS.map((o) => (
           <OptionCard
             key={o.value}

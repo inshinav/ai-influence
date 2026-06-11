@@ -68,23 +68,26 @@ export default function DawnBackdrop() {
   const [prevPhase, setPrevPhase] = useState<DawnPhase | null>(null)
   const lastPhaseRef = useRef<DawnPhase>(phase)
 
+  // Смена фазы: старый слой проявляется поверх и медленно гаснет
   useEffect(() => {
-    if (lastPhaseRef.current === phase) {
-      // calm включили посреди кроссфейда — мгновенно убираем старый слой
-      if (calmMotion) setPrevPhase(null)
-      return
-    }
+    if (lastPhaseRef.current === phase) return
     const previous = lastPhaseRef.current
     lastPhaseRef.current = phase
-    if (calmMotion) {
-      // без кроссфейда: мгновенная смена палитры
-      setPrevPhase(null)
-      return
+    if (calmMotion) return // мгновенная смена палитры, без кроссфейда
+    const show = window.setTimeout(() => setPrevPhase(previous), 0)
+    const hide = window.setTimeout(() => setPrevPhase(null), 4500)
+    return () => {
+      window.clearTimeout(show)
+      window.clearTimeout(hide)
     }
-    setPrevPhase(previous)
-    const id = window.setTimeout(() => setPrevPhase(null), 4500)
-    return () => window.clearTimeout(id)
   }, [phase, calmMotion])
+
+  // calm включили посреди кроссфейда — старый слой убираем сразу
+  useEffect(() => {
+    if (!calmMotion) return
+    const id = window.setTimeout(() => setPrevPhase(null), 0)
+    return () => window.clearTimeout(id)
+  }, [calmMotion])
 
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden">

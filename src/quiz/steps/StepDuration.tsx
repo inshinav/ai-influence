@@ -15,12 +15,12 @@ export default function StepDuration({
   value: DurationAnswer | null
   onSelect: (v: DurationAnswer) => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
 
   return (
     <div>
       <StepHeading title="Как давно это состояние?" />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-col gap-3">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
         {OPTIONS.map((o) => (
           <OptionCard
             key={o.value}

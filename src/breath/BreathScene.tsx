@@ -91,20 +91,25 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [])
 
+  /** Переход в фазу: секунды выставляются в момент перехода, не в эффекте */
+  const goPhase = (p: Exclude<ScenePhase, 'paused'>) => {
+    setSecondsLeft(PHASE_SECONDS[p])
+    setPhase(p)
+  }
+
   // Машина фаз: вдох 4с → задержка 7с → выдох 8с, циклы без ограничения
   useEffect(() => {
     if (phase === 'paused') return
     const seconds = PHASE_SECONDS[phase]
-    setSecondsLeft(seconds)
     breathCue(phase)
     haptic(10)
     const tick = window.setInterval(() => setSecondsLeft((s) => Math.max(s - 1, 0)), 1000)
     const next = window.setTimeout(() => {
-      if (phase === 'inhale') setPhase('hold')
-      else if (phase === 'hold') setPhase('exhale')
+      if (phase === 'inhale') goPhase('hold')
+      else if (phase === 'hold') goPhase('exhale')
       else {
         setCycle((c) => c + 1)
-        setPhase('inhale')
+        goPhase('inhale')
       }
     }, seconds * 1000)
     return () => {
@@ -113,7 +118,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
     }
   }, [phase])
 
-  const resume = () => setPhase('inhale')
+  const resume = () => goPhase('inhale')
 
   const paused = phase === 'paused'
   const expanded = phase === 'inhale' || phase === 'hold'

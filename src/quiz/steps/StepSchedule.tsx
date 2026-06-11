@@ -18,7 +18,7 @@ export default function StepSchedule({
   onChange: (v: TimePref[]) => void
   onNext: () => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
 
   const toggle = (v: TimePref) => {
     onChange(value.includes(v) ? value.filter((t) => t !== v) : [...value, v])
@@ -27,7 +27,7 @@ export default function StepSchedule({
   return (
     <div>
       <StepHeading title="Когда удобно встречаться?" sub="Можно выбрать несколько" />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {OPTIONS.map((o) => (
           <OptionCard
             key={o.value}

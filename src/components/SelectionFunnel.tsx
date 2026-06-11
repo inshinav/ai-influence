@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView, useReducedMotion } from 'motion/react'
+import { motion, useInView } from 'motion/react'
 import { Check } from 'lucide-react'
 import { NBSP } from '../lib/format'
+import { useCalmMotion } from '../care/CareContext'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -46,15 +47,11 @@ const ELIMINATION_STAGE: number[] = (() => {
 export default function SelectionFunnel() {
   const fieldRef = useRef<HTMLDivElement>(null)
   const inView = useInView(fieldRef, { once: true, margin: '-120px' })
-  const reducedMotion = useReducedMotion()
+  const reducedMotion = useCalmMotion()
   const [activeStage, setActiveStage] = useState(0)
 
   useEffect(() => {
-    if (!inView) return
-    if (reducedMotion) {
-      setActiveStage(STAGES.length)
-      return
-    }
+    if (!inView || reducedMotion) return
     let stage = 0
     const id = window.setInterval(() => {
       stage += 1
@@ -64,8 +61,10 @@ export default function SelectionFunnel() {
     return () => window.clearInterval(id)
   }, [inView, reducedMotion])
 
-  const aliveCount = ALIVE_BY_STAGE[activeStage]
-  const finished = activeStage >= STAGES.length
+  // При calm-режиме сразу финальное состояние — без таймеров и setState в эффекте
+  const effectiveStage = reducedMotion && inView ? STAGES.length : activeStage
+  const aliveCount = ALIVE_BY_STAGE[effectiveStage]
+  const finished = effectiveStage >= STAGES.length
 
   return (
     <section id="selection" className="py-20 md:py-28">
@@ -109,7 +108,7 @@ export default function SelectionFunnel() {
                 <span
                   key={i}
                   className={`size-3 rounded-full transition-colors duration-500 md:size-3.5 ${
-                    stage <= activeStage ? 'bg-mist' : 'bg-sun'
+                    stage <= effectiveStage ? 'bg-mist' : 'bg-sun'
                   }`}
                 />
               ))}
@@ -120,8 +119,8 @@ export default function SelectionFunnel() {
           <ol className="space-y-4">
             {STAGES.map((label, i) => {
               const stageNumber = i + 1
-              const passed = stageNumber < activeStage
-              const current = stageNumber === activeStage
+              const passed = stageNumber < effectiveStage
+              const current = stageNumber === effectiveStage
               return (
                 <li key={label} className="flex items-center gap-3">
                   <span

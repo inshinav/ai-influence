@@ -13,7 +13,7 @@ export default function StepTopics({
   onChange: (v: TopicId[]) => void
   onNext: () => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
   const full = value.length >= MAX
 
   const toggle = (id: TopicId) => {
@@ -24,7 +24,7 @@ export default function StepTopics({
   return (
     <div>
       <StepHeading title="Что беспокоит?" sub="Выберите до трёх вариантов" />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-wrap gap-2.5">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-wrap gap-2.5">
         {topics.map((t) => {
           const selected = value.includes(t.id)
           const blocked = full && !selected

@@ -1,5 +1,5 @@
-import { useReducedMotion } from 'motion/react'
 import { press } from '../data/press'
+import { useCalmMotion } from '../care/CareContext'
 
 /** Стилизованные текстовые «логотипы» — без чужих графических знаков */
 const STYLE: Record<string, string> = {
@@ -24,7 +24,7 @@ function PressRow({ ariaHidden }: { ariaHidden?: boolean }) {
 }
 
 export default function PressMarquee() {
-  const reduced = useReducedMotion()
+  const reduced = useCalmMotion()
 
   return (
     <section className="border-y border-line bg-white/60 py-7">

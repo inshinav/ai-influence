@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowLeft } from 'lucide-react'
 import type { SlotSelection, Therapist, TimePref } from '../types'
@@ -70,12 +70,12 @@ export default function SlotPicker({
   onConfirm: (slot: SlotSelection) => void
   onBack: (() => void) | null
 }) {
-  const days = useMemo(buildDays, [])
+  const [days] = useState(buildDays)
   const [dayIndex, setDayIndex] = useState(0)
   const [time, setTime] = useState<string | null>(null)
 
   const day = days[dayIndex]
-  const times = useMemo(() => timesForDay(therapist, day), [therapist, day])
+  const times = timesForDay(therapist, day)
 
   const initials = therapist.name
     .split(' ')

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { track } from '../lib/analytics'
+import { useCalmMotion } from '../care/CareContext'
 
 export default function StickyCTA({
   hidden,
@@ -10,7 +11,7 @@ export default function StickyCTA({
   onOpenQuiz: () => void
 }) {
   const [heroGone, setHeroGone] = useState(false)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useCalmMotion()
 
   useEffect(() => {
     const hero = document.getElementById('hero')

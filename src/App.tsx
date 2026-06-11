@@ -6,7 +6,7 @@ import PressMarquee from './components/PressMarquee'
 import HowItWorks from './components/HowItWorks'
 import TherapistsSection from './components/TherapistsSection'
 import BreathWidget from './components/BreathWidget'
-import MiniTests from './components/MiniTests'
+import ClearingSection from './clearing/ClearingSection'
 import Pricing from './components/Pricing'
 import SelectionFunnel from './components/SelectionFunnel'
 import Reviews from './components/Reviews'
@@ -15,6 +15,7 @@ import FAQ from './components/FAQ'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 import StickyCTA from './components/StickyCTA'
+import CarePanel from './care/CarePanel'
 import QuizOverlay from './quiz/QuizOverlay'
 
 export default function App() {
@@ -37,7 +38,7 @@ export default function App() {
         <HowItWorks />
         <TherapistsSection onBook={bookTherapist} />
         <BreathWidget onOpenQuiz={() => openQuiz('breath_widget')} />
-        <MiniTests onOpenQuiz={(topic) => openQuiz('mini_test', topic)} />
+        <ClearingSection onOpenQuiz={(topic) => openQuiz('clearing_test', topic)} />
         <Pricing />
         <SelectionFunnel />
         <Reviews />
@@ -47,6 +48,7 @@ export default function App() {
       </main>
       <Footer />
       <StickyCTA hidden={launch !== null} onOpenQuiz={() => openQuiz('sticky_cta')} />
+      <CarePanel />
       <QuizOverlay launch={launch} onClose={() => setLaunch(null)} />
     </>
   )

@@ -25,7 +25,7 @@ export default function StepMethod({
   value: MethodPref
   onSelect: (v: MethodPref) => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
 
   return (
     <div>
@@ -33,7 +33,7 @@ export default function StepMethod({
         title="Какой подход ближе?"
         sub="Если не уверены — доверьтесь подбору, это работает лучше всего"
       />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-col gap-3">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
         {OPTIONS.map((o) => (
           <OptionCard
             key={o.value}

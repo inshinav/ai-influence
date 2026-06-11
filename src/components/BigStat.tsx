@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { useInView, useReducedMotion } from 'motion/react'
+import { useInView } from 'motion/react'
 import { track } from '../lib/analytics'
+import { useCalmMotion } from '../care/CareContext'
 
 export default function BigStat({ onOpenQuiz }: { onOpenQuiz: () => void }) {
-  const reduced = useReducedMotion()
+  const reduced = useCalmMotion()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const [value, setValue] = useState(0)
 
   useEffect(() => {
-    if (!inView) return
-    if (reduced) {
-      setValue(81)
-      return
-    }
+    if (!inView || reduced) return
     const duration = 1200
     let raf = 0
     let startTime: number | null = null
@@ -40,7 +37,7 @@ export default function BigStat({ onOpenQuiz }: { onOpenQuiz: () => void }) {
       />
       <div ref={ref} className="container-x relative">
         <p className="font-display text-[clamp(96px,18vw,200px)] leading-none tracking-tight">
-          {value}%
+          {reduced ? 81 : value}%
         </p>
         <p className="mx-auto mt-4 max-w-md text-xl text-ink-soft md:text-2xl">
           клиентов чувствуют результат уже после пятой сессии

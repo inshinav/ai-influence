@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { Play } from 'lucide-react'
+import { useCalmMotion } from '../care/CareContext'
 import type { Therapist, Method } from '../types'
 import { topicById } from '../data/topics'
 import { formatPrice, experienceLabel, NBSP } from '../lib/format'
@@ -27,7 +28,7 @@ export default function TherapistCard({
   onBook: (t: Therapist) => void
 }) {
   const [expanded, setExpanded] = useState(false)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useCalmMotion()
 
   const initials = therapist.name
     .split(' ')

@@ -39,23 +39,28 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
 
   useEffect(() => () => timers.current.forEach(window.clearTimeout), [])
 
+  /** Переход в фазу: секунды выставляются в момент перехода, не в эффекте */
+  const goPhase = (p: Exclude<Phase, 'idle' | 'done'>) => {
+    setSecondsLeft(PHASE_SECONDS[p])
+    setPhase(p)
+  }
+
   // Цепочка фаз: вдох 4с → задержка 7с → выдох 8с, два цикла
   useEffect(() => {
     if (phase === 'idle' || phase === 'done') return
     const seconds = PHASE_SECONDS[phase]
-    setSecondsLeft(seconds)
     breathCue(phase)
     haptic(10)
     const tick = window.setInterval(() => setSecondsLeft((s) => Math.max(s - 1, 0)), 1000)
     const next = window.setTimeout(() => {
-      if (phase === 'inhale') setPhase('hold')
-      else if (phase === 'hold') setPhase('exhale')
+      if (phase === 'inhale') goPhase('hold')
+      else if (phase === 'hold') goPhase('exhale')
       else if (cycle + 1 >= TOTAL_CYCLES) {
         track('breath_complete')
         setPhase('done')
       } else {
         setCycle((c) => c + 1)
-        setPhase('inhale')
+        goPhase('inhale')
       }
     }, seconds * 1000)
     timers.current.push(next)
@@ -68,7 +73,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
   const start = () => {
     track('breath_start')
     setCycle(0)
-    setPhase('inhale')
+    goPhase('inhale')
   }
 
   const running = phase === 'inhale' || phase === 'hold' || phase === 'exhale'

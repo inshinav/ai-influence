@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { Check, Loader2 } from 'lucide-react'
+import { useCalmMotion } from '../care/CareContext'
 
 const LINES = ['Анализируем 4 700 анкет…', 'Сверяем расписание…', 'Считаем совместимость…']
 
 export default function MatchingAnimation({ onDone }: { onDone: () => void }) {
-  const reduced = useReducedMotion()
+  const reduced = useCalmMotion()
   const [visible, setVisible] = useState(reduced ? LINES.length : 1)
   const doneRef = useRef(onDone)
 

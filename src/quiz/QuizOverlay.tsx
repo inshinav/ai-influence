@@ -70,7 +70,8 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
   )
   const [slot, setSlot] = useState<SlotSelection | null>(null)
   const [confirmExit, setConfirmExit] = useState(false)
-  const dirRef = useRef(1)
+  /** Направление слайда шагов: 1 — вперёд, −1 — назад */
+  const [dir, setDir] = useState(1)
   const dialogRef = useRef<HTMLDivElement>(null)
   const startTracked = useRef(false)
 
@@ -95,7 +96,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
   }, [])
 
   const goNext = useCallback(() => {
-    dirRef.current = 1
+    setDir(1)
     setStep((s) => {
       const next = Math.min(s + 1, TOTAL_STEPS)
       if (next !== s) track('quiz_step', { step: next })
@@ -104,7 +105,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
   }, [])
 
   const goBack = useCallback(() => {
-    dirRef.current = -1
+    setDir(-1)
     track('quiz_back')
     setStep((s) => Math.max(s - 1, 1))
   }, [])
@@ -221,9 +222,9 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
         return (
           <motion.div
             key={`step-${step}`}
-            initial={{ opacity: 0, x: dirRef.current * 28 }}
+            initial={{ opacity: 0, x: dir * 28 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: dirRef.current * -28 }}
+            exit={{ opacity: 0, x: dir * -28 }}
             transition={{ duration: 0.25, ease: EASE }}
             className="mx-auto w-full max-w-xl"
           >
@@ -254,7 +255,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
                 setStage('slot')
               }}
               onEdit={() => {
-                dirRef.current = -1
+                setDir(-1)
                 setStage('steps')
                 setStep(2)
               }}

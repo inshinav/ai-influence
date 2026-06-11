@@ -55,7 +55,7 @@ export function rankTherapists(all: Therapist[], a: QuizAnswers): MatchResult[] 
       }
     })
     .sort((x, y) => y.score - x.score || y.fine - x.fine)
-    .map(({ fine: _fine, ...rest }) => rest)
+    .map((r) => ({ therapist: r.therapist, score: r.score, percent: r.percent, reasons: r.reasons }))
 }
 
 const methodHints: Record<Therapist['method'], string> = {

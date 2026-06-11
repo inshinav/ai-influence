@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import type { Therapist, TopicId } from '../types'
+import { useCalmMotion } from '../care/CareContext'
 import { therapists } from '../data/therapists'
 import TherapistCard from './TherapistCard'
 
@@ -22,7 +23,7 @@ const INITIAL_VISIBLE = 6
 export default function TherapistsSection({ onBook }: { onBook: (t: Therapist) => void }) {
   const [filter, setFilter] = useState<Filter>('all')
   const [visible, setVisible] = useState(INITIAL_VISIBLE)
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useCalmMotion()
 
   const filtered = therapists.filter((t) => {
     if (filter === 'all') return true

@@ -1,8 +1,9 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { track } from '../lib/analytics'
+import { useCalmMotion } from '../care/CareContext'
 
 export default function FinalCTA({ onOpenQuiz }: { onOpenQuiz: () => void }) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useCalmMotion()
 
   return (
     <section className="py-24 md:py-32">

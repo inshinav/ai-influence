@@ -10,7 +10,7 @@ export default function StepExperience({
   value: boolean | null
   onSelect: (v: boolean) => void
 }) {
-  const nav = useArrowNav()
+  const { ref: navRef, onKeyDown: navKeyDown } = useArrowNav()
   const [pickedNo, setPickedNo] = useState(false)
   const timer = useRef<number | null>(null)
 
@@ -31,7 +31,7 @@ export default function StepExperience({
   return (
     <div>
       <StepHeading title="Был ли у вас опыт терапии?" />
-      <div ref={nav.ref} onKeyDown={nav.onKeyDown} className="mt-8 flex flex-col gap-3">
+      <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
         <OptionCard selected={value === true} onClick={() => onSelect(true)} title="Да" />
         <OptionCard selected={pickedNo || value === false} onClick={pickNo} title="Нет" />
       </div>
