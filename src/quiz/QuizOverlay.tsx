@@ -17,6 +17,7 @@ import { emptyAnswers } from '../types'
 import { therapists } from '../data/therapists'
 import { rankTherapists, type MatchResult } from '../lib/matching'
 import { track } from '../lib/analytics'
+import { SPRING } from '../lib/motionPresets'
 import QuizProgress from './QuizProgress'
 import StepFormat from './steps/StepFormat'
 import StepTopics from './steps/StepTopics'
@@ -222,10 +223,10 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
         return (
           <motion.div
             key={`step-${step}`}
-            initial={{ opacity: 0, x: dir * 28 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: dir * -28 }}
-            transition={{ duration: 0.25, ease: EASE }}
+            initial={{ opacity: 0, x: dir * 28, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: dir * -28, filter: 'blur(6px)' }}
+            transition={SPRING}
             className="mx-auto w-full max-w-xl"
           >
             {renderStep()}
@@ -244,7 +245,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: EASE }}
+            transition={SPRING}
             className="mx-auto w-full max-w-5xl"
           >
             <Results
@@ -269,7 +270,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: EASE }}
+            transition={SPRING}
             className="mx-auto w-full max-w-2xl"
           >
             <SlotPicker
@@ -289,7 +290,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: EASE }}
+            transition={SPRING}
             className="mx-auto w-full max-w-md"
           >
             <SignupGate
@@ -307,7 +308,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: EASE }}
+            transition={SPRING}
             className="mx-auto w-full max-w-2xl"
           >
             <Confirmation therapist={chosen} slot={slot} onClose={onClose} />
@@ -324,16 +325,21 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 overflow-y-auto bg-paper"
     >
+      {/* Деликатное небо под контентом — атмосфера ясности */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[40vh] bg-gradient-to-b from-sky-soft/50 to-transparent"
+      />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Подбор психолога"
         tabIndex={-1}
-        className="min-h-full outline-none"
+        className="relative min-h-full outline-none"
       >
       {/* Верхняя панель */}
-      <div className="sticky top-0 z-10 bg-paper/85 backdrop-blur-md">
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-xl">
         <div className="container-x flex h-16 items-center justify-between gap-4">
           <div className="flex w-24 items-center">
             {stage === 'steps' && step > 1 && (
@@ -360,9 +366,9 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
           </div>
         </div>
         {stage === 'steps' && (
-          <div className="h-0.5 w-full bg-mist" aria-hidden>
+          <div className="h-1 w-full bg-mist" aria-hidden>
             <div
-              className="h-full bg-sun transition-all duration-300"
+              className="h-full rounded-r-full bg-sky transition-all duration-300"
               style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
             />
           </div>

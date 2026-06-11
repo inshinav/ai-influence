@@ -34,13 +34,13 @@ export default function MatchingAnimation({ onDone }: { onDone: () => void }) {
       <div className="relative flex items-center justify-center">
         <div
           aria-hidden
-          className="absolute size-44 rounded-full bg-gradient-to-br from-sun via-peach to-sky opacity-50 blur-2xl"
+          className="absolute size-44 rounded-full bg-sky/40 blur-2xl"
         />
         {reduced ? (
-          <div className="relative size-32 rounded-full bg-gradient-to-br from-sun via-peach to-sky" />
+          <div className="relative size-32 rounded-full bg-gradient-to-br from-sky via-azure to-white" />
         ) : (
           <motion.div
-            className="relative size-32 rounded-full bg-gradient-to-br from-sun via-peach to-sky"
+            className="relative size-32 rounded-full bg-gradient-to-br from-sky via-azure to-white"
             animate={{ scale: [1, 1.15, 1] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
           />

@@ -7,6 +7,7 @@ import { topicById } from '../data/topics'
 import { experienceLabel, formatPrice } from '../lib/format'
 import { track } from '../lib/analytics'
 import { clarityVars } from '../lib/clarity'
+import { SPRING } from '../lib/motionPresets'
 import { useCalmMotion } from '../care/CareContext'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -24,7 +25,7 @@ function Avatar({ therapist }: { therapist: Therapist }) {
     .map((w) => w[0])
     .join('')
   return (
-    <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sun/60 via-peach/60 to-sky/60">
+    <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky/30 via-azure/30 to-sky-soft">
       <span className="font-display text-lg" aria-hidden>
         {initials}
       </span>
@@ -137,17 +138,17 @@ export default function Results({
           return (
           <ClarityIn key={r.therapist.id} delay={80 + (i % 3) * 150}>
           <motion.article
-            className={`card relative flex h-full flex-col p-5 ${i === 0 ? 'ring-2 ring-sun/70' : ''}`}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: Math.min(i, 2) * 0.08, ease: EASE }}
+            className={`card relative flex h-full flex-col p-5 ${i === 0 ? 'ring-2 ring-sky/60' : ''}`}
+            initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ ...SPRING, delay: Math.min(i, 2) * 0.08 }}
           >
             {i === 0 && (
-              <span className="absolute -top-3 right-4 rounded-full bg-sun px-2.5 py-1 text-[11.5px] font-semibold">
+              <span className="absolute -top-3 right-4 rounded-full bg-sky px-2.5 py-1 text-[11.5px] font-semibold text-white">
                 Лучшее совпадение
               </span>
             )}
-            <span className="w-fit rounded-full bg-ink px-3 py-1 text-[13px] font-semibold text-paper">
+            <span className="w-fit rounded-full bg-sky-deep px-3 py-1 text-[13px] font-semibold text-white">
               Совпадение {r.percent}%
             </span>
 
@@ -165,8 +166,8 @@ export default function Results({
             </div>
 
             {quote && (
-              <p className="mt-4 flex items-start gap-2 rounded-xl bg-sky/25 px-3 py-2 text-[13.5px] leading-snug">
-                <Quote size={14} className="mt-0.5 shrink-0 text-ink-soft" aria-hidden />
+              <p className="mt-4 flex items-start gap-2 rounded-xl bg-sky-soft/70 px-3 py-2 text-[13.5px] leading-snug">
+                <Quote size={14} className="mt-0.5 shrink-0 text-sky" aria-hidden />
                 <span>{quote}</span>
               </p>
             )}
