@@ -3,8 +3,8 @@ import { motion, useInView } from 'motion/react'
 import { Check } from 'lucide-react'
 import { NBSP } from '../lib/format'
 import { useCalmMotion } from '../care/CareContext'
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
+import { ScribbleArrow } from './Scribble'
 
 const STAGES = [
   'Образование',
@@ -67,14 +67,9 @@ export default function SelectionFunnel() {
   const finished = effectiveStage >= STAGES.length
 
   return (
-    <section id="selection" className="py-20 md:py-28">
+    <section id="selection" className="pt-20 pb-8 md:pt-28 md:pb-10">
       <div className="container-x">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5, ease: EASE }}
-        >
+        <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={VIEWPORT_ONCE}>
           <p className="eyebrow">Отбор</p>
           <h2 className="mt-3 text-4xl md:text-5xl">
             В{NBSP}Ясно попадают только 9% психологов
@@ -107,8 +102,12 @@ export default function SelectionFunnel() {
               {ELIMINATION_STAGE.map((stage, i) => (
                 <span
                   key={i}
-                  className={`size-3 rounded-full transition-colors duration-500 md:size-3.5 ${
-                    stage <= effectiveStage ? 'bg-mist' : 'bg-sun'
+                  className={`size-3 rounded-full transition-[background-color,box-shadow] duration-500 md:size-3.5 ${
+                    stage <= effectiveStage
+                      ? 'bg-mist'
+                      : finished
+                        ? 'bg-sky shadow-[0_0_12px_rgba(39,155,224,0.6)]'
+                        : 'bg-sky'
                   }`}
                 />
               ))}
@@ -128,7 +127,7 @@ export default function SelectionFunnel() {
                       passed
                         ? 'bg-ok/10 text-ok'
                         : current
-                          ? 'bg-ink text-paper'
+                          ? 'bg-ink text-white'
                           : 'bg-mist text-ink-soft'
                     }`}
                   >
@@ -142,12 +141,20 @@ export default function SelectionFunnel() {
                     {label}
                   </span>
                   {current && (
-                    <span className="size-2 shrink-0 rounded-full bg-sun" aria-hidden="true" />
+                    <span className="size-2 shrink-0 rounded-full bg-sky" aria-hidden="true" />
                   )}
                 </li>
               )
             })}
           </ol>
+        </div>
+
+        {/* Мостик к ценам: отбор и честная цена — одна история доверия */}
+        <div className="mt-10 text-center">
+          <p className="text-[15px] text-ink-soft">
+            Прошедшие отбор работают по{NBSP}честной цене{NBSP}— без{NBSP}скрытых условий
+          </p>
+          <ScribbleArrow className="mx-auto mt-2 w-14 rotate-45" />
         </div>
       </div>
     </section>

@@ -5,6 +5,9 @@ import { useCalmMotion } from '../care/CareContext'
 import { breathCue } from '../lib/sound'
 import { haptic } from '../lib/haptics'
 import { track } from '../lib/analytics'
+import { NBSP } from '../lib/format'
+import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
+import { ScribbleUnderline } from './Scribble'
 import BreathScene from '../breath/BreathScene'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -13,8 +16,8 @@ type Phase = 'idle' | 'inhale' | 'hold' | 'exhale' | 'done'
 
 const PHASE_SECONDS: Record<Exclude<Phase, 'idle' | 'done'>, number> = {
   inhale: 4,
-  hold: 7,
-  exhale: 8,
+  hold: 4,
+  exhale: 6,
 }
 
 const PHASE_LABEL: Record<Exclude<Phase, 'idle' | 'done'>, string> = {
@@ -23,12 +26,17 @@ const PHASE_LABEL: Record<Exclude<Phase, 'idle' | 'done'>, string> = {
   exhale: 'Выдох…',
 }
 
-const CYCLE_SECONDS = 19
+const CYCLE_SECONDS = 14
 const TOTAL_CYCLES = 2
 
 const RING_R = 148
 const RING_LEN = 2 * Math.PI * RING_R
 
+/**
+ * «60 секунд ясности»: сфера света дышит вместе с человеком.
+ * Вдох 4 — расширение, задержка 4 — свечение, выдох 6 — отпускание.
+ * На время практики экран мягко «фокусируется» на сфере виньеткой.
+ */
 export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   const calm = useCalmMotion()
   const [phase, setPhase] = useState<Phase>('idle')
@@ -45,7 +53,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
     setPhase(p)
   }
 
-  // Цепочка фаз: вдох 4с → задержка 7с → выдох 8с, два цикла
+  // Цепочка фаз: вдох 4с → задержка 4с → выдох 6с, два цикла
   useEffect(() => {
     if (phase === 'idle' || phase === 'done') return
     const seconds = PHASE_SECONDS[phase]
@@ -82,23 +90,41 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
   const ringProgress = (() => {
     if (!running) return 0
     const passed =
-      phase === 'inhale' ? PHASE_SECONDS.inhale : phase === 'hold' ? 11 : CYCLE_SECONDS
+      phase === 'inhale'
+        ? PHASE_SECONDS.inhale
+        : phase === 'hold'
+          ? PHASE_SECONDS.inhale + PHASE_SECONDS.hold
+          : CYCLE_SECONDS
     return passed / CYCLE_SECONDS
   })()
 
   const scale = phase === 'inhale' || phase === 'hold' ? 1.35 : 1
-  const scaleDuration = phase === 'inhale' ? 4 : phase === 'exhale' ? 8 : 0.3
+  const scaleDuration = phase === 'inhale' ? 4 : phase === 'exhale' ? 6 : 0.3
 
   return (
-    <section id="breath" className="py-20 md:py-28">
+    <section id="breath" className="relative py-20 md:py-28">
       <div className="container-x grid items-center gap-12 md:grid-cols-2">
-        <div>
-          <p className="eyebrow">Попробуйте прямо сейчас</p>
-          <h2 className="mt-3 text-4xl md:text-5xl">{'60 секунд спокойствия — прямо здесь'}</h2>
-          <p className="mt-5 max-w-md text-lg text-ink-soft">
-            {'Забота о себе начинается с малого. Это упражнение психологи дают на первых сессиях при тревоге: медленное дыхание 4–7–8 помогает телу выйти из режима «бей или беги» — прямо сейчас, без подготовки.'}
-          </p>
-        </div>
+        <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={VIEWPORT_ONCE}>
+          {/* На время практики текст уходит в тень — внимание остаётся на сфере */}
+          <div
+            className={`transition-opacity duration-1000 ${
+              running && !calm ? 'opacity-40' : 'opacity-100'
+            }`}
+          >
+            <p className="eyebrow">Попробуйте прямо сейчас</p>
+            <h2 className="mt-3 text-4xl md:text-5xl">
+              {'60 секунд '}
+              <span className="relative inline-block">
+                ясности
+                <ScribbleUnderline className="absolute inset-x-0 -bottom-1" />
+              </span>
+              {`${NBSP}— прямо здесь`}
+            </h2>
+            <p className="mt-5 max-w-md text-lg text-ink-soft">
+              {`Минута тишины${NBSP}— уже забота о${NBSP}себе. Медленное дыхание 4–4–6 помогает телу успокоиться, а${NBSP}мыслям${NBSP}— проясниться.`}
+            </p>
+          </div>
+        </motion.div>
 
         <div className="flex flex-col items-center">
           <div className="relative flex size-[320px] items-center justify-center">
@@ -110,7 +136,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
                 cy="160"
                 r={RING_R}
                 fill="none"
-                stroke="var(--sun-deep)"
+                stroke="var(--sky)"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeDasharray={RING_LEN}
@@ -123,18 +149,23 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
               />
             </svg>
 
-            {/* Свечение при задержке дыхания */}
+            {/* Свечение вокруг сферы: на задержке дыхания пульсирует */}
             {!calm && (
               <motion.div
-                className="absolute size-[230px] rounded-full bg-gradient-to-br from-sun/50 via-peach/50 to-sky/50 blur-2xl"
-                animate={phase === 'hold' ? { opacity: [0.4, 0.85, 0.4] } : { opacity: 0.35 }}
-                transition={phase === 'hold' ? { duration: 3.5, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.5 }}
+                className="absolute size-[230px] rounded-full bg-sky/40 blur-3xl"
+                aria-hidden
+                animate={phase === 'hold' ? { opacity: [0.4, 0.8, 0.4] } : { opacity: 0.4 }}
+                transition={
+                  phase === 'hold'
+                    ? { duration: 4, repeat: Infinity, ease: 'easeInOut' }
+                    : { duration: 0.5 }
+                }
               />
             )}
 
-            {/* Круг */}
+            {/* Сфера света */}
             <motion.div
-              className="relative flex size-[210px] items-center justify-center rounded-full bg-gradient-to-br from-sun/70 via-peach/70 to-sky/70"
+              className="relative flex size-[210px] items-center justify-center rounded-full bg-gradient-to-br from-sky via-azure to-white"
               animate={calm ? { scale: 1 } : { scale: phase === 'done' || phase === 'idle' ? 1 : scale }}
               transition={{ duration: calm ? 0 : scaleDuration, ease: 'easeInOut' }}
             >
@@ -149,7 +180,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    Начать
+                    Сделать вдох
                   </motion.button>
                 )}
                 {running && (
@@ -207,7 +238,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
                 transition={{ duration: 0.4, ease: EASE }}
               >
                 <p className="text-[16px]">
-                  {'Это была 1 минута для себя. Представьте, что даст 50 минут с психологом.'}
+                  {`Это была минута для${NBSP}себя. Представьте, что даст час с${NBSP}психологом.`}
                 </p>
                 <button
                   type="button"
@@ -231,6 +262,25 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Фокусировка: мягкая виньетка приглушает края экрана на время практики */}
+      <AnimatePresence>
+        {running && !calm && (
+          <motion.div
+            key="focus"
+            className="pointer-events-none absolute inset-0"
+            aria-hidden
+            style={{
+              background:
+                'radial-gradient(70% 70% at 50% 50%, rgba(22,24,29,0) 45%, rgba(22,24,29,0.06) 100%)',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: EASE }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Полноэкранный «Момент тишины» */}
       <AnimatePresence>

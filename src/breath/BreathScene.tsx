@@ -13,8 +13,8 @@ type ActivePhase = Exclude<ScenePhase, 'paused'>
 
 const PHASE_SECONDS: Record<ActivePhase, number> = {
   inhale: 4,
-  hold: 7,
-  exhale: 8,
+  hold: 4,
+  exhale: 6,
 }
 
 const PHASE_LABEL: Record<ActivePhase, string> = {
@@ -32,17 +32,17 @@ const RINGS = [
 
 /** Генеративные «споры»: мягкие blur-круги, медленно дрейфующие вокруг центра */
 const SPORES = [
-  { size: 20, left: '22%', top: '28%', dx: 34, dy: 26, dur: 15, delay: 0, cls: 'bg-sun/40' },
-  { size: 14, left: '72%', top: '20%', dx: -28, dy: 22, dur: 18, delay: 1.4, cls: 'bg-peach/45' },
+  { size: 20, left: '22%', top: '28%', dx: 34, dy: 26, dur: 15, delay: 0, cls: 'bg-sky/40' },
+  { size: 14, left: '72%', top: '20%', dx: -28, dy: 22, dur: 18, delay: 1.4, cls: 'bg-azure/45' },
   { size: 26, left: '80%', top: '62%', dx: -38, dy: -30, dur: 20, delay: 0.6, cls: 'bg-sky/50' },
   { size: 16, left: '14%', top: '64%', dx: 30, dy: -24, dur: 13, delay: 2.2, cls: 'bg-sky/45' },
-  { size: 22, left: '38%', top: '12%', dx: 26, dy: 20, dur: 17, delay: 1, cls: 'bg-peach/35' },
-  { size: 12, left: '60%', top: '82%', dx: -24, dy: -20, dur: 12, delay: 0.3, cls: 'bg-sun/35' },
-  { size: 18, left: '88%', top: '38%', dx: -32, dy: 26, dur: 19, delay: 1.8, cls: 'bg-sun-deep/25' },
+  { size: 22, left: '38%', top: '12%', dx: 26, dy: 20, dur: 17, delay: 1, cls: 'bg-azure/35' },
+  { size: 12, left: '60%', top: '82%', dx: -24, dy: -20, dur: 12, delay: 0.3, cls: 'bg-sky/35' },
+  { size: 18, left: '88%', top: '38%', dx: -32, dy: 26, dur: 19, delay: 1.8, cls: 'bg-sky-deep/25' },
 ]
 
 /**
- * «Момент тишины»: полноэкранная практика дыхания 4-7-8.
+ * «Момент тишины»: полноэкранная практика дыхания 4-4-6.
  * Циклы бесконечны — пока человек сам не решит выйти (Esc, крестик, клик по фону).
  * Скрытая вкладка ставит практику на паузу: таймеры снимаются, CPU свободен.
  */
@@ -97,7 +97,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
     setPhase(p)
   }
 
-  // Машина фаз: вдох 4с → задержка 7с → выдох 8с, циклы без ограничения
+  // Машина фаз: вдох 4с → задержка 4с → выдох 6с, циклы без ограничения
   useEffect(() => {
     if (phase === 'paused') return
     const seconds = PHASE_SECONDS[phase]
@@ -123,7 +123,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
   const paused = phase === 'paused'
   const expanded = phase === 'inhale' || phase === 'hold'
   const phaseDuration =
-    phase === 'inhale' ? 4 : phase === 'exhale' ? 8 : phase === 'hold' ? 0.3 : 0.6
+    phase === 'inhale' ? 4 : phase === 'exhale' ? 6 : phase === 'hold' ? 0.3 : 0.6
 
   return (
     <motion.div
@@ -137,16 +137,16 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Момент тишины — дыхание 4–7–8"
+      aria-label="Момент тишины — дыхание 4–4–6"
       tabIndex={-1}
       className="h-full outline-none"
       onClick={onClose}
     >
-      {/* Фон: мягкий рассветный градиент от бумаги к небу */}
-      <div className="absolute inset-0 bg-paper" aria-hidden />
-      <div className="absolute inset-0 bg-gradient-to-b from-sky/20 via-transparent to-peach/10" aria-hidden />
+      {/* Фон: ясное небо — сверху голубое, у горизонта тонкий тёплый край рассвета */}
+      <div className="absolute inset-0 bg-white" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-b from-sky/25 via-azure/10 to-transparent" aria-hidden />
       <div
-        className="absolute inset-0 bg-[radial-gradient(58%_42%_at_50%_70%,rgba(255,200,61,0.12),transparent_72%)]"
+        className="absolute inset-0 bg-[radial-gradient(58%_42%_at_50%_88%,rgba(255,217,168,0.18),transparent_72%)]"
         aria-hidden
       />
 
@@ -205,12 +205,12 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
             <div className="max-w-xl text-center">
               <p className="eyebrow">Момент тишины</p>
               <p className="mt-4 font-display text-2xl leading-snug md:text-3xl">
-                {'Вдох — 4 · Держим — 7 · Выдох — 8'}
+                {'Вдох — 4 · Держим — 4 · Выдох — 6'}
               </p>
               {phase === 'paused' ? (
                 <>
                   <p className="mt-8 text-lg text-ink-soft">
-                    {'Пауза — вернитесь, когда будете готовы'}
+                    {'Пауза — вернитесь, когда будете готовы'}
                   </p>
                   <button type="button" className="btn-secondary mt-6" onClick={resume}>
                     Продолжить
@@ -235,7 +235,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
                 {RINGS.map((r, i) => (
                   <motion.div
                     key={r.size}
-                    className="absolute rounded-full border border-ink/10"
+                    className="absolute rounded-full border border-[rgba(39,155,224,0.3)]"
                     style={{ width: r.size, height: r.size }}
                     aria-hidden
                     animate={{
@@ -248,19 +248,19 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
 
                 {/* Свечение при задержке дыхания */}
                 <motion.div
-                  className="absolute size-[260px] rounded-full bg-gradient-to-br from-sun/45 via-peach/45 to-sky/45 blur-3xl"
+                  className="absolute size-[260px] rounded-full bg-sky/40 blur-3xl"
                   aria-hidden
                   animate={phase === 'hold' ? { opacity: [0.4, 0.8, 0.4] } : { opacity: 0.35 }}
                   transition={
                     phase === 'hold'
-                      ? { duration: 3.5, repeat: Infinity, ease: 'easeInOut' }
+                      ? { duration: 4, repeat: Infinity, ease: 'easeInOut' }
                       : { duration: 0.6 }
                   }
                 />
 
-                {/* Дышащий круг */}
+                {/* Сфера света */}
                 <motion.div
-                  className="relative flex size-[240px] items-center justify-center rounded-full bg-gradient-to-br from-sun/70 via-peach/70 to-sky/70"
+                  className="relative flex size-[240px] items-center justify-center rounded-full bg-gradient-to-br from-sky via-azure to-white"
                   animate={{ scale: paused ? 1 : expanded ? 1.3 : 1 }}
                   transition={{ duration: phaseDuration, ease: 'easeInOut' }}
                 >
@@ -284,7 +284,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
               {phase === 'paused' ? (
                 <div className="mt-8 flex flex-col items-center gap-4 text-center">
                   <p className="text-[15px] text-ink-soft">
-                    {'Пауза — вернитесь, когда будете готовы'}
+                    {'Пауза — вернитесь, когда будете готовы'}
                   </p>
                   <button type="button" className="btn-secondary" onClick={resume}>
                     Продолжить
