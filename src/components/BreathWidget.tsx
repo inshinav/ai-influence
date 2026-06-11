@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
+import { Maximize2 } from 'lucide-react'
+import { useCalmMotion } from '../care/CareContext'
+import { breathCue } from '../lib/sound'
+import { haptic } from '../lib/haptics'
 import { track } from '../lib/analytics'
+import BreathScene from '../breath/BreathScene'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -25,10 +30,11 @@ const RING_R = 148
 const RING_LEN = 2 * Math.PI * RING_R
 
 export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void }) {
-  const reduced = useReducedMotion()
+  const calm = useCalmMotion()
   const [phase, setPhase] = useState<Phase>('idle')
   const [cycle, setCycle] = useState(0)
   const [secondsLeft, setSecondsLeft] = useState(0)
+  const [showScene, setShowScene] = useState(false)
   const timers = useRef<number[]>([])
 
   useEffect(() => () => timers.current.forEach(window.clearTimeout), [])
@@ -38,6 +44,8 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
     if (phase === 'idle' || phase === 'done') return
     const seconds = PHASE_SECONDS[phase]
     setSecondsLeft(seconds)
+    breathCue(phase)
+    haptic(10)
     const tick = window.setInterval(() => setSecondsLeft((s) => Math.max(s - 1, 0)), 1000)
     const next = window.setTimeout(() => {
       if (phase === 'inhale') setPhase('hold')
@@ -77,7 +85,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
   const scaleDuration = phase === 'inhale' ? 4 : phase === 'exhale' ? 8 : 0.3
 
   return (
-    <section className="py-20 md:py-28">
+    <section id="breath" className="py-20 md:py-28">
       <div className="container-x grid items-center gap-12 md:grid-cols-2">
         <div>
           <p className="eyebrow">Попробуйте прямо сейчас</p>
@@ -111,7 +119,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
             </svg>
 
             {/* Свечение при задержке дыхания */}
-            {!reduced && (
+            {!calm && (
               <motion.div
                 className="absolute size-[230px] rounded-full bg-gradient-to-br from-sun/50 via-peach/50 to-sky/50 blur-2xl"
                 animate={phase === 'hold' ? { opacity: [0.4, 0.85, 0.4] } : { opacity: 0.35 }}
@@ -122,8 +130,8 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
             {/* Круг */}
             <motion.div
               className="relative flex size-[210px] items-center justify-center rounded-full bg-gradient-to-br from-sun/70 via-peach/70 to-sky/70"
-              animate={reduced ? { scale: 1 } : { scale: phase === 'done' || phase === 'idle' ? 1 : scale }}
-              transition={{ duration: reduced ? 0 : scaleDuration, ease: 'easeInOut' }}
+              animate={calm ? { scale: 1 } : { scale: phase === 'done' || phase === 'idle' ? 1 : scale }}
+              transition={{ duration: calm ? 0 : scaleDuration, ease: 'easeInOut' }}
             >
               <AnimatePresence mode="wait">
                 {phase === 'idle' && (
@@ -151,7 +159,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
                     <p className="text-lg font-medium text-ink/80">
                       {PHASE_LABEL[phase as 'inhale' | 'hold' | 'exhale']}
                     </p>
-                    {reduced && <p className="mt-1 text-3xl font-semibold text-ink/70">{secondsLeft}</p>}
+                    {calm && <p className="mt-1 text-3xl font-semibold text-ink/70">{secondsLeft}</p>}
                   </motion.div>
                 )}
                 {phase === 'done' && (
@@ -167,6 +175,17 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
               </AnimatePresence>
             </motion.div>
           </div>
+
+          {phase === 'idle' && (
+            <button
+              type="button"
+              className="btn-secondary mt-5"
+              onClick={() => setShowScene(true)}
+            >
+              <Maximize2 size={16} aria-hidden />
+              Полный экран
+            </button>
+          )}
 
           {running && (
             <p className="mt-4 text-[13.5px] text-ink-soft" aria-live="polite">
@@ -207,6 +226,11 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Полноэкранный «Момент тишины» */}
+      <AnimatePresence>
+        {showScene && <BreathScene onClose={() => setShowScene(false)} />}
+      </AnimatePresence>
     </section>
   )
 }
