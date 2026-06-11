@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Cloud, Download, Lock, Sparkles, Sun, Wind } from 'lucide-react'
+import { Cloud, Download, Lock, Sun, Wind } from 'lucide-react'
 import type { TopicId } from '../types'
 import { track } from '../lib/analytics'
 import { haptic } from '../lib/haptics'
@@ -15,7 +15,7 @@ import {
   type ClearingTestId,
   type FreeTool,
 } from './tests'
-import FogStage from './FogStage'
+import ClearWindow from './ClearWindow'
 import Reflection from './Reflection'
 import IntensitySlider from './IntensitySlider'
 import SupportScreen from './SupportScreen'
@@ -171,6 +171,8 @@ function TestFlow({
   const heavy = done && isHeavy(test, scores)
   const result = sum >= test.threshold ? test.elevated : test.ok
   const clarity = done ? 1 : clarityForProgress(scores.length, total)
+  /** Подсказка-приглашение: видна, пока человек не сделал первый ответ */
+  const showNudge = step === 0 && scores.length === 0 && picked === null
 
   useEffect(
     () => () => {
@@ -266,7 +268,9 @@ function TestFlow({
   }
 
   return (
-    <FogStage clarity={clarity} className="card max-w-2xl p-6 md:p-8">
+    <div className="card max-w-3xl overflow-hidden">
+      <div className="grid md:grid-cols-[1fr_220px]">
+      <div className="p-6 md:p-8">
       <div className="min-h-[380px]">
         <AnimatePresence mode="wait" initial={false}>
           {done && heavy ? (
@@ -283,12 +287,11 @@ function TestFlow({
           ) : done ? (
             <motion.div key="result" {...slide}>
               <div ref={resultRef} tabIndex={-1} className="outline-none">
-              <div
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-mist"
-                aria-hidden="true"
-              >
-                <Sparkles className="h-5 w-5 text-sky" />
-              </div>
+              {/* Награда: окно расчищено */}
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-soft px-3 py-1.5 text-[12.5px] font-semibold text-ink">
+                <Sun className="h-3.5 w-3.5 text-sky" aria-hidden="true" />
+                Небо расчищено
+              </span>
               <h3 className="mt-4 font-display text-2xl md:text-[28px]">{result.title}</h3>
               <p className="mt-2 max-w-xl text-ink-soft">{result.text}</p>
               <p className="mt-3 text-[12.5px] text-ink-soft/80">
@@ -352,35 +355,51 @@ function TestFlow({
               </p>
 
               {question.kind === 'choice' ? (
-                <div
-                  ref={optionsRef}
-                  onKeyDown={onOptionsKeyDown}
-                  role="group"
-                  aria-labelledby={`clearing-q-${test.id}`}
-                  className="mt-5 grid gap-2"
-                >
-                  {question.options.map((option, i) => {
-                    const isPicked = picked === i
-                    const dimmed = picked !== null && !isPicked
-                    return (
-                      <button
-                        key={option.label}
-                        type="button"
-                        aria-pressed={isPicked}
-                        onClick={(e) => answer(option.score, option.reflection, i, e.detail === 0)}
-                        className={`w-full rounded-xl border p-4 text-left text-[15px] transition-all duration-200 ${
-                          isPicked
-                            ? 'border-ink bg-ink text-paper'
-                            : dimmed
-                              ? 'border-line bg-white opacity-50'
-                              : 'border-line bg-white hover:border-ink/25 hover:bg-mist/50'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    )
-                  })}
-                </div>
+                <>
+                  {showNudge && (
+                    <p className="hand mt-4 text-[19px]" aria-hidden>
+                      выберите честный ответ ↓
+                    </p>
+                  )}
+                  <div
+                    ref={optionsRef}
+                    onKeyDown={onOptionsKeyDown}
+                    role="group"
+                    aria-labelledby={`clearing-q-${test.id}`}
+                    className={`${showNudge ? 'mt-2' : 'mt-5'} grid gap-2`}
+                  >
+                    {question.options.map((option, i) => {
+                      const isPicked = picked === i
+                      const dimmed = picked !== null && !isPicked
+                      return (
+                        <button
+                          key={option.label}
+                          type="button"
+                          aria-pressed={isPicked}
+                          onClick={(e) => answer(option.score, option.reflection, i, e.detail === 0)}
+                          className={`relative w-full rounded-xl border p-4 text-left text-[15px] transition-all duration-200 ${
+                            isPicked
+                              ? 'border-ink bg-ink text-white'
+                              : dimmed
+                                ? 'border-line bg-white opacity-50'
+                                : 'border-line bg-white hover:-translate-y-px hover:border-sky/40 hover:bg-sky-soft/30'
+                          }`}
+                        >
+                          {/* Мягкий пульс на первом варианте — «сюда можно нажать» */}
+                          {i === 0 && showNudge && !calm && (
+                            <motion.span
+                              aria-hidden
+                              className="pointer-events-none absolute -inset-px rounded-xl ring-2 ring-sky/60"
+                              animate={{ opacity: [0.8, 0, 0.8] }}
+                              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                            />
+                          )}
+                          {option.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </>
               ) : (
                 <div ref={optionsRef} onKeyDown={onOptionsKeyDown} className="mt-7">
                   <IntensitySlider
@@ -412,7 +431,16 @@ function TestFlow({
           ) : null}
         </AnimatePresence>
       </div>
-    </FogStage>
+      </div>
+
+      {/* Запотевшее окно: туман живёт здесь, ответы протирают стекло */}
+      <ClearWindow
+        clarity={clarity}
+        done={done}
+        className="order-first h-28 border-b border-line md:order-none md:h-auto md:border-b-0 md:border-l"
+      />
+      </div>
+    </div>
   )
 }
 
