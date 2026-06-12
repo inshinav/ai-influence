@@ -76,7 +76,16 @@ export default function Footer() {
         <div className="mt-10 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="rounded-xl bg-mist px-4 py-3 text-[13px] text-ink-soft">
             Концепт-прототип для демонстрации продуктовых гипотез. Не{' '}является официальным
-            сайтом Ясно.
+            сайтом Ясно. Факты о{' '}сервисе сверены по{' '}открытым страницам{' '}
+            <a
+              href="https://yasno.live"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4 hover:text-ink"
+            >
+              yasno.live
+            </a>
+            , анкеты, слоты и{' '}контакты — демонстрационные, без отправки данных.
           </p>
           <p className="shrink-0 text-[13px] text-ink-soft">©{' '}2026</p>
         </div>

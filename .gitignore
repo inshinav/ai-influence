@@ -29,3 +29,7 @@ yasno-beget.zip
 _yasno_*
 _extract.py
 tmp_*
+.chrome-audit*/
+.chrome-visual-qa*/
+.edge-visual-qa*/
+qa-visual/
