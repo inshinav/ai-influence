@@ -48,6 +48,10 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
         >
           <p className="eyebrow">Отзывы</p>
           <h2 className="mt-3 text-4xl md:text-5xl">После сессий говорят так</h2>
+          {/* Проверяемое, а не заявленное: рейтинги живут на независимых площадках */}
+          <p className="mt-4 text-[14.5px] text-ink-soft">
+            {`4,8${NBSP}из${NBSP}5 в App${NBSP}Store и Google${NBSP}Play · 800+ отзывов на${NBSP}независимых площадках`}
+          </p>
         </motion.div>
 
         {/* Сцена: активная история в фокусе, соседние — приглушены по бокам */}

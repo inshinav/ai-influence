@@ -7,7 +7,7 @@ import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
 import { ScribbleArrow } from './Scribble'
 
 const STAGES = [
-  'Образование',
+  `Образование и${NBSP}500+ часов в${NBSP}методе`,
   `Опыт от${NBSP}3${NBSP}лет`,
   'Рекомендации супервизора',
   `Собеседование с${NBSP}разбором практики`,
@@ -76,7 +76,8 @@ export default function SelectionFunnel() {
           </h2>
           <p className="mt-4 max-w-xl text-lg text-ink-soft">
             Каждая заявка проходит шесть этапов проверки. Из{NBSP}100 кандидатов
-            до{NBSP}работы с{NBSP}клиентами доходят девять.
+            до{NBSP}работы с{NBSP}клиентами доходят девять{NBSP}— только те, кого мы
+            смело порекомендовали{NBSP}бы собственным друзьям.
           </p>
         </motion.div>
 
