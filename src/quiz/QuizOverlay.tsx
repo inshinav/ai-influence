@@ -322,10 +322,15 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 overflow-y-auto bg-paper"
     >
-      {/* Деликатное небо под контентом — атмосфера ясности */}
+      {/* Деликатное небо под контентом: дымка рассеивается с каждым ответом —
+          механика «станет ясно» работает и внутри воронки */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[40vh] bg-gradient-to-b from-sky-soft/50 to-transparent"
+        style={{
+          opacity: stage === 'steps' ? 1 - ((step - 1) / TOTAL_STEPS) * 0.8 : 0.2,
+          transition: 'opacity 0.9s var(--ease-out-soft)',
+        }}
       />
       <div
         ref={dialogRef}

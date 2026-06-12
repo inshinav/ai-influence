@@ -68,7 +68,7 @@ function PreviewCall() {
 const STEPS = [
   {
     title: 'Расскажите о себе',
-    text: '2 минуты и 7 простых вопросов — без регистрации.',
+    text: '2 минуты и 6 простых вопросов — без регистрации.',
     preview: <PreviewQuiz />,
   },
   {

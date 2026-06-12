@@ -437,7 +437,7 @@ function TestFlow({
       <ClearWindow
         clarity={clarity}
         done={done}
-        className="order-first h-28 border-b border-line md:order-none md:h-auto md:border-b-0 md:border-l"
+        className="order-first h-36 border-b border-line md:order-none md:h-auto md:border-b-0 md:border-l"
       />
       </div>
     </div>

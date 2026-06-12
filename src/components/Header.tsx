@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Moon, Sun } from 'lucide-react'
-import { useCare } from '../care/CareContext'
+import { AnimatePresence, motion } from 'motion/react'
+import { Menu, Moon, Sun, X } from 'lucide-react'
+import { useCare, useCalmMotion } from '../care/CareContext'
 import { track } from '../lib/analytics'
 
 const NAV_LINKS = [
@@ -13,7 +14,9 @@ const NAV_LINKS = [
 
 export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const { settings, setSetting } = useCare()
+  const calm = useCalmMotion()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -22,10 +25,20 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Esc закрывает мобильное меню
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
   return (
     <header
       className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
-        scrolled
+        scrolled || menuOpen
           ? 'bg-paper/75 backdrop-blur-xl border-b border-line'
           : 'bg-transparent border-b border-transparent'
       }`}
@@ -77,8 +90,46 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
           >
             Подобрать психолога
           </button>
+          {/* Мобильное меню: без него «Цены» и «FAQ» на телефоне недостижимы из шапки */}
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            className="rounded-full p-2.5 text-ink-soft transition-colors hover:bg-mist hover:text-ink md:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
+          </button>
         </div>
       </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            id="mobile-nav"
+            aria-label="Основная навигация"
+            className="border-t border-line bg-paper/95 backdrop-blur-xl md:hidden"
+            initial={calm ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={calm ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={{ duration: calm ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="container-x flex flex-col py-2">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-lg px-2 py-3 text-[16px] text-ink transition-colors hover:bg-mist"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

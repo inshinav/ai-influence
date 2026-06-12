@@ -69,7 +69,7 @@ export default function SignupGate({
       {/* Выбор человека перед глазами: время не «потерялось», пока он вводит контакты */}
       <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 !shadow-none p-4">
         <div className="flex items-center gap-3">
-          <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sky/30 via-azure/30 to-sky-soft">
+          <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sky/25 via-azure/25 to-dawn/40">
             <span className="font-display text-[14px]" aria-hidden>
               {therapist.name
                 .split(' ')

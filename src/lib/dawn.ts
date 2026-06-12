@@ -29,6 +29,7 @@ export const DAWN: Record<DawnPhase, DawnPalette> = {
     label: 'Утренняя (7–11)',
     blobs: ['rgba(95, 194, 240, 0.42)', 'rgba(255, 217, 168, 0.32)', 'rgba(39, 155, 224, 0.26)'],
     veil: 'rgba(95, 194, 240, 0.03)',
+    heroLine: 'Доброе утро. День можно начать с заботы о себе.',
   },
   day: {
     label: 'Дневная (11–17)',
@@ -39,6 +40,7 @@ export const DAWN: Record<DawnPhase, DawnPalette> = {
     label: 'Закатная (17–22)',
     blobs: ['rgba(95, 194, 240, 0.34)', 'rgba(255, 217, 168, 0.42)', 'rgba(39, 155, 224, 0.24)'],
     veil: 'rgba(255, 217, 168, 0.05)',
+    heroLine: 'Вечер — хорошее время разобрать прожитый день.',
   },
   night: {
     label: 'Ночная (22–5)',

@@ -171,6 +171,19 @@ export async function downloadResultCard(opts: ResultCardOptions): Promise<void>
   })
   if (!blob) return
 
+  // Мобайл: системный шеринг-лист — карточку можно сразу переслать,
+  // а не искать в «Загрузках». Отказ человека — не повод навязывать файл.
+  const file = new File([blob], `${opts.fileName ?? 'yasno-result'}.png`, { type: 'image/png' })
+  if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file] })
+      return
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return
+      /* share не получился — падаем в обычное скачивание */
+    }
+  }
+
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

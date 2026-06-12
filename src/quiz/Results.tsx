@@ -26,7 +26,7 @@ function Avatar({ therapist }: { therapist: Therapist }) {
     .map((w) => w[0])
     .join('')
   return (
-    <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky/30 via-azure/30 to-sky-soft">
+    <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky/25 via-azure/25 to-dawn/40">
       <span className="font-display text-lg" aria-hidden>
         {initials}
       </span>
