@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Play } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { useCalmMotion } from '../care/CareContext'
 import type { Therapist, Method } from '../types'
 import { topicById } from '../data/topics'
@@ -134,13 +134,10 @@ export default function TherapistCard({
 
         {/* Действия: «Записаться» проявляется на hover (desktop), всегда видна на mobile */}
         <div className="mt-auto flex gap-2 pt-4">
+          {/* CTA всегда видима: скрытая до hover кнопка записи стоила бы конверсии */}
           <button
             type="button"
-            className={`btn-primary flex-1 !px-4 !py-2.5 text-[15px]${
-              reduceMotion
-                ? ''
-                : ' transition-[opacity,transform] duration-300 ease-[var(--ease-out-soft)] md:translate-y-1 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100'
-            }`}
+            className="btn-primary flex-1 !px-4 !py-2.5 text-[15px]"
             onClick={handleBook}
           >
             Записаться
@@ -180,25 +177,25 @@ export default function TherapistCard({
                     {methodApproach[therapist.method]}
                   </p>
                 </div>
+                {/* Прозрачность отбора на карточке конкретного человека —
+                    в момент, когда решают, можно ли ему довериться */}
                 <div>
-                  <div
-                    role="img"
-                    aria-label={'Видео-визитка — заглушка'}
-                    className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-ink via-ink to-sky-deeper"
-                  >
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 bg-[radial-gradient(60%_80%_at_70%_20%,rgba(39,155,224,0.25),transparent_70%)]"
-                    />
-                    <span className="glass relative flex size-12 items-center justify-center rounded-full">
-                      <Play
-                        aria-hidden="true"
-                        className="ml-0.5 size-5 text-ink"
-                        fill="currentColor"
-                      />
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[13px] text-ink-soft">{`Видео-знакомство, 60${NBSP}сек`}</p>
+                  <h4 className="eyebrow">Проверено Ясно</h4>
+                  <ul className="mt-2 flex flex-col gap-1.5">
+                    {[
+                      'Диплом и подготовка в методе подтверждены',
+                      'Прошёл отбор — 6 этапов, проходят 9% кандидатов',
+                      'Регулярные супервизии и этический кодекс',
+                    ].map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2 text-[13.5px] leading-snug text-ink-soft"
+                      >
+                        <ShieldCheck size={15} className="mt-0.5 shrink-0 text-ok" aria-hidden />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </motion.div>

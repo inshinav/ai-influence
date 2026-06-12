@@ -139,7 +139,7 @@ export default function Hero({ onOpenQuiz }: { onOpenQuiz: (topic?: TopicId) => 
         </motion.div>
 
         <motion.p variants={reveal} className="mt-10 text-[13.5px] text-ink-soft">
-          4{' '}700 проверенных специалистов · 81% чувствуют результат к{' '}5-й сессии ·
+          4{' '}800 проверенных специалистов · 81% чувствуют результат к{' '}5-й сессии ·
           от{' '}3{' '}150{' '}₽
         </motion.p>
 

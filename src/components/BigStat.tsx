@@ -12,15 +12,15 @@ import { reveal, revealParent, VIEWPORT_ONCE } from '../lib/motionPresets'
 const STATS: { value: number; suffix: string; label: string; main?: boolean }[] = [
   { value: 81, suffix: '%', label: 'чувствуют результат уже после пятой сессии', main: true },
   { value: 420_000, suffix: '+', label: 'человек уже выбрали Ясно' },
-  { value: 4_700, suffix: '', label: 'проверенных специалистов' },
+  { value: 4_800, suffix: '', label: 'проверенных специалистов' },
   { value: 7, suffix: ' лет', label: 'средний опыт психолога' },
 ]
 
 const PULSE_LINES = [
-  'кто-то начал терапию пару минут назад',
   'сессии идут прямо сейчас — онлайн',
   'из Москвы, Алматы, Берлина — отовсюду',
   'каждый день — сотни первых сессий',
+  'половина приходят в терапию впервые',
 ]
 
 function useCountUp(target: number, run: boolean, durationMs = 1400): number {

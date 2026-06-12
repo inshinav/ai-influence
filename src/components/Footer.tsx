@@ -1,9 +1,13 @@
-const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
+type FooterLink = { href: string; label: string; external?: boolean }
+
+/** Ни одной мёртвой ссылки: либо живой якорь, либо реальный адрес экосистемы Ясно */
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Сервис',
     links: [
       { href: '#how', label: 'Как это работает' },
       { href: '#therapists', label: 'Психологи' },
+      { href: '#tests', label: 'Тесты' },
       { href: '#pricing', label: 'Цены' },
       { href: '#faq', label: 'FAQ' },
     ],
@@ -11,17 +15,17 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
   {
     title: 'Помощь',
     links: [
-      { href: '#', label: 'Поддержка 24/7' },
-      { href: '#', label: 'Частые вопросы' },
-      { href: '#', label: 'Экстренная помощь' },
+      { href: 'mailto:care@yasno.example', label: 'Поддержка 24/7' },
+      { href: '#faq', label: 'Частые вопросы' },
+      { href: 'tel:+74959895050', label: 'Экстренная помощь — МЧС' },
     ],
   },
   {
     title: 'Компания',
     links: [
-      { href: '#', label: 'О нас' },
-      { href: '#', label: 'Стать психологом Ясно' },
-      { href: '#', label: 'Блог' },
+      { href: 'https://yasno.live', label: 'Настоящее Ясно', external: true },
+      { href: 'https://work.yasno.live', label: 'Стать психологом Ясно', external: true },
+      { href: 'https://yasno.live/blog', label: 'Блог', external: true },
     ],
   },
 ]
@@ -49,6 +53,7 @@ export default function Footer() {
                     <li key={link.label}>
                       <a
                         href={link.href}
+                        {...(link.external ? { target: '_blank', rel: 'noreferrer' } : {})}
                         className="text-[15px] text-ink-soft transition-colors hover:text-ink"
                       >
                         {link.label}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowLeft } from 'lucide-react'
 import type { SlotSelection, Therapist, TimePref } from '../types'
@@ -70,12 +70,21 @@ export default function SlotPicker({
   onConfirm: (slot: SlotSelection) => void
   onBack: (() => void) | null
 }) {
-  const [days] = useState(buildDays)
-  const [dayIndex, setDayIndex] = useState(0)
+  const days = useMemo(() => buildDays(), [])
+  // Стартуем с первого дня, где реально есть слоты: ночью «сегодня» уже пуст,
+  // и человек не должен встречать запись с экрана «всё занято»
+  const [dayIndex, setDayIndex] = useState(() => {
+    const first = days.findIndex((d) => timesForDay(therapist, d).length > 0)
+    return first === -1 ? 0 : first
+  })
   const [time, setTime] = useState<string | null>(null)
 
   const day = days[dayIndex]
   const times = timesForDay(therapist, day)
+  const nextFreeDay =
+    times.length === 0
+      ? days.find((d) => d.index !== dayIndex && timesForDay(therapist, d).length > 0)
+      : undefined
 
   const initials = therapist.name
     .split(' ')
@@ -141,7 +150,25 @@ export default function SlotPicker({
       </div>
 
       {times.length === 0 ? (
-        <p className="mt-6 text-[14.5px] text-ink-soft">В этот день всё занято</p>
+        <div className="mt-6">
+          <p className="text-[14.5px] text-ink-soft">
+            В этот день всё занято — психолог уже с клиентами.
+          </p>
+          {nextFreeDay && (
+            <button
+              type="button"
+              className="btn-secondary mt-4"
+              onClick={() => {
+                setDayIndex(nextFreeDay.index)
+                setTime(null)
+              }}
+            >
+              {`Ближайшее свободное — ${
+                nextFreeDay.index <= 1 ? nextFreeDay.tabLabel.toLowerCase() : nextFreeDay.tabLabel
+              }`}
+            </button>
+          )}
+        </div>
       ) : (
         <div className="mt-5 grid grid-cols-3 gap-2.5 sm:grid-cols-4">
           {times.map((t) => (

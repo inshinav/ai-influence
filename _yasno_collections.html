@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru" prefix="og: https://ogp.me/ns# profile: https://ogp.me/ns/profile# article: https://ogp.me/ns/article#">
+
+  <script type='text/javascript'>
+    this.App || (this.App = {});
+    this.App.user || (this.App.user = {});
+    this.App.user = {"id":"0","signed_up":false,"role":"anonymous"};
+
+  </script>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <link rel="stylesheet" href="https://assets.yasno.live/assets/tailwind-6a255a44ff1846cb339ab538289e82604b834bf975031987af1e2cf0e201cb0c.css" media="all" />
+
+      <title>Cписок услуг психотерапевтов и психологов онлайн-сервиса Ясно – Ясно</title>
+
+      <meta name="title" content="Cписок услуг психотерапевтов и психологов онлайн-сервиса Ясно">
+  <meta name="description" content="Полный перечень услуг психотерапевтической помощи, которые оказывают специалисты онлайн-сервиса по подбору психологов Ясно.">
+
+  <meta rel="canonical" content="https://yasno.live/collections">
+
+
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="qSSBKFW8xXGxn7hyfaISsDlg8aceCa6PnHw66A7xPwvofb-31I80he9lykI--IqR4QpF0bZ26kSKfhnYA7W59g" />
+    <meta name="action-cable-url" content="wss://yasno.live:8443/cable" />
+
+    <meta name="yandex-verification" content="43dea9e52a35191f" />
+
+    <link rel="preconnect" href="https://assets.yasno.live">
+    <link rel="preconnect" href="https://mc.yandex.ru" crossorigin="anonymous">
+
+    <link rel="apple-touch-icon" sizes="120x120" href="https://assets.yasno.live/assets/apple-touch-icon-7ed14f4b02be76b2a61e77a3945e967d3e3b742d5776ebcfa9a74f3baf6d3e44.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://assets.yasno.live/assets/favicon-32x32-ff1e21699d106551b3e813032d5026b7b58bb92c6384394c637bffdba3d0617b.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://assets.yasno.live/assets/favicon-16x16-98da0fe3710367996389b57a57300f2cc2f4f9c22c3491cbdb276fbdfbf67121.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="https://assets.yasno.live/assets/safari-pinned-tab-1ca60e6c789231a85f4cdf360978ee485543746373b8fa2ca8a6b26d102813c5.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta property="fb:app_id" content="412447992475780">
+    <meta name="apple-itunes-app" content="app-id=1584370233">
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    </script>
+
+    <!-- Carrot quest BEGIN -->
+<template id="CarrotTemplate">
+  <script type="text/javascript">
+    !function(){function t(t,e){return function(){window.carrotquestasync.push(t,arguments)}}if("undefined"==typeof carrotquest){var e=document.createElement("script");e.onload=()=>{App?.carrot();};e.type="text/javascript",e.async=!0,e.src="https://cdn.carrotquest.app/api.min.js",document.getElementsByTagName("head")[0].appendChild(e),window.carrotquest={},window.carrotquestasync=[],carrotquest.settings={};for(var n=["connect","track","identify","auth","onReady","addCallback","removeCallback","trackMessageInteraction"],a=0;a<n.length;a++)carrotquest[n[a]]=t(n[a])}}(),carrotquest.connect("61364-19e997a5e87ab85d6148879c1a");
+  </script>
+</template>
+<!-- Carrot quest END -->
+
+
+      
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.App?.user?.role !== 'client') {
+          return
+        }
+        if (window.App?.user?.signed_up) {
+          return
+        }
+
+        const NEED_INIT = false;
+        const NEED_UPDATE = false;
+
+        if (!NEED_INIT && NEED_UPDATE) {
+          const ADVCAKE_TRACK_ID = 'advcake_track_id';
+          const ADVCAKE_TRACK_URL = 'advcake_track_url';
+          const LAST_SOURCE_CAKE = 'last_source_cake';
+
+          const cookies = document.cookie.split('; ')
+
+          const getCookie = (name) => {
+            const cookie = cookies.find(row => row.startsWith(name))
+            return cookie ? cookie.split('=')?.[1] : null
+          }
+
+          // По этой куке определяем - посещал ли пользователь
+          // страницу с utm-метками AdvCake
+          const isLastSourceCake = getCookie(LAST_SOURCE_CAKE)
+          if (!isLastSourceCake || isLastSourceCake === 'false') {
+            return
+          }
+
+          // Получаем домен верхнего уровня
+          const getTopLevelDomain = () => {
+            const hostname = window.location.hostname;
+            const parts = hostname.split('.');
+            if (parts.length >= 2) {
+              return '.' + parts.slice(-2).join('.');
+            }
+            return '';
+          };
+
+          fetch('/api/v1/user/advcake', {
+            method: 'PUT',
+            body: JSON.stringify({
+              [ADVCAKE_TRACK_ID]: getCookie(ADVCAKE_TRACK_ID),
+              [ADVCAKE_TRACK_URL]: getCookie(ADVCAKE_TRACK_URL)
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.statusText);
+            }
+            return response;
+          })
+          .then(() => {
+            const topLevelDomain = getTopLevelDomain();
+            // Убираем cookies после их обработки
+            cookies.forEach(cookie => {
+              if (cookie.startsWith(LAST_SOURCE_CAKE)) {
+                const [name] = cookie.split('=');
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${topLevelDomain}`;
+              }
+            });
+          })
+        }
+      });
+    </script>
+
+      <script>
+  mindbox =
+    window.mindbox ||
+    function () {
+      mindbox.queue.push(arguments);
+    };
+  mindbox.queue = mindbox.queue || [];
+  mindbox("create", {
+    endpointId:
+      "yasnolive.Website",
+  });
+</script>
+<script src="https://api.mindbox.ru/scripts/v1/tracker.js" async></script>
+
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W84WW532M8"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-W84WW532M8', {"send_page_view":false,"link_attribution":true,"groups":"metrics"});
+      gtag('config', 'AW-10879951271', { send_page_views: false });
+    gtag('set', {'currency': 'RUB'});
+    gtag('set', 'user_properties', {});
+</script>
+
+      
+      <!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(46196496, "init", {
+        clickmap: true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor: false,
+        trackHash:true,
+        ecommerce:"dataLayer"
+    });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/46196496" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+        <script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src='https://vk.com/js/api/openapi.js?169',t.onload=function(){VK.Retargeting.Init("VK-RTRG-1469791-bOY0V"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-1469791-bOY0V" style="position:fixed; left:-999px;" alt=""/></noscript>
+
+        <script>(function(t,l,g,r,m){t[g]||(g=t[g]=function(){g.run?g.run.apply(g,arguments):g.queue.push(arguments)},g.queue=[],t=l.createElement(r),t.async=!0,t.src=m,l=l.getElementsByTagName(r)[0],l.parentNode.insertBefore(t,l))})(window,document,'tgp','script','https://telegram.org/js/pixel.js');tgp('init','LH8G9SFU');</script>
+
+      <!-- Rating Mail.ru counter -->
+<script type="text/javascript">
+var _tmr = window._tmr || (window._tmr = []);
+_tmr.push({id: "3546051", type: "pageView", start: (new Date()).getTime()});
+(function (d, w, id) {
+  if (d.getElementById(id)) return;
+  var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+  ts.src = "https://top-fwz1.mail.ru/js/code.js";
+  var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+  if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+})(document, window, "topmailru-code");
+</script><noscript><div>
+<img src="https://top-fwz1.mail.ru/counter?id=3546051;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" />
+</div></noscript>
+<!-- //Rating Mail.ru counter -->
+
+      
+
+      <script src="https://assets.yasno.live/assets/application-fcadb46c3f24fa0c46d2e07645da57e094816430b0f652e8f6c3dcf64fc317eb.js"></script>
+      <link rel="stylesheet" href="https://assets.yasno.live/assets/application-5a52eb198cf4ebf18f8cc05681c6a8a8a2c0dc9654a868c428fcda736aa6f5b4.css" media="all" />
+      <script src="https://assets.yasno.live/packs/assets/application-_V0qQyyB.js" crossorigin="anonymous" type="module" defer="defer"></script><link rel="modulepreload" href="https://assets.yasno.live/packs/assets/_commonjsHelpers-CQRjLznp.js" as="script" crossorigin="anonymous" defer="defer">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/preload-helper-8Mkc4Aqh.js" as="script" crossorigin="anonymous" defer="defer">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/trails-Dx_yhHZW.js" as="script" crossorigin="anonymous" defer="defer">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/intercom-DLErejYC.js" as="script" crossorigin="anonymous" defer="defer">
+      <script src="https://assets.yasno.live/packs/assets/vue-B3XhNQfv.js" crossorigin="anonymous" type="module"></script><link rel="modulepreload" href="https://assets.yasno.live/packs/assets/general-DoEu43wN.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/index-B_tcn53u.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/preload-helper-8Mkc4Aqh.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/skeleton-Di_WzLf_.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/textbox.vue_vue_type_script_setup_true_lang-CcarHem4-DQhxjuhM.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/_commonjsHelpers-CQRjLznp.js" as="script" crossorigin="anonymous">
+<link rel="modulepreload" href="https://assets.yasno.live/packs/assets/merge-BGm4W9YH.js" as="script" crossorigin="anonymous"><link rel="stylesheet" href="https://assets.yasno.live/packs/assets/index-CgnVUq53.css" media="screen" />
+
+    <script type='text/javascript'>
+        window.addEventListener('load', function() {
+            if (typeof Sentry !== 'undefined' && Sentry !== null) {
+                Sentry.setUser( {"role":"anonymous"} );
+                Sentry.setTag('role', 'client')
+            }
+        })
+    </script>
+
+    
+</head>
+
+
+  <body>
+
+    <div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '412447992475780',
+      autoLogAppEvents : false,
+      xfbml            : true,
+      version          : 'v9.0'
+    });
+  };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js" nonce="bfvUeXMK"></script>
+
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0;"><symbol viewBox="0 0 20 16" id="arrow" xmlns="http://www.w3.org/2000/svg"><path d="M1 7a1 1 0 000 2V7zm18.707 1.707a1 1 0 000-1.414L13.343.929a1 1 0 10-1.414 1.414L17.586 8l-5.657 5.657a1 1 0 001.414 1.414l6.364-6.364zM1 9h18V7H1v2z" data-fill="true"/></symbol><symbol viewBox="0 0 15 28" id="arrow-left" xmlns="http://www.w3.org/2000/svg"><path d="M13.02.293a1 1 0 111.415 1.414L1.707 14.435a1 1 0 11-1.414-1.414L13.02.293z" data-fill="true"/><path d="M.293 14.435a1 1 0 111.414-1.414l12.728 12.728a1 1 0 01-1.414 1.414L.293 14.435z" data-fill="true"/></symbol><symbol viewBox="0 0 15 28" id="arrow-right" xmlns="http://www.w3.org/2000/svg"><path d="M1.707.293A1 1 0 10.293 1.707l12.728 12.728a1 1 0 101.414-1.414L1.707.293z" data-fill="true"/><path d="M14.435 14.435a1 1 0 10-1.414-1.414L.293 25.749a1 1 0 101.414 1.414l12.728-12.728z" data-fill="true"/></symbol><symbol viewBox="0 0 25 49" id="lightning" xmlns="http://www.w3.org/2000/svg"><path d="M11.618.83a2.39 2.39 0 00-1.847 1.481l-9.6 24a2.4 2.4 0 002.231 3.29h7.2v16.8a2.39 2.39 0 001.941 2.354c.159.029.31.047.46.047.964 0 1.866-.588 2.231-1.51l9.6-24a2.409 2.409 0 00-2.231-3.29h-7.2v-16.8a2.39 2.39 0 00-1.94-2.353 2.427 2.427 0 00-.845-.019z" data-fill="true"/></symbol><symbol viewBox="0 0 16 21" id="lock" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C4.676 0 2 2.62 2 5.874v.98c-1.1 0-2 .88-2 1.957v9.79c0 1.078.9 1.959 2 1.959h12c1.1 0 2-.881 2-1.958v-9.79c0-1.078-.9-1.959-2-1.959v-.979C14 2.62 11.324 0 8 0zm0 1.958c2.276 0 4 1.688 4 3.916v.98H4v-.98c0-2.228 1.724-3.916 4-3.916zm0 9.79c1.1 0 2 .882 2 1.959s-.9 1.958-2 1.958-2-.881-2-1.958.9-1.958 2-1.958z" data-fill="true"/></symbol></svg>
+
+    <div class="page-wrap after _bg-grey-200">
+      
+<script>
+  window.App.links = {"signup":"/signup","settings":"/settings","settingsCard":"/settings/card","settingsQuestions":"/settings/questions","settingsReferral":"/settings/referral","therapists":"/therapists","faq":"/faq","checkups":"/checkup","gifts":"/gifts?utm_campaign=main_menu\u0026utm_medium=own\u0026utm_source=other","logout":"/auth/logout","track":"/dashboard/track","terms":"/terms","blog":"/blog","reviews":"/reviews","contacts":"/contacts","schedule":"/settings/schedule","courses":"https://courses.yasno.live/?utm_source=other\u0026utm_medium=other\u0026utm_campaign=yasno_main","calendar":null};
+</script>
+
+<div class="header-container b__s">
+  <header class="header !_z-[101] _bg-white-100 xl:_min-h-[80px] _min-h-[50px] _flex _items-center">
+    <div class="container [@media(max-width:1200px)]:!_max-w-full _min-w-[320px] _flex _items-center _relative">
+      <a href="/" class="_flex _mr-auto">
+        <img class="header__logo" alt="Ясно" src="https://assets.yasno.live/assets/logo-v3-c38b04297d1f116bcd4aba74a4285775f3c7ef78155b4309da2df317147671f2.svg" />
+      </a>
+
+        <nav class="_grow _flex _items-center _mr-auto">
+          <ul class="_grow _hidden md:_flex _items-center _justify-center _gap-5 _list-none sm:_t-small-regular xl:_t-body-regular _m-0 _p-0 _text-nowrap _no-underline">
+            <li>
+              <a
+                href="https://work.yasno.live/psychologist"
+                class="!_text-black-500 _no-underline hover:_no-underline _transition-opacity hover:_opacity-70 _p-0"
+                target="_blank"
+              >
+                Для психологов
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://business.yasno.live/?utm_source=Yasno_live&amp;utm_medium=refferal&amp;utm_content=button"
+                class="!_text-black-500 _no-underline hover:_no-underline _transition-opacity hover:_opacity-70 _p-0"
+                target="_blank"
+              >
+                Для бизнеса
+              </a>
+            </li>
+            <li>
+              <a
+                href="/gifts?utm_campaign=main_header&amp;utm_medium=own&amp;utm_source=other"
+                class=" _p-0 !_text-black-500 _no-underline hover:_no-underline _transition-opacity hover:_opacity-70"
+              >
+                <span class="lg:_hidden">Сертификаты</span>
+                <span class="_hidden lg:_block">Подарочные сертификаты</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/tests"
+                class=" _p-0 !_text-black-500 _no-underline hover:_no-underline _transition-opacity hover:_opacity-70"
+              >
+                Тесты
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://courses.yasno.live/?utm_source=other&amp;utm_medium=other&amp;utm_campaign=yasno_main"
+                class="_p-0 !_text-black-500 _no-underline hover:_no-underline _transition-opacity hover:_opacity-70"
+                target="_blank"
+              >
+                Курсы
+              </a>
+            </li>
+            <li class="sm:_hidden">
+              <a
+                href="/auth"
+                class="_p-0 !_text-black-500 hover:_no-underline _transition-opacity hover:_opacity-70"
+              >
+                Вход
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="_flex _justify-end _items-center _m-0 _p-0">
+            <div class="header__actions _flex _items-center">
+              <a class="!_text-black-500 nav-link header__link _items-center !_hidden md:!_flex" href="/auth">
+                <svg class="_fill-grey-600 _mr-2.5 _w-4 _h-5 _mt-[-2px]" >
+                  <use xlink:href="#lock"></use>
+                </svg>
+                Вход
+</a>                <a class="!_text-white-100 header__btn text-nowrap _ml-[30px] !_flex" href="/auth/signup">
+                  Выбрать&nbsp;психолога
+</a>            </div>
+            <button class="header__menu-btn _block md:!_hidden" type="button" data-toggle="dropdown" aria-expanded="false">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right _hidden _absolute _right-0 !_top-full">
+              <a target="_blank" class="dropdown-item" href="https://work.yasno.live/psychologist">Для психологов</a>
+              <a target="_blank" class="dropdown-item" href="https://business.yasno.live/?utm_source=Yasno_live&amp;utm_medium=refferal&amp;utm_content=button">Для бизнеса</a>
+              <a class="dropdown-item" href="/gifts?utm_campaign=main_header&amp;utm_medium=own&amp;utm_source=other">Подарочные сертификаты</a>
+              <a class="dropdown-item" href="/tests">Психологические тесты</a>
+              <a class="dropdown-item" href="https://courses.yasno.live/?utm_source=other&amp;utm_medium=other&amp;utm_campaign=yasno_main">Курсы</a>
+              <a class="dropdown-item" href="/blog">Блог</a>
+              <div class="_h-px _bg-gray-200 _my-2"></div>
+              <a class="dropdown-item _flex _items-center" href="/auth">
+                <svg class="_fill-grey-600 _w-[13px] _h-4 _mr-[5px] _mt-[-3px]">
+                  <use xlink:href="#lock"></use>
+                </svg>
+                Вход
+</a>            </div>
+        </div>
+    </div>
+  </header>
+</div>
+
+
+      
+
+      
+
+      <div class="container ">
+        
+
+<div class="vue-app-container" data-component-name="public/therapists-presets-map"></div>
+
+
+        <div id="modal-holder"></div>
+      </div>
+
+      
+    </div>
+
+    <script src="https://assets.yasno.live/assets/appsflyer_script-f876f1f336a40c77385a657d28db96011a3d15e36ab02b1d796d0d334ef4b6d0.js" defer="defer"></script>
+  <div class="_max-w-[1140px] _mx-auto _w-full _px-[15px] _pt-10 _relative _z-[8]">
+    <footer class="_text-sm _leading-5 _mb-10">
+      <nav class="_flex _flex-col lg:_flex-row _flex-wrap _mb-10">
+        <div class="_w-full lg:_w-auto lg:_mr-24 xl:_mr-[76px]">
+          <div class="_mb-8 lg:_hidden">
+            <a class="_btn-base-secondary _btn-medium js-appsflyer" href="https://yasno.onelink.me/vWlQ/fxzqoazx">Скачать приложение</a>
+          </div>
+          <div class="_hidden lg:_block _w-[168px]">
+            <a href="https://app.yasno.live/vWlQ/qr" target="_blank" class="!_no-underline _bg-grey-200 _relative _p-2 _rounded-md _block _mb-2 !_text-black-100 _text-xs _font-medium js-appsflyer">
+              <img
+                src="https://assets.yasno.live/assets/icons/footer-line-933dc390333f19b3dd3ad809359ad2c2368f2abbeaaa9d274093729ae5a8c89f.svg"
+                alt=""
+                loading="lazy"
+                class="_absolute _left-0 _top-0"
+              >
+              <div class="_flex _items-center">
+                <img
+                  src="https://assets.yasno.live/assets/download-app-qr-code-a53314eca6f8cd49ac769031f5a28f92debaa2f0a9cb652ba21116c15149f12a.svg"
+                  alt=""
+                  loading="lazy"
+                  class="_w-10 _z-99 _relative"
+                >
+                <div class="_ml-3 _z-[99]">
+                  Скачать приложение
+                </div>
+              </div>
+            </a>
+            <div class="_grid _grid-cols-2 _gap-2">
+              <a aria-label="Скачать приложение Ясно в App Store" class="_p-0" href="https://app.appsflyer.com/id1584370233?pid=12&amp;utm_source=footer">
+                <img
+                  src="https://assets.yasno.live/assets/icons/apple-badge-a60a83d2d7980c2a21e795505f6c5558838908bb9f0a3fb82b8c37dd93725e25.svg"
+                  alt=""
+                  loading="lazy"
+                  class="_w-full"
+                >
+</a>              <a aria-label="Скачать приложение Ясно в Google Play" class="_p-0" href="https://app.appsflyer.com/live.yasno.app?pid=12&amp;utm_source=footer">
+                <img
+                  src="https://assets.yasno.live/assets/icons/google-badge-dc1f96a3c883ef2e65be6a2985a5167a4c9dc67a5897ddf18e53bcf004d27c38.svg"
+                  alt=""
+                  loading="lazy"
+                  class="_w-full"
+                >
+</a>            </div>
+          </div>
+        </div>
+        <div class="_grid _grid-cols-1 md:_grid-cols-[168px,208px,236px] _gap-y-6 _gap-x-5 xl:_gap-x-6 _flex-1 _whitespace-nowrap _mr-auto _mb-6 lg:_mb-0">
+          <ul class="_list-none _p-0 _m-0 _flex _flex-col _gap-2 _leading-4">
+            <li class="_text-black-100 _leading-4 _font-medium _mb-1">
+              О, ясно
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/faq">Вопросы-ответы</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/reviews">Отзывы клиентов</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/contacts">Контакты</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" target="_blank" href="https://work.yasno.live">Вакансии</a>
+            </li>
+            <li>
+              <a target="_blank" class="_link-grey--without-visited _p-0" href="https://business.yasno.live/?utm_source=Yasno_live&amp;utm_medium=refferal&amp;utm_content=button">Ясно для бизнеса</a>
+            </li>
+          </ul>
+          <ul class="_list-none _p-0 _m-0 _flex _flex-col _gap-2 _leading-4">
+            <li class="_text-black-100 _leading-4 _font-medium _mb-1">
+              Полезное
+            </li>
+            <li onclick="window.App?.analytics?.event('FooterMenu_Option_Select', { option_title: 'Каталог психологов', option_url: '/therapists' })">
+              <a class="_link-grey--without-visited _p-0" target="_self" href="/therapists">Каталог психологов</a>
+            </li>
+              <li>
+                <a class="_link-grey--without-visited _p-0" href="/collections">Услуги психологов</a>
+              </li>
+              <li>
+                <a class="_link-grey--without-visited _p-0" href="/free-psychological-help">Бесплатная помощь</a>
+              </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/supervisors">Супервизия</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/blog">Статьи о психологии</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/tests">
+                Психологические тесты
+              </a>
+            </li>
+            <li>
+              <a
+                class="_link-grey--without-visited _p-0"
+                href="https://courses.yasno.live/?utm_source=other&amp;utm_medium=other&amp;utm_campaign=yasno_main"
+              >
+                Курсы
+              </a>
+            </li>
+          </ul>
+          <ul class="_list-none _p-0 _m-0 _flex _flex-col _gap-2 _leading-4">
+            <li class="_text-black-100 _leading-4 _font-medium _mb-1">
+              Ещё
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/gifts?utm_campaign=main_footer&amp;utm_medium=own&amp;utm_source=other">Подарочные сертификаты</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/promo">Правила акций</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/terms">Пользовательское соглашение</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/personaldata">Обработка персональных данных</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/consent">Согласие на обработку</a>
+            </li>
+            <li>
+              <a class="_link-grey--without-visited _p-0" href="/documents">Охрана труда</a>
+            </li>
+          </ul>
+        </div>
+        <div class="_contents xl:_flex _flex-col _justify-between _items-end">
+          <div class="_flex lg:_grid xl:_flex _grid-cols-2 _flex-nowrap _gap-2 _content-start _mb-4 lg:_mb-0">
+            <a
+              aria-label="Ссылка на страницу Ясно в Вконтакте"
+              href="https://vk.com/yasnotherapy" target="_blank"
+              class="!_no-underline _p-0"
+            >
+              <img
+                src="https://assets.yasno.live/assets/icons/vk-17805fd30391f478a63dafecfc6260d4023e804b9d5755e69637d92f6c77f1e8.svg"
+                alt="Иконка Вконтакте"
+                loading="lazy"
+              >
+            </a>
+            <a
+              aria-label="Ссылка на страницу Ясно в Яндекс дзен"
+              href="https://zen.yandex.ru/yasnolive" target="_blank"
+              class="!_no-underline _p-0"
+            >
+              <img
+                src="https://assets.yasno.live/assets/icons/ya-dzen-7505fc8835897ef2d1ab01612f43ea8f8eefaea9b34cb1ec34b442ea8e4577f8.svg"
+                alt="Иконка Яндекс дзен"
+                loading="lazy"
+              >
+            </a>
+            <a
+              aria-label="Ссылка на страницу Ясно в Telegram"
+              href="https://t.me/yasno_live" target="_blank"
+              class="!_no-underline _p-0"
+            >
+              <img
+                src="https://assets.yasno.live/assets/icons/tg-7938e28de8103f6c4cb2968c04d824fd8aeea6a9848201bb0aad08cfeebee1f7.svg"
+                alt="Иконка Телеграм"
+                loading="lazy"
+              >
+            </a>
+            <a
+              aria-label="Ссылка на страницу Ясно в Youtube"
+              href="https://www.youtube.com/c/Яснолайв" target="_blank"
+              class="!_no-underline _p-0"
+            >
+              <img
+                src="https://assets.yasno.live/assets/icons/youtube-68969c319df66510ca3aa2faf542879d16ff316d6d86ed1670e0a9bd0bfbe370.svg"
+                alt="Иконка Youtube"
+                loading="lazy"
+              >
+            </a>
+          </div>
+
+        </div>
+      </nav>
+      <div class="_flex _flex-col md:_flex-row _gap-10 _justify-between _t-tiny-regular _text-grey-700">
+        <div>
+          Аккредитованная IT-компания ООО «Ясно.лайв», ИНН 9703044223, адрес: 123104, г. Москва, ул. Большая Бронная, д. 7, помещение 2/2, ОКВЭД 62.01, коды
+          видов IT-деятельности 17.01, vse@yasno.live, +7-999-928-7873. Входит в реестр российского ПО (№19027, №28398, №29276), <a class="_text-grey-700 _p-0 _underline hover:_no-underline" href="/fees">подробная информация о ПО</a>
+        </div>
+        <div class="_w-[152px] _shrink-0 md:_text-right">
+          © Ясно.лайв 2026
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+    <div class="modal" id="intercom-blocked" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h4 class="modal-title">Служба поддержки</h4>
+        <button type="button" class="close" data-dismiss="modal"></button>
+      </div>
+      <div class="modal-body m-md-4 ">
+        <p>Хмм,</p>
+        <p>похоже, что блокировщик рекламы в вашем браузере заблокировал виджет, через который работает наша служба поддержки.</p>
+
+        <p>Но это не страшно, просто напишите нам на <a href="mailto:vse@yasno.live">vse@yasno.live</a> и мы вам тут же ответим.</p>
+
+        <p>Извините за неудобство.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+    <div class="vue-app-container" data-component-name="dynamic-content-modal"></div>
+  </body>
+</html>
+<!-- generated on yasno-live-server-b8bdbdb9-vtjkq by production-5598a88aaf43191908f2960d6696826d70b2d289 at 2026-06-11T23:20:21+00:00 -->
+
