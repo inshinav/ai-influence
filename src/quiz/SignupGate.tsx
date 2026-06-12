@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft, Loader2, Lock } from 'lucide-react'
 import type { SlotSelection, Therapist } from '../types'
+import { formatPrice } from '../lib/format'
 import { track } from '../lib/analytics'
 
 export default function SignupGate({
@@ -55,9 +56,39 @@ export default function SignupGate({
       </button>
 
       <h2 className="font-display text-3xl tracking-[-0.02em]">Почти готово</h2>
-      <p className="mt-2 text-ink-soft">
-        Куда прислать ссылку на сессию с {firstName}? {slot.dateLabel}, {slot.time}.
-      </p>
+      <p className="mt-2 text-ink-soft">Куда прислать ссылку на сессию с {firstName}?</p>
+
+      {/* Выбор человека перед глазами: время не «потерялось», пока он вводит контакты */}
+      <div className="card mt-6 flex flex-wrap items-center justify-between gap-3 !shadow-none p-4">
+        <div className="flex items-center gap-3">
+          <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sky/30 via-azure/30 to-sky-soft">
+            <span className="font-display text-[14px]" aria-hidden>
+              {therapist.name
+                .split(' ')
+                .map((w) => w[0])
+                .join('')}
+            </span>
+            <img
+              src={therapist.photo}
+              alt=""
+              width={44}
+              height={44}
+              loading="lazy"
+              className="absolute inset-0 size-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none'
+              }}
+            />
+          </span>
+          <div>
+            <p className="text-[15px] font-semibold leading-tight">{therapist.name}</p>
+            <p className="text-[13px] text-ink-soft">
+              {slot.dateLabel} · {slot.time}
+            </p>
+          </div>
+        </div>
+        <p className="text-[14px] font-medium">{formatPrice(therapist.price)}</p>
+      </div>
 
       <form
         className="mt-8 flex flex-col gap-4"
@@ -110,6 +141,12 @@ export default function SignupGate({
           />
           {errors.phone && <p className="mt-1.5 text-[13px] text-red-600">{errors.phone}</p>}
         </div>
+
+        {/* Страх «куда уйдут мои данные» снимается в момент ввода, а не в FAQ */}
+        <p className="flex items-start gap-2 text-[13.5px] leading-snug text-ink-soft">
+          <Lock size={15} className="mt-0.5 shrink-0 text-sky" aria-hidden />
+          {'Контакты нужны только для ссылки на сессию и напоминаний. Никому не передаём — даже психологу виден лишь ваш запрос.'}
+        </p>
 
         <button type="submit" className="btn-primary w-full" disabled={loading}>
           {loading ? (

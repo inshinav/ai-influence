@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowLeft, X } from 'lucide-react'
 import type {
@@ -15,7 +15,7 @@ import type {
 } from '../types'
 import { emptyAnswers } from '../types'
 import { therapists } from '../data/therapists'
-import { rankTherapists, type MatchResult } from '../lib/matching'
+import { countEligible, rankTherapists, type MatchResult } from '../lib/matching'
 import { track } from '../lib/analytics'
 import { SPRING } from '../lib/motionPresets'
 import QuizProgress from './QuizProgress'
@@ -75,6 +75,9 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
   const [dir, setDir] = useState(1)
   const dialogRef = useRef<HTMLDivElement>(null)
   const startTracked = useRef(false)
+
+  /** Живой счётчик: сколько специалистов каталога проходят под текущие ответы */
+  const matched = useMemo(() => countEligible(therapists, answers), [answers])
 
   useEffect(() => {
     if (startTracked.current) return
@@ -353,7 +356,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
               </button>
             )}
           </div>
-          {stage === 'steps' && <QuizProgress step={step} total={TOTAL_STEPS} />}
+          {stage === 'steps' && <QuizProgress step={step} total={TOTAL_STEPS} matched={matched} />}
           <div className="flex w-24 items-center justify-end">
             <button
               type="button"

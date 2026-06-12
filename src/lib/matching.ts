@@ -28,6 +28,22 @@ export function scoreTherapist(t: Therapist, a: QuizAnswers): number {
   return score
 }
 
+/**
+ * Сколько психологов каталога проходят под УЖЕ данные ответы (AND-фильтр
+ * по заполненным критериям). Питает живой счётчик в квизе: каждый ответ
+ * на глазах сужает круг — видимая работа подбора вместо чёрного ящика.
+ */
+export function countEligible(all: Therapist[], a: QuizAnswers): number {
+  return all.filter((t) => {
+    if (a.format && !t.formats.includes(a.format)) return false
+    if (a.topics.length > 0 && !a.topics.some((topic) => t.topics.includes(topic))) return false
+    if (a.gender && a.gender !== 'any' && t.gender !== a.gender) return false
+    if (a.method !== 'any' && t.method !== a.method) return false
+    if (a.schedule.length > 0 && !a.schedule.some((s) => t.schedule.includes(s))) return false
+    return true
+  }).length
+}
+
 /** Максимально возможный балл для данных ответов — для нормализации в проценты */
 function maxScore(a: QuizAnswers): number {
   let max = a.topics.length * 3

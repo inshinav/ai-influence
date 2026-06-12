@@ -92,6 +92,7 @@ export default function Results({
 }) {
   const [visible, setVisible] = useState(3)
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [explainOpen, setExplainOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
@@ -130,7 +131,35 @@ export default function Results({
         >
           Изменить ответы
         </button>
+        <button
+          type="button"
+          className="ml-3 text-ink-soft underline decoration-dotted underline-offset-4 transition-colors hover:text-ink"
+          aria-expanded={explainOpen}
+          onClick={() => {
+            if (!explainOpen) track('match_explain_open')
+            setExplainOpen(!explainOpen)
+          }}
+        >
+          Как считаем совпадение?
+        </button>
       </p>
+
+      {/* Процент — не магия: прозрачный расчёт вместо чёрного ящика */}
+      <AnimatePresence initial={false}>
+        {explainOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <p className="mt-3 max-w-2xl rounded-2xl bg-mist px-4 py-3 text-[14px] leading-relaxed text-ink-soft">
+              {'Сравниваем ваши ответы с анкетами специалистов: темы — главный вес, дальше метод, формат, расписание и пожелания. 100% не показываем никогда: честный максимум до живого знакомства — 97%. Если психолог не подойдёт, бесплатно подберём другого.'}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="mt-8 grid gap-5 md:grid-cols-3">
         {ranked.slice(0, visible).map((r, i) => {
