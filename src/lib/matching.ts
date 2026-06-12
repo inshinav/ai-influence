@@ -1,12 +1,13 @@
 import type { QuizAnswers, Therapist, TimePref, TopicId } from '../types'
 import { topicById } from '../data/topics'
 import { experienceLabel } from './format'
+import { nextSlotLabel } from './slots'
 
 export type MatchResult = {
   therapist: Therapist
   score: number
-  /** Нормализованный «процент совпадения» в честном диапазоне 86–97 */
-  percent: number
+  /** «Процент совпадения» 45–97; null = совпадений по критериям нет (бейдж не показываем) */
+  percent: number | null
   /** 2–3 человеческие причины для блока «Почему именно она/он» */
   reasons: string[]
 }
@@ -54,19 +55,24 @@ function maxScore(a: QuizAnswers): number {
   return Math.max(max, 1)
 }
 
-/** Сортировка по убыванию score (опыт — тонкая добавка), проценты 86–97 (без 100% — честнее) */
+/**
+ * Сортировка по убыванию score (опыт — тонкая добавка). Процент честный:
+ * полное совпадение ≈ 93–97, частичное проседает реально, нулевое — без
+ * бейджа вовсе. Заваленный к 86–97 «пол» убит сознательно: проценты,
+ * которые не могут упасть, не значат ничего.
+ */
 export function rankTherapists(all: Therapist[], a: QuizAnswers): MatchResult[] {
   const max = maxScore(a)
   return all
     .map((therapist) => {
       const score = scoreTherapist(therapist, a)
       // Непрерывная величина: скор задаёт базу, опыт мягко разводит равные скоры
-      const fine = 85 + (score / max) * 8 + Math.min(therapist.experienceYears, 15) * 0.35
+      const fine = 52 + (score / max) * 41 + Math.min(therapist.experienceYears, 15) * 0.25
       return {
         therapist,
         score,
         fine,
-        percent: Math.max(86, Math.min(Math.round(fine), 97)),
+        percent: score === 0 ? null : Math.max(45, Math.min(Math.round(fine), 97)),
         reasons: explainMatch(therapist, a),
       }
     })
@@ -114,9 +120,9 @@ export function explainMatch(t: Therapist, a: QuizAnswers): string[] {
 
   const matchedTimes = a.schedule.filter((s) => t.schedule.includes(s))
   if (matchedTimes.length > 0) {
-    reasons.push(`Свободное время ${matchedTimes.map((s) => scheduleLabels[s]).join(' и ')} · ближайший слот: ${t.nextSlot}`)
+    reasons.push(`Свободное время ${matchedTimes.map((s) => scheduleLabels[s]).join(' и ')} · ближайший слот: ${nextSlotLabel(t)}`)
   } else {
-    reasons.push(`Ближайший свободный слот: ${t.nextSlot}`)
+    reasons.push(`Ближайший свободный слот: ${nextSlotLabel(t)}`)
   }
 
   if (a.gender && a.gender !== 'any' && t.gender === a.gender && reasons.length < 3) {
@@ -178,9 +184,6 @@ export function quoteFromAnswers(t: Therapist, a: QuizAnswers, index = 0): strin
     variants.push(`Вы впервые в терапии\u00A0— ${firstName} бережно помогает освоиться`)
   }
 
-  if (a.duration === 'always' || a.duration === 'year') {
-    variants.push(`Вы живёте с этим давно\u00A0— ${firstName} умеет работать с долгими историями`)
-  }
 
   const matchedTime = a.schedule.find((s) => t.schedule.includes(s))
   if (matchedTime) {

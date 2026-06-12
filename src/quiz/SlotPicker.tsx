@@ -1,65 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowLeft } from 'lucide-react'
-import type { SlotSelection, Therapist, TimePref } from '../types'
+import type { SlotSelection, Therapist } from '../types'
+import { buildDays, timesForDay } from '../lib/slots'
 import { experienceLabel, formatPrice } from '../lib/format'
 import { track } from '../lib/analytics'
 
 const EASE = [0.22, 1, 0.36, 1] as const
-
-const DAYPART_TIMES: Record<Exclude<TimePref, 'weekend'>, string[]> = {
-  morning: ['9:00', '10:00', '11:00'],
-  day: ['12:00', '14:00', '16:00'],
-  evening: ['18:00', '19:00', '20:00'],
-}
-
-type Day = {
-  index: number
-  tabLabel: string
-  dateLabel: string
-  isoDate: string
-  isWeekend: boolean
-  isToday: boolean
-}
-
-function buildDays(): Day[] {
-  const fmt = new Intl.DateTimeFormat('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' })
-  const now = new Date()
-  return Array.from({ length: 5 }, (_, i) => {
-    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i)
-    const label = fmt.format(d)
-    const dow = d.getDay()
-    return {
-      index: i,
-      tabLabel: i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : label[0].toUpperCase() + label.slice(1),
-      dateLabel: label,
-      isoDate: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`,
-      isWeekend: dow === 0 || dow === 6,
-      isToday: i === 0,
-    }
-  })
-}
-
-/** Честные и детерминированные слоты из расписания психолога — без фейкового дефицита */
-function timesForDay(therapist: Therapist, day: Day): string[] {
-  let times: string[] = []
-  if (day.isWeekend) {
-    if (!therapist.schedule.includes('weekend')) return []
-    times = ['10:00', '12:00', '15:00', '17:00']
-    if (therapist.schedule.includes('evening')) times = [...times, ...DAYPART_TIMES.evening]
-  } else {
-    for (const part of ['morning', 'day', 'evening'] as const) {
-      if (therapist.schedule.includes(part)) times = [...times, ...DAYPART_TIMES[part]]
-    }
-  }
-  // Лёгкое прореживание занятыми слотами
-  times = times.filter((t) => (day.index + parseInt(t, 10)) % 4 !== 0)
-  if (day.isToday) {
-    const cutoff = new Date().getHours() + 2
-    times = times.filter((t) => parseInt(t, 10) > cutoff)
-  }
-  return times
-}
 
 export default function SlotPicker({
   therapist,
@@ -78,6 +25,7 @@ export default function SlotPicker({
     return first === -1 ? 0 : first
   })
   const [time, setTime] = useState<string | null>(null)
+  const confirmRef = useRef<HTMLDivElement>(null)
 
   const day = days[dayIndex]
   const times = timesForDay(therapist, day)
@@ -85,6 +33,17 @@ export default function SlotPicker({
     times.length === 0
       ? days.find((d) => d.index !== dayIndex && timesForDay(therapist, d).length > 0)
       : undefined
+  /** Сегодня пусто из-за «впритык не записываем», а не из-за занятости */
+  const emptyByCutoff =
+    times.length === 0 && day.isToday && timesForDay(therapist, day, { ignoreCutoff: true }).length > 0
+
+  const pickTime = (t: string) => {
+    setTime(t)
+    // На коротких экранах бар подтверждения монтируется ниже фолда — доводим до него
+    window.setTimeout(() => {
+      confirmRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }, 60)
+  }
 
   const initials = therapist.name
     .split(' ')
@@ -105,7 +64,7 @@ export default function SlotPicker({
       )}
 
       <div className="flex items-center gap-3">
-        <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sun/60 via-peach/60 to-sky/60">
+        <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-sky/25 via-azure/25 to-dawn/40">
           <span className="font-display" aria-hidden>
             {initials}
           </span>
@@ -129,7 +88,7 @@ export default function SlotPicker({
         </div>
       </div>
 
-      <h2 className="mt-7 font-display text-3xl tracking-[-0.02em]">Выберите время</h2>
+      <h2 className="mt-7 font-display text-3xl">Выберите время</h2>
 
       <div className="mt-6 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="День сессии">
         {days.map((d) => (
@@ -152,7 +111,9 @@ export default function SlotPicker({
       {times.length === 0 ? (
         <div className="mt-6">
           <p className="text-[14.5px] text-ink-soft">
-            В этот день всё занято — психолог уже с клиентами.
+            {emptyByCutoff
+              ? 'На сегодня запись уже закрыта — психологу нужно время подготовиться к встрече.'
+              : 'В этот день всё занято — психолог уже с клиентами.'}
           </p>
           {nextFreeDay && (
             <button
@@ -181,7 +142,7 @@ export default function SlotPicker({
                   ? 'border-ink bg-ink text-paper'
                   : 'border-line bg-paper hover:border-ink/30'
               }`}
-              onClick={() => setTime(t)}
+              onClick={() => pickTime(t)}
             >
               {t}
             </button>
@@ -191,27 +152,34 @@ export default function SlotPicker({
 
       {time && (
         <motion.div
+          ref={confirmRef}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: EASE }}
-          className="mt-7 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-mist px-5 py-4"
+          className="mt-7 rounded-2xl bg-mist px-5 py-4"
         >
-          <p className="text-[15px]">
-            <span className="font-medium">
-              {therapist.name} · {day.dateLabel} · {time}
-            </span>
-            <span className="ml-2 text-ink-soft">{formatPrice(therapist.price)}</span>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[15px]">
+              <span className="font-medium">
+                {therapist.name} · {day.dateLabel} · {time}
+              </span>
+              <span className="ml-2 text-ink-soft">{formatPrice(therapist.price)}</span>
+            </p>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={() => {
+                track('slot_selected', { therapist: therapist.id })
+                onConfirm({ dateLabel: day.dateLabel, isoDate: day.isoDate, time })
+              }}
+            >
+              Закрепить время
+            </button>
+          </div>
+          {/* Цена рядом с кнопкой — и сразу честное «когда платить» */}
+          <p className="mt-2.5 text-[13px] text-ink-soft">
+            {'Сейчас ничего не списываем: оплата — после знакомства, в личном кабинете.'}
           </p>
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => {
-              track('slot_selected', { therapist: therapist.id })
-              onConfirm({ dateLabel: day.dateLabel, isoDate: day.isoDate, time })
-            }}
-          >
-            Закрепить время
-          </button>
         </motion.div>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { Lock } from 'lucide-react'
 import type { TopicId } from '../../types'
 import { topics } from '../../data/topics'
 import { StepHeading, useArrowNav } from '../controls'
@@ -47,6 +48,11 @@ export default function StepTopics({
           {'Выбрано 3 из 3 — этого достаточно'}
         </p>
       )}
+      {/* Момент раскрытия самого чувствительного — безопасность говорим здесь, не в FAQ */}
+      <p className="mt-6 flex max-w-md items-start gap-2 text-[13px] leading-snug text-ink-soft">
+        <Lock size={14} className="mt-0.5 shrink-0 text-sky" aria-hidden />
+        {'Ответы видит только алгоритм подбора. Психолог узнает тему — рассказывать подробности или нет, решаете вы.'}
+      </p>
       <button
         type="button"
         className={`btn-primary mt-8 ${value.length === 0 ? 'pointer-events-none opacity-40' : ''}`}

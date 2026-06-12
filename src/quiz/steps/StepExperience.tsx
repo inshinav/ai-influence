@@ -28,11 +28,21 @@ export default function StepExperience({
     timer.current = window.setTimeout(() => onSelect(false), 1600)
   }
 
+  // Передумал в паузе: гасим отложенный «Нет», чтобы он не перетёр «Да»
+  const pickYes = () => {
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current)
+      timer.current = null
+    }
+    setPickedNo(false)
+    onSelect(true)
+  }
+
   return (
     <div>
       <StepHeading title="Был ли у вас опыт терапии?" />
       <div ref={navRef} onKeyDown={navKeyDown} className="mt-8 flex flex-col gap-3">
-        <OptionCard selected={value === true} onClick={() => onSelect(true)} title="Да" />
+        <OptionCard selected={value === true} onClick={pickYes} title="Да" />
         <OptionCard selected={pickedNo || value === false} onClick={pickNo} title="Нет" />
       </div>
       {pickedNo && (

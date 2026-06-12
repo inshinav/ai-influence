@@ -21,8 +21,6 @@ export type MethodPref = 'any' | Method
 /** Предпочтение по полу психолога: 'any' = «Не важно» */
 export type GenderPref = 'any' | 'f' | 'm'
 
-export type DurationAnswer = 'recent' | 'months' | 'year' | 'always'
-
 export type Therapist = {
   id: string
   name: string
@@ -35,8 +33,6 @@ export type Therapist = {
   formats: TherapyFormat[]
   schedule: TimePref[]
   price: number
-  /** «сегодня, 19:00» / «завтра, 10:00» — честная ближайшая доступность */
-  nextSlot: string
   /** Одно живое предложение «как я работаю» */
   quote: string
   education: string
@@ -45,7 +41,6 @@ export type Therapist = {
 export type QuizAnswers = {
   format: TherapyFormat | null
   topics: TopicId[]
-  duration: DurationAnswer | null
   hadTherapy: boolean | null
   gender: GenderPref | null
   method: MethodPref
@@ -55,7 +50,6 @@ export type QuizAnswers = {
 export const emptyAnswers: QuizAnswers = {
   format: null,
   topics: [],
-  duration: null,
   hadTherapy: null,
   gender: null,
   method: 'any',

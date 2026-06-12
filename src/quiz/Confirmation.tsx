@@ -4,6 +4,7 @@ import { CalendarPlus, Check } from 'lucide-react'
 import type { SlotSelection, Therapist } from '../types'
 import { experienceLabel, formatPrice } from '../lib/format'
 import { downloadIcs } from '../lib/ics'
+import { ScribbleUnderline } from '../components/Scribble'
 import { track } from '../lib/analytics'
 
 const EASE = [0.22, 1, 0.36, 1] as const
@@ -66,14 +67,18 @@ export default function Confirmation({
         >
           <Check size={28} aria-hidden />
         </motion.div>
-        <h2 className="mt-5 font-display text-3xl tracking-[-0.02em] md:text-4xl">
-          Запись закреплена
+        <h2 className="mt-5 font-display text-3xl md:text-4xl">
+          <span className="relative inline-block">
+            Запись закреплена
+            <ScribbleUnderline className="absolute -bottom-2 left-0" delay={500} />
+          </span>
         </h2>
+        <p aria-hidden className="hand mt-3 text-[22px]">{`до встречи — ${slot.dateLabel}`}</p>
       </div>
 
       <div className="card mt-8 flex flex-wrap items-center justify-between gap-4 p-6">
         <div className="flex items-center gap-3">
-          <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sun/60 via-peach/60 to-sky/60">
+          <span className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-sky/25 via-azure/25 to-dawn/40">
             <span className="font-display text-lg" aria-hidden>
               {initials}
             </span>
@@ -131,7 +136,7 @@ export default function Confirmation({
         {offer === 'open' && (
           <>
             <p className="text-[15.5px] leading-relaxed">
-              {'Терапия работает как ритм: 81% чувствуют результат к 5-й сессии. Забронировать то же время на следующей неделе?'}
+              {'Терапия работает как ритм: 81% чувствуют результат к 5-й сессии. Удержать то же время на следующей неделе? Это бесплатно и ни к чему не обязывает.'}
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-4">
               <button type="button" className="btn-primary" onClick={holdRhythm}>
@@ -149,7 +154,7 @@ export default function Confirmation({
         )}
         {offer === 'held' && (
           <p className="text-[15.5px] leading-relaxed">
-            {`Время ${slot.time} на следующей неделе удержано за вами. Подтвердите после первой сессии — или просто отпустите.`}
+            {`Время ${slot.time} на следующей неделе удержано за вами на 24 часа после первой сессии. Подтвердите одним нажатием — или просто отпустите, ничего не спишем.`}
           </p>
         )}
         {offer === 'later' && (
@@ -176,7 +181,7 @@ export default function Confirmation({
             role="status"
           >
             <Check size={18} className="text-ok" aria-hidden />
-            Слот предварительно удержан на 24 часа
+            Время удержано — решите после первой сессии
           </motion.div>
         )}
       </AnimatePresence>

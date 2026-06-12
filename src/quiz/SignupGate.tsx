@@ -3,6 +3,7 @@ import { ArrowLeft, Loader2, Lock } from 'lucide-react'
 import type { SlotSelection, Therapist } from '../types'
 import { formatPrice } from '../lib/format'
 import { track } from '../lib/analytics'
+import { ScribbleUnderline } from '../components/Scribble'
 
 export default function SignupGate({
   therapist,
@@ -31,7 +32,9 @@ export default function SignupGate({
   const submit = () => {
     const next: { email?: string; phone?: string } = {}
     if (!/\S+@\S+\.\S+/.test(email)) next.email = 'Проверьте адрес почты'
-    if (phone.replace(/\D/g, '').length < 10) next.phone = 'Проверьте номер — нужно не меньше 10 цифр'
+    // Телефон — по желанию: проверяем формат, только если человек его ввёл
+    if (phone.trim() !== '' && phone.replace(/\D/g, '').length < 10)
+      next.phone = 'Проверьте номер — нужно не меньше 10 цифр'
     setErrors(next)
     if (Object.keys(next).length > 0) return
     setLoading(true)
@@ -55,7 +58,12 @@ export default function SignupGate({
         Назад к времени
       </button>
 
-      <h2 className="font-display text-3xl tracking-[-0.02em]">Почти готово</h2>
+      <h2 className="font-display text-3xl">
+        <span className="relative inline-block">
+          Почти готово
+          <ScribbleUnderline className="absolute -bottom-1.5 left-0" delay={400} />
+        </span>
+      </h2>
       <p className="mt-2 text-ink-soft">Куда прислать ссылку на сессию с {firstName}?</p>
 
       {/* Выбор человека перед глазами: время не «потерялось», пока он вводит контакты */}
@@ -107,7 +115,7 @@ export default function SignupGate({
             type="email"
             autoComplete="email"
             inputMode="email"
-            placeholder="you@example.com"
+            placeholder="ivan@yandex.ru"
             className={`mt-1.5 w-full rounded-2xl border bg-paper px-5 py-4 text-[16px] ${
               errors.email ? 'border-red-400' : 'border-line'
             }`}
@@ -122,7 +130,8 @@ export default function SignupGate({
 
         <div>
           <label htmlFor="signup-phone" className="text-[13.5px] font-medium">
-            Телефон
+            Телефон{' '}
+            <span className="font-normal text-ink-soft">— по желанию, для SMS-напоминания</span>
           </label>
           <input
             id="signup-phone"
@@ -148,6 +157,7 @@ export default function SignupGate({
           {'Контакты нужны только для ссылки на сессию и напоминаний. Никому не передаём — даже психологу виден лишь ваш запрос.'}
         </p>
 
+        <p aria-hidden className="hand -mb-2 text-center text-[20px]">это ещё не оплата</p>
         <button type="submit" className="btn-primary w-full" disabled={loading}>
           {loading ? (
             <>
@@ -160,7 +170,7 @@ export default function SignupGate({
         </button>
 
         <p className="text-center text-[13.5px] text-ink-soft">
-          {'Оплата — после знакомства с психологом в личном кабинете. Никаких паролей — вход по ссылке из письма.'}
+          {'Подбор и запись — бесплатно. Карту привяжете в кабинете, когда решите остаться; списание — за 12 часов до сессии. Никаких паролей — вход по ссылке из письма.'}
         </p>
       </form>
     </div>

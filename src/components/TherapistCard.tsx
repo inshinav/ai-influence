@@ -5,6 +5,7 @@ import { useCalmMotion } from '../care/CareContext'
 import type { Therapist, Method } from '../types'
 import { topicById } from '../data/topics'
 import { formatPrice, experienceLabel, NBSP } from '../lib/format'
+import { nextSlotLabel } from '../lib/slots'
 import { track } from '../lib/analytics'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
@@ -36,7 +37,9 @@ export default function TherapistCard({
     .map((part) => part.charAt(0))
     .join('')
 
-  const slotToday = therapist.nextSlot.includes('сегодня')
+  // Слот считается из той же сетки, что и слот-пикер: обещание всегда сходится
+  const nextSlot = nextSlotLabel(therapist)
+  const slotToday = nextSlot.includes('сегодня')
   const panelId = `therapist-details-${therapist.id}`
 
   const handleBook = () => {
@@ -128,7 +131,7 @@ export default function TherapistCard({
             <span className="relative size-2 rounded-full bg-ok" />
           </span>
           <p className="text-[13.5px] text-ink-soft">
-            Ближайший слот: <span className="font-medium text-ok">{therapist.nextSlot}</span>
+            Ближайший слот: <span className="font-medium text-ok">{nextSlot}</span>
           </p>
         </div>
 

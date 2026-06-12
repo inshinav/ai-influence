@@ -21,7 +21,6 @@ const SAMPLE_ANSWERS: QuizAnswers = {
   ...emptyAnswers,
   format: 'individual',
   topics: ['anxiety'],
-  duration: 'year',
   hadTherapy: false,
   gender: 'any',
   method: 'any',
@@ -143,7 +142,7 @@ export default function QAPage() {
 
       <QABlock title="Результаты подбора — цитаты из ответов + проявление из тумана">
         <p className="mb-4 text-[14.5px] text-ink-soft">
-          Мок-ответы: тревога · вечером · впервые в терапии · больше года. Проверяйте
+          Мок-ответы: тревога · вечером · впервые в терапии. Проверяйте
           разные строки-цитаты на трёх карточках и отсутствие 100%.
         </p>
         <Results

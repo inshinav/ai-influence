@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowLeft, X } from 'lucide-react'
 import type {
-  DurationAnswer,
   GenderPref,
   MethodPref,
   QuizAnswers,
@@ -21,7 +20,6 @@ import { SPRING } from '../lib/motionPresets'
 import QuizProgress from './QuizProgress'
 import StepFormat from './steps/StepFormat'
 import StepTopics from './steps/StepTopics'
-import StepDuration from './steps/StepDuration'
 import StepExperience from './steps/StepExperience'
 import StepGender from './steps/StepGender'
 import StepMethod from './steps/StepMethod'
@@ -34,7 +32,7 @@ import Confirmation from './Confirmation'
 
 type Stage = 'steps' | 'matching' | 'results' | 'slot' | 'signup' | 'confirmation'
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 6
 const EASE = [0.22, 1, 0.36, 1] as const
 
 type Props = {
@@ -59,10 +57,13 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
   const directBooking = launch.kind === 'book'
 
   const [stage, setStage] = useState<Stage>(directBooking ? 'slot' : 'steps')
-  const [step, setStep] = useState(1)
+  /* Клик по чипу боли — это уже ответ «что беспокоит»: открываем шаг тем
+     с видимо выбранным чипом («мы услышали»), формат по умолчанию — для себя
+     (меняется на шаге 1, он остаётся доступен через «Назад») */
+  const [step, setStep] = useState(launch.kind === 'quiz' && launch.topic ? 2 : 1)
   const [answers, setAnswers] = useState<QuizAnswers>(() =>
     launch.kind === 'quiz' && launch.topic
-      ? { ...emptyAnswers, topics: [launch.topic] }
+      ? { ...emptyAnswers, format: 'individual', topics: [launch.topic] }
       : emptyAnswers,
   )
   const [ranked, setRanked] = useState<MatchResult[]>([])
@@ -181,33 +182,26 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
         )
       case 3:
         return (
-          <StepDuration
-            value={answers.duration}
-            onSelect={pickAndAdvance<DurationAnswer>((duration) => ({ duration }))}
-          />
-        )
-      case 4:
-        return (
           <StepExperience
             value={answers.hadTherapy}
             onSelect={pickAndAdvance<boolean>((hadTherapy) => ({ hadTherapy }))}
           />
         )
-      case 5:
+      case 4:
         return (
           <StepGender
             value={answers.gender}
             onSelect={pickAndAdvance<GenderPref>((gender) => ({ gender }))}
           />
         )
-      case 6:
+      case 5:
         return (
           <StepMethod
             value={answers.method}
             onSelect={pickAndAdvance<MethodPref>((method) => ({ method }))}
           />
         )
-      case 7:
+      case 6:
         return (
           <StepSchedule
             value={answers.schedule}
@@ -238,7 +232,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
       case 'matching':
         return (
           <motion.div key="matching" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
-            <MatchingAnimation onDone={handleMatchingDone} />
+            <MatchingAnimation answers={answers} onDone={handleMatchingDone} />
           </motion.div>
         )
       case 'results':
@@ -379,7 +373,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
       </div>
 
       {/* Контент */}
-      <div className="container-x flex min-h-[calc(100vh-64px)] flex-col justify-center py-10 md:py-14">
+      <div className="container-x flex min-h-[calc(100dvh-64px)] flex-col justify-center py-10 md:py-14">
         <AnimatePresence mode="wait">{renderStage()}</AnimatePresence>
       </div>
 
@@ -403,9 +397,21 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
               role="alertdialog"
               aria-label="Подтверждение закрытия"
             >
-              <h3 className="text-lg font-semibold">Прервать подбор?</h3>
+              <h3 className="text-lg font-semibold">
+                {stage === 'slot' || stage === 'signup'
+                  ? `Закрыть запись к ${chosen ? chosen.name.split(' ')[0] : 'психологу'}?`
+                  : stage === 'results'
+                    ? 'Закрыть подборку?'
+                    : 'Прервать подбор?'}
+              </h3>
               <p className="mt-2 text-[15px] text-ink-soft">
-                Ответы не сохранятся. Подбор занимает всего пару минут.
+                {stage === 'signup' && chosen && slot
+                  ? `Время ${slot.dateLabel}, ${slot.time} пока свободно — останется только закрепить.`
+                  : stage === 'slot'
+                    ? 'Осталось выбрать время — это меньше минуты. Закрыть и начать заново?'
+                    : stage === 'results'
+                      ? 'Подборка исчезнет — но её можно прислать себе на почту внизу страницы.'
+                      : 'Ответы не сохранятся. Подбор занимает всего пару минут.'}
               </p>
               <div className="mt-6 flex flex-col gap-2.5">
                 <button type="button" className="btn-primary w-full" onClick={() => setConfirmExit(false)} autoFocus>

@@ -1,13 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { Check, Loader2 } from 'lucide-react'
+import type { QuizAnswers, TimePref } from '../types'
+import { topicById } from '../data/topics'
 import { useCalmMotion } from '../care/CareContext'
 
-const LINES = ['Анализируем 4 800 анкет…', 'Сверяем расписание…', 'Считаем совместимость…']
+const TIME_LABEL: Record<TimePref, string> = {
+  morning: 'по утрам',
+  day: 'днём',
+  evening: 'по вечерам',
+  weekend: 'в выходные',
+}
 
-export default function MatchingAnimation({ onDone }: { onDone: () => void }) {
+/**
+ * Кульминация подбора цитирует ответы человека — видно, что секунды
+ * ожидания тратятся именно на его запрос, а не на анимацию для всех.
+ */
+function buildLines(answers: QuizAnswers): string[] {
+  const topic = answers.topics[0]
+  const time = answers.schedule[0]
+  return [
+    'Читаем ваши ответы…',
+    topic
+      ? topic === 'unknown'
+        ? 'Ищем тех, кто умеет работать с «просто тяжело»…'
+        : `Ищем тех, кто работает с ${topicById(topic).withLabel}…`
+      : 'Сверяем ваш запрос с анкетами специалистов…',
+    time ? `Оставляем свободных ${TIME_LABEL[time]}…` : 'Сверяем расписание…',
+  ]
+}
+
+export default function MatchingAnimation({
+  answers,
+  onDone,
+}: {
+  answers: QuizAnswers
+  onDone: () => void
+}) {
   const reduced = useCalmMotion()
-  const [visible, setVisible] = useState(reduced ? LINES.length : 1)
+  const [lines] = useState(() => buildLines(answers))
+  const [visible, setVisible] = useState(reduced ? 3 : 1)
   const doneRef = useRef(onDone)
 
   useEffect(() => {
@@ -48,7 +80,7 @@ export default function MatchingAnimation({ onDone }: { onDone: () => void }) {
       </div>
 
       <ul className="mt-12 flex flex-col items-start gap-3" aria-live="polite">
-        {LINES.slice(0, Math.min(visible, LINES.length)).map((line, i) => {
+        {lines.slice(0, Math.min(visible, lines.length)).map((line, i) => {
           const passed = reduced || visible > i + 1
           return (
             <motion.li

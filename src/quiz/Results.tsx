@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check, Quote } from 'lucide-react'
+import { Check, Quote, ShieldCheck } from 'lucide-react'
 import type { QuizAnswers, Therapist } from '../types'
 import { quoteFromAnswers, type MatchResult } from '../lib/matching'
 import { topicById } from '../data/topics'
 import { experienceLabel, formatPrice } from '../lib/format'
+import { nextSlotLabel } from '../lib/slots'
 import { track } from '../lib/analytics'
 import { clarityVars } from '../lib/clarity'
 import { SPRING } from '../lib/motionPresets'
@@ -167,7 +168,11 @@ export default function Results({
           return (
           <ClarityIn key={r.therapist.id} delay={80 + (i % 3) * 150}>
           <motion.article
-            className={`card relative flex h-full flex-col p-5 ${i === 0 ? 'ring-2 ring-sky/60' : ''}`}
+            className={`card relative flex h-full flex-col p-5 ${
+              i === 0
+                ? 'ring-2 ring-sky/60 shadow-[0_16px_40px_rgba(39,155,224,0.18)] md:scale-[1.02]'
+                : ''
+            }`}
             initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ ...SPRING, delay: Math.min(i, 2) * 0.08 }}
@@ -177,9 +182,22 @@ export default function Results({
                 Лучшее совпадение
               </span>
             )}
-            <span className="w-fit rounded-full bg-sky-deep px-3 py-1 text-[13px] font-semibold text-white">
-              Совпадение {r.percent}%
-            </span>
+            <div className="flex items-center gap-2">
+              {r.percent !== null ? (
+                <span className="w-fit rounded-full bg-sky-deep px-3 py-1 text-[13px] font-semibold text-white">
+                  Совпадение {r.percent}%
+                </span>
+              ) : (
+                <span className="w-fit rounded-full bg-mist px-3 py-1 text-[13px] font-medium text-ink-soft">
+                  Близкий профиль
+                </span>
+              )}
+              {i === 0 && (
+                <span aria-hidden className="hand text-[18px]">
+                  начать можно здесь
+                </span>
+              )}
+            </div>
 
             <div className="mt-4 flex items-center gap-3">
               <Avatar therapist={r.therapist} />
@@ -213,13 +231,18 @@ export default function Results({
               ))}
             </ul>
 
-            <p className="mt-4 text-[14.5px]">
+            <p className="mt-3 flex items-center gap-1.5 text-[12.5px] text-ink-soft">
+              <ShieldCheck size={14} className="shrink-0 text-ok" aria-hidden />
+              {'Диплом проверен · отбор 9% · супервизии'}
+            </p>
+
+            <p className="mt-3 text-[14.5px]">
               <span className="font-semibold">{formatPrice(r.therapist.price)}</span>
               <span className="text-ink-soft"> · 50 мин</span>
             </p>
             <p className="mt-1 flex items-center gap-1.5 text-[13.5px] text-ink-soft">
               <span className="size-2 rounded-full bg-ok" aria-hidden />
-              {r.therapist.nextSlot}
+              {nextSlotLabel(r.therapist)}
             </p>
 
             <div className="mt-auto flex flex-col gap-2 pt-4">
@@ -265,7 +288,7 @@ export default function Results({
 
         <div className="w-full max-w-sm">
           <p className="text-center text-[13.5px] text-ink-soft">
-            Не готовы решать сейчас? Заберите подборку с собой
+            Хотите подумать спокойно? Пришлём подборку на почту
           </p>
           {emailSent ? (
             <p className="mt-3 text-center text-[14.5px]">
@@ -284,7 +307,7 @@ export default function Results({
                 type="email"
                 aria-label="Электронная почта для подборки"
                 placeholder="Почта — пришлём подборку"
-                className={`w-full rounded-full border bg-paper px-5 py-3 text-[15px] ${
+                className={`w-full rounded-full border bg-paper px-5 py-3 text-[16px] ${
                   emailError ? 'border-red-400' : 'border-line'
                 }`}
                 value={email}
