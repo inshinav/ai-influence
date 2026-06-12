@@ -59,7 +59,7 @@ export default function SupportScreen({
           <li key={resource.tel}>
             <a
               href={`tel:${resource.tel}`}
-              className="flex items-start gap-3 rounded-2xl border border-line bg-white p-4 transition-colors duration-200 hover:bg-mist/50"
+              className="flex items-start gap-3 rounded-2xl border border-line bg-paper p-4 transition-colors duration-200 hover:bg-mist/50"
             >
               <span
                 className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist"

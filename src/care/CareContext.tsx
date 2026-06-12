@@ -10,6 +10,7 @@ import {
 import { useReducedMotion } from 'motion/react'
 import { setSoundEnabled } from '../lib/sound'
 import { setHapticsEnabled } from '../lib/haptics'
+import { phaseForHour, resolveHour } from '../lib/dawn'
 
 /**
  * «Панель заботы»: доступность как видимая забота, а не настройки в шестерёнке.
@@ -26,6 +27,8 @@ export type CareSettings = {
   lessMotion: boolean
   /** Звуковой слой (по умолчанию выключен) */
   sound: boolean
+  /** Ночная тема «мягкое ночное небо» — забота о глазах ночного трафика */
+  night: boolean
 }
 
 const DEFAULTS: CareSettings = {
@@ -34,6 +37,21 @@ const DEFAULTS: CareSettings = {
   largeText: false,
   lessMotion: false,
   sound: false,
+  night: false,
+}
+
+/**
+ * Ночь по умолчанию: ночная фаза суток (22–5, как у Adaptive Dawn)
+ * или тёмная системная тема. Человек всегда может переключить вручную —
+ * состояние живёт только в React, ничего не пишем на устройство.
+ */
+function initialNight(): boolean {
+  try {
+    if (phaseForHour(resolveHour()) === 'night') return true
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  } catch {
+    return false
+  }
 }
 
 type CareContextValue = {
@@ -49,7 +67,10 @@ const CareContext = createContext<CareContextValue | null>(null)
 
 export function CareProvider({ children }: { children: ReactNode }) {
   // Состояние только в React — прототип ничего не пишет на устройство
-  const [settings, setSettings] = useState<CareSettings>(DEFAULTS)
+  const [settings, setSettings] = useState<CareSettings>(() => ({
+    ...DEFAULTS,
+    night: initialNight(),
+  }))
   const systemReduced = useReducedMotion() ?? false
 
   const setSetting = useCallback(
@@ -69,7 +90,8 @@ export function CareProvider({ children }: { children: ReactNode }) {
     root.classList.toggle('care-large', settings.largeText)
     root.classList.toggle('care-quiet', settings.quiet)
     root.classList.toggle('care-calm', calmMotion)
-  }, [settings.contrast, settings.largeText, settings.quiet, calmMotion])
+    root.classList.toggle('night', settings.night)
+  }, [settings.contrast, settings.largeText, settings.quiet, settings.night, calmMotion])
 
   useEffect(() => {
     setSoundEnabled(soundOn)

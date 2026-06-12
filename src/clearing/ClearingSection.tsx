@@ -100,7 +100,7 @@ function ToolBlock({ tool, calm }: { tool: FreeTool; calm: boolean }) {
           <p className="mt-1.5 text-[15px] text-ink-soft">{tool.text}</p>
           <button
             type="button"
-            className="btn-secondary mt-4 bg-white"
+            className="btn-secondary mt-4 bg-paper"
             onClick={() => {
               document
                 .querySelector(tool.target)
@@ -120,7 +120,7 @@ function ToolBlock({ tool, calm }: { tool: FreeTool; calm: boolean }) {
             {tool.steps.map((stepText, i) => (
               <li key={stepText} className="flex items-start gap-3 text-[15px] leading-snug">
                 <span
-                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-[12.5px] font-semibold"
+                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-paper text-[12.5px] font-semibold"
                   aria-hidden="true"
                 >
                   {i + 1}
@@ -379,10 +379,10 @@ function TestFlow({
                           onClick={(e) => answer(option.score, option.reflection, i, e.detail === 0)}
                           className={`relative w-full rounded-xl border p-4 text-left text-[15px] transition-all duration-200 ${
                             isPicked
-                              ? 'border-ink bg-ink text-white'
+                              ? 'border-ink bg-ink text-paper'
                               : dimmed
-                                ? 'border-line bg-white opacity-50'
-                                : 'border-line bg-white hover:-translate-y-px hover:border-sky/40 hover:bg-sky-soft/30'
+                                ? 'border-line bg-paper opacity-50'
+                                : 'border-line bg-paper hover:-translate-y-px hover:border-sky/40 hover:bg-sky-soft/30'
                           }`}
                         >
                           {/* Мягкий пульс на первом варианте — «сюда можно нажать» */}

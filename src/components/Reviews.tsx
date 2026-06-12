@@ -103,7 +103,7 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
             <button
               type="button"
               aria-label="Предыдущий отзыв"
-              className="flex size-11 items-center justify-center rounded-full border border-line bg-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-mist active:scale-95"
+              className="flex size-11 items-center justify-center rounded-full border border-line bg-paper transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-mist active:scale-95"
               onClick={() => go(-1)}
             >
               <ArrowLeft size={18} aria-hidden />
@@ -111,7 +111,7 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
             <button
               type="button"
               aria-label="Следующий отзыв"
-              className="flex size-11 items-center justify-center rounded-full border border-line bg-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-mist active:scale-95"
+              className="flex size-11 items-center justify-center rounded-full border border-line bg-paper transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-mist active:scale-95"
               onClick={() => go(1)}
             >
               <ArrowRight size={18} aria-hidden />

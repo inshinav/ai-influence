@@ -79,7 +79,7 @@ export default function TherapistCard({
         {/* Постоянная подложка для читаемости подписи */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/35 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[rgba(22,24,29,0.45)] to-transparent"
         />
         {/* Свечение «ясного неба» снизу — проявляется на hover */}
         {!reduceMotion && (
@@ -132,7 +132,7 @@ export default function TherapistCard({
           </p>
         </div>
 
-        {/* Действия: «Записаться» проявляется на hover (desktop), всегда видна на mobile */}
+        {/* Действия */}
         <div className="mt-auto flex gap-2 pt-4">
           {/* CTA всегда видима: скрытая до hover кнопка записи стоила бы конверсии */}
           <button

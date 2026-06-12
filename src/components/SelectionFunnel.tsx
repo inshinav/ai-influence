@@ -127,7 +127,7 @@ export default function SelectionFunnel() {
                       passed
                         ? 'bg-ok/10 text-ok'
                         : current
-                          ? 'bg-ink text-white'
+                          ? 'bg-ink text-paper'
                           : 'bg-mist text-ink-soft'
                     }`}
                   >

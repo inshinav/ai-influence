@@ -36,13 +36,13 @@ export function OptionCard({ selected, onClick, icon, title, sub, badge }: Optio
       onClick={onClick}
       className={`w-full rounded-2xl border p-5 text-left transition-all duration-200 ${
         selected
-          ? 'border-ink bg-ink text-white shadow-[0_8px_24px_rgba(39,155,224,0.25)]'
-          : 'border-line bg-white hover:-translate-y-px hover:border-sky/40 hover:bg-sky-soft/30'
+          ? 'border-ink bg-ink text-paper shadow-[0_8px_24px_rgba(39,155,224,0.25)]'
+          : 'border-line bg-paper hover:-translate-y-px hover:border-sky/40 hover:bg-sky-soft/30'
       }`}
     >
       <span className="flex items-center gap-4">
         {icon && (
-          <span className={`shrink-0 ${selected ? 'text-white/80' : 'text-ink-soft'}`} aria-hidden>
+          <span className={`shrink-0 ${selected ? 'text-paper/80' : 'text-ink-soft'}`} aria-hidden>
             {icon}
           </span>
         )}
@@ -52,7 +52,7 @@ export function OptionCard({ selected, onClick, icon, title, sub, badge }: Optio
             {badge}
           </span>
           {sub && (
-            <span className={`mt-0.5 block text-[13.5px] ${selected ? 'text-white/70' : 'text-ink-soft'}`}>
+            <span className={`mt-0.5 block text-[13.5px] ${selected ? 'text-paper/70' : 'text-ink-soft'}`}>
               {sub}
             </span>
           )}

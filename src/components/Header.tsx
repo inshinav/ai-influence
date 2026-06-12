@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
+import { useCare } from '../care/CareContext'
 import { track } from '../lib/analytics'
 
 const NAV_LINKS = [
@@ -11,6 +13,7 @@ const NAV_LINKS = [
 
 export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   const [scrolled, setScrolled] = useState(false)
+  const { settings, setSetting } = useCare()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -23,7 +26,7 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
     <header
       className={`fixed top-0 inset-x-0 z-40 transition-colors duration-300 ${
         scrolled
-          ? 'bg-white/75 backdrop-blur-xl border-b border-line'
+          ? 'bg-paper/75 backdrop-blur-xl border-b border-line'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
@@ -50,16 +53,31 @@ export default function Header({ onOpenQuiz }: { onOpenQuiz: () => void }) {
           ))}
         </nav>
 
-        <button
-          type="button"
-          className="btn-primary !px-5 !py-2.5 text-[15px]"
-          onClick={() => {
-            track('cta_click', { section: 'header' })
-            onOpenQuiz()
-          }}
-        >
-          Подобрать психолога
-        </button>
+        <div className="flex items-center gap-1.5">
+          {/* Деликатный переключатель ночного неба — забота на виду */}
+          <button
+            type="button"
+            aria-label={settings.night ? 'Включить дневную тему' : 'Включить ночную тему'}
+            aria-pressed={settings.night}
+            className="rounded-full p-2.5 text-ink-soft transition-colors hover:bg-mist hover:text-ink"
+            onClick={() => {
+              track('night_toggle', { on: !settings.night, source: 'header' })
+              setSetting('night', !settings.night)
+            }}
+          >
+            {settings.night ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
+          </button>
+          <button
+            type="button"
+            className="btn-primary !px-5 !py-2.5 text-[15px]"
+            onClick={() => {
+              track('cta_click', { section: 'header' })
+              onOpenQuiz()
+            }}
+          >
+            Подобрать психолога
+          </button>
+        </div>
       </div>
     </header>
   )

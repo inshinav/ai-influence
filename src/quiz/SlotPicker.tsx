@@ -179,7 +179,7 @@ export default function SlotPicker({
               className={`rounded-xl border py-2.5 text-[15px] font-medium transition-all duration-200 ${
                 time === t
                   ? 'border-ink bg-ink text-paper'
-                  : 'border-line bg-white hover:border-ink/30'
+                  : 'border-line bg-paper hover:border-ink/30'
               }`}
               onClick={() => setTime(t)}
             >

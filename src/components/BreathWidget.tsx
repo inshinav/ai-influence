@@ -174,7 +174,7 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
                   <motion.button
                     key="start"
                     type="button"
-                    className="rounded-full bg-white/90 px-7 py-3 font-semibold shadow-sm transition-transform hover:scale-105"
+                    className="rounded-full bg-white/90 px-7 py-3 font-semibold text-[#16181d] shadow-sm transition-transform hover:scale-105"
                     onClick={start}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

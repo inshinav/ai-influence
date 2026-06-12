@@ -12,7 +12,7 @@ export default function FinalCTA({ onOpenQuiz }: { onOpenQuiz: () => void }) {
     <section className="relative overflow-hidden py-28 md:py-36">
       {/* Атмосфера: ясное небо с тёплым краем у горизонта */}
       <div aria-hidden className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-sky-soft/45 to-azure/25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-paper via-sky-soft/45 to-azure/25" />
         <div
           className="absolute inset-x-0 bottom-0 h-44"
           style={{

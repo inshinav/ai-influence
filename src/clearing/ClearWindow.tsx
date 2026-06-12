@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { motion } from 'motion/react'
 import { clarityVars } from '../lib/clarity'
 import { useCalmMotion } from '../care/CareContext'
@@ -22,7 +23,7 @@ export default function ClearWindow({
     <div
       aria-hidden
       className={`relative overflow-hidden ${className}`}
-      style={clarityVars(clarity)}
+      style={{ ...clarityVars(clarity), '--mist': '#f4f7fa', '--paper': '#ffffff' } as CSSProperties}
     >
       {/* Небо за стеклом */}
       <div className="absolute inset-0 bg-gradient-to-b from-sky via-azure to-white" />

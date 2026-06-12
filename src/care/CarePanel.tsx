@@ -52,7 +52,7 @@ function ToggleRow({
         }`}
       >
         <span
-          className={`absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+          className={`absolute left-0.5 top-0.5 size-5 rounded-full bg-paper shadow-sm transition-transform duration-200 ${
             checked ? 'translate-x-4' : ''
           }`}
         />
@@ -125,7 +125,7 @@ export default function CarePanel() {
             track('care_panel_open')
           }
         }}
-        className="peer flex size-12 items-center justify-center rounded-full border border-line bg-white text-ink shadow-lift transition-colors hover:bg-mist"
+        className="peer flex size-12 items-center justify-center rounded-full border border-line bg-paper text-ink shadow-lift transition-colors hover:bg-mist"
       >
         <HeartHandshake size={20} aria-hidden />
       </button>
@@ -163,6 +163,12 @@ export default function CarePanel() {
             </p>
 
             <div className="mt-4 flex flex-col gap-1">
+              <ToggleRow
+                label="Ночная тема"
+                sub="мягкое ночное небо — глазам легче в темноте"
+                checked={settings.night}
+                onToggle={() => toggle('night')}
+              />
               <ToggleRow
                 label="Тихий режим"
                 sub="без движения, звука и вибрации"

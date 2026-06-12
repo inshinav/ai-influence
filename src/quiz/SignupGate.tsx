@@ -108,7 +108,7 @@ export default function SignupGate({
             autoComplete="email"
             inputMode="email"
             placeholder="you@example.com"
-            className={`mt-1.5 w-full rounded-2xl border bg-white px-5 py-4 text-[16px] ${
+            className={`mt-1.5 w-full rounded-2xl border bg-paper px-5 py-4 text-[16px] ${
               errors.email ? 'border-red-400' : 'border-line'
             }`}
             value={email}
@@ -130,7 +130,7 @@ export default function SignupGate({
             autoComplete="tel"
             inputMode="tel"
             placeholder="+7 900 000-00-00"
-            className={`mt-1.5 w-full rounded-2xl border bg-white px-5 py-4 text-[16px] ${
+            className={`mt-1.5 w-full rounded-2xl border bg-paper px-5 py-4 text-[16px] ${
               errors.phone ? 'border-red-400' : 'border-line'
             }`}
             value={phone}

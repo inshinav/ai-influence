@@ -11,8 +11,8 @@ function PreviewQuiz() {
       <div className="h-2.5 w-1/2 rounded-full bg-ink/10" />
       <div className="mt-2 flex flex-wrap gap-1.5">
         <span className="rounded-full bg-ink px-2.5 py-1 text-[11px] font-medium text-paper">Тревога</span>
-        <span className="rounded-full bg-white px-2.5 py-1 text-[11px] text-ink-soft">Отношения</span>
-        <span className="rounded-full bg-white px-2.5 py-1 text-[11px] text-ink-soft">Сон</span>
+        <span className="rounded-full bg-paper px-2.5 py-1 text-[11px] text-ink-soft">Отношения</span>
+        <span className="rounded-full bg-paper px-2.5 py-1 text-[11px] text-ink-soft">Сон</span>
       </div>
     </div>
   )
@@ -28,7 +28,7 @@ function PreviewMatches() {
   return (
     <div className="flex h-full flex-col justify-center gap-2 p-5">
       {rows.map((r) => (
-        <div key={r.pct} className="flex items-center gap-2.5 rounded-xl bg-white px-3 py-2">
+        <div key={r.pct} className="flex items-center gap-2.5 rounded-xl bg-paper px-3 py-2">
           <span className="size-6 shrink-0 rounded-full bg-gradient-to-br from-sky/40 to-azure/40" />
           <span className={`h-2 rounded-full bg-ink/15 ${r.name}`} />
           <span className="ml-auto rounded-full bg-ok/10 px-2 py-0.5 text-[11px] font-semibold text-ok">

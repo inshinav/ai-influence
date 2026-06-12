@@ -284,7 +284,7 @@ export default function Results({
                 type="email"
                 aria-label="Электронная почта для подборки"
                 placeholder="Почта — пришлём подборку"
-                className={`w-full rounded-full border bg-white px-5 py-3 text-[15px] ${
+                className={`w-full rounded-full border bg-paper px-5 py-3 text-[15px] ${
                   emailError ? 'border-red-400' : 'border-line'
                 }`}
                 value={email}

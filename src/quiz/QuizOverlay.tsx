@@ -342,7 +342,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
         className="relative min-h-full outline-none"
       >
       {/* Верхняя панель */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-xl">
+      <div className="sticky top-0 z-10 bg-paper/80 backdrop-blur-xl">
         <div className="container-x flex h-16 items-center justify-between gap-4">
           <div className="flex w-24 items-center">
             {stage === 'steps' && step > 1 && (
@@ -390,7 +390,7 @@ function QuizSession({ launch, onClose }: { launch: QuizLaunch; onClose: () => v
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-20 flex items-center justify-center bg-ink/30 p-5"
+            className="fixed inset-0 z-20 flex items-center justify-center bg-[rgba(22,24,29,0.45)] p-5"
             onClick={() => setConfirmExit(false)}
           >
             <motion.div

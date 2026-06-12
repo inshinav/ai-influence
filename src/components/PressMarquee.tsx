@@ -27,7 +27,7 @@ export default function PressMarquee() {
   const reduced = useCalmMotion()
 
   return (
-    <section className="border-y border-line bg-white/60 py-7">
+    <section className="border-y border-line bg-paper/60 py-7">
       <div className="container-x flex items-center gap-8">
         <p className="eyebrow shrink-0">О нас пишут</p>
         {reduced ? (

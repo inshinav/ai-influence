@@ -32,7 +32,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-white py-14">
+    <footer className="border-t border-line bg-paper py-14">
       <div className="container-x">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,2fr)]">
           <div>

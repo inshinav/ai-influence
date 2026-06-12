@@ -127,7 +127,7 @@ export default function Confirmation({
         <p className="text-[13.5px] text-ink-soft">Напомним за 24 часа и за 1 час до сессии</p>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-line bg-white p-6">
+      <div className="mt-8 rounded-2xl border border-line bg-paper p-6">
         {offer === 'open' && (
           <>
             <p className="text-[15.5px] leading-relaxed">

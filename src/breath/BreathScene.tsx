@@ -143,7 +143,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       {/* Фон: ясное небо — сверху голубое, у горизонта тонкий тёплый край рассвета */}
-      <div className="absolute inset-0 bg-white" aria-hidden />
+      <div className="absolute inset-0 bg-paper" aria-hidden />
       <div className="absolute inset-0 bg-gradient-to-b from-sky/25 via-azure/10 to-transparent" aria-hidden />
       <div
         className="absolute inset-0 bg-[radial-gradient(58%_42%_at_50%_88%,rgba(255,217,168,0.18),transparent_72%)]"
@@ -174,7 +174,7 @@ export default function BreathScene({ onClose }: { onClose: () => void }) {
             e.stopPropagation()
             setSetting('sound', !settings.sound)
           }}
-          className="inline-flex items-center gap-2 rounded-full border border-line bg-white/70 px-4 py-2.5 text-sm font-medium text-ink-soft backdrop-blur-sm transition-colors hover:bg-mist hover:text-ink"
+          className="inline-flex items-center gap-2 rounded-full border border-line bg-paper/70 px-4 py-2.5 text-sm font-medium text-ink-soft backdrop-blur-sm transition-colors hover:bg-mist hover:text-ink"
         >
           {settings.sound ? <Volume2 size={16} aria-hidden /> : <VolumeX size={16} aria-hidden />}
           Звук
