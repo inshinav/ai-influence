@@ -14,8 +14,11 @@
       ;(function () {
         try {
           var p = new URLSearchParams(location.search).get('hour')
-          var h = p !== null && p !== '' && !isNaN(+p) ? +p : new Date().getHours()
-          if (h >= 22 || h < 5 || matchMedia('(prefers-color-scheme: dark)').matches) {
+          var forced = p !== null && p !== '' && !isNaN(+p)
+          var h = forced ? +p : new Date().getHours()
+          var night = h >= 22 || h < 5
+          // Явный ?hour= (QA) главнее системной тёмной темы
+          if (night || (!forced && matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('night')
           }
         } catch (e) {

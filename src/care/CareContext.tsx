@@ -48,6 +48,9 @@ const DEFAULTS: CareSettings = {
 function initialNight(): boolean {
   try {
     if (phaseForHour(resolveHour()) === 'night') return true
+    // Явный ?hour= (QA-форс) главнее системной тёмной темы
+    const forced = new URLSearchParams(window.location.search).get('hour')
+    if (forced !== null && forced !== '' && Number.isFinite(+forced)) return false
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   } catch {
     return false

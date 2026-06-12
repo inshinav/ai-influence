@@ -23,24 +23,39 @@ Vite + React 18 + TypeScript strict + Tailwind v4 (плагин @tailwindcss/vit
 
 - `src/App.tsx` — порядок секций = драматургия снятия страхов, у секций
   микро-CTA `onOpenQuiz` (лестница входов в воронку)
-- `src/quiz/` — квиз: QuizOverlay (оркестратор, state-машина stages) → steps/* →
-  MatchingAnimation → Results → SlotPicker → SignupGate → Confirmation
+- `src/quiz/` — квиз 6 шагов: QuizOverlay (оркестратор, state-машина stages;
+  живой счётчик countEligible; запуск с чипа темы стартует с шага 2) → steps/* →
+  MatchingAnimation (цитирует ответы) → Results (честный percent 45–97 | null) →
+  SlotPicker → SignupGate (телефон опционален) → Confirmation. Квиз/BreathScene/
+  QAPage — lazy-чанки, квиз префетчится на idle
 - `src/clearing/` — «Расчистка»: тесты-разговор с отражениями на каждый ответ,
   «запотевшим окном» (ClearWindow, туман НЕ на вопросах), веткой поддержки
   (SupportScreen) и PNG-карточкой результата (canvas, без библиотек)
 - `src/care/` — «Панель заботы» (CareContext): тихий режим/контраст/крупный
   текст/меньше анимации/звук; состояние ТОЛЬКО в React (localStorage запрещён)
-- `src/lib/` — matching (прозрачный скоринг + quoteFromAnswers), dawn (фазы
-  суток), motionPresets (SPRING 120/18, blur-in reveal), sound (Web Audio,
-  off по умолчанию), haptics, clarity, analytics (track → console), format, ics
+- `src/lib/` — matching (прозрачный скоринг + quoteFromAnswers), slots
+  (ЕДИНЫЙ источник расписания: buildDays/timesForDay/nextSlotLabel — карточки,
+  результаты и пикер обязаны совпадать), dawn (фазы суток, heroLine у всех фаз),
+  motionPresets (SPRING 120/18, blur-in reveal), sound (Web Audio, off
+  по умолчанию), haptics, clarity, analytics (track → console), format, ics
+- Фото психологов — локальные ассеты (src/assets/therapists), без hotlink
 
 ## Бренд «Ясное небо 2.0» (НЕ менять без задачи)
 
 Белый фон + прохладный --mist #F4F7FA; фирменный голубой --sky #279BE0;
 CTA на --sky-deep #1873B5 (AA 5.0:1 с белым — не светлить); --azure/--sky-soft
-для градиентов неба; тёплый --dawn #FFD9A8 только дозированно в атмосфере.
-Шрифты: Geologica (display, h1/h2 автоматически), Inter (body), Caveat —
+для градиентов неба; тёплый --dawn #FFD9A8 дозированно («dawn = человеческое»:
+аватары, тёплые края). Шрифты самохостятся через fontsource — семейства
+'Geologica Variable' (display), 'Inter Variable' (body), 'Caveat Variable' —
 рукописные завитки (`.hand`, компоненты Scribble: Underline/Arrow/Spark).
+
+Ночная тема (html.night): `bg-paper` = поверхность (ночью #0F151E),
+`white` = свет/текст на акцентах (НЕ флипает: сферы, солнце, облака, CTA).
+Инверсии — парой ink↔paper (chip-active, выбранные опции): работают в обеих
+темах. Включение: фаза 22–5 (`?hour=` форсит и главнее системной тёмной темы) /
+prefers-color-scheme / луна в Header / тумблер Панели заботы. Inline-скрипт
+в index.html ставит класс до пейнта — зеркалит CareContext.initialNight,
+менять только синхронно.
 Старые имена токенов paper/sun/sun-deep/peach — алиасы на новый бренд.
 Готовые классы: btn-primary/btn-secondary/chip/chip-active/card/card-hover/
 glass/eyebrow/hand/container-x/grain/fog-veil/clarity-reveal.
