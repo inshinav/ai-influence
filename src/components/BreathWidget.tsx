@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Maximize2 } from 'lucide-react'
 import { useCalmMotion } from '../care/CareContext'
@@ -8,7 +8,8 @@ import { track } from '../lib/analytics'
 import { NBSP } from '../lib/format'
 import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
 import { ScribbleUnderline } from './Scribble'
-import BreathScene from '../breath/BreathScene'
+
+const BreathScene = lazy(() => import('../breath/BreathScene'))
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -26,8 +27,9 @@ const PHASE_LABEL: Record<Exclude<Phase, 'idle' | 'done'>, string> = {
   exhale: 'Выдох…',
 }
 
+/* Честная минута: «60 секунд ясности» — это 4 цикла по 14 с (56 с), а не 28 */
 const CYCLE_SECONDS = 14
-const TOTAL_CYCLES = 2
+const TOTAL_CYCLES = 4
 
 const RING_R = 148
 const RING_LEN = 2 * Math.PI * RING_R
@@ -284,7 +286,11 @@ export default function BreathWidget({ onOpenQuiz }: { onOpenQuiz: () => void })
 
       {/* Полноэкранный «Момент тишины» */}
       <AnimatePresence>
-        {showScene && <BreathScene onClose={() => setShowScene(false)} />}
+        {showScene && (
+          <Suspense fallback={null}>
+            <BreathScene onClose={() => setShowScene(false)} />
+          </Suspense>
+        )}
       </AnimatePresence>
     </section>
   )

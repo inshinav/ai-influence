@@ -13,8 +13,8 @@ const PAPER = '#ffffff'
 const SKY = '#279be0'
 const LINE = 'rgba(22, 24, 29, 0.12)'
 
-const FONT_DISPLAY = 'Geologica, Inter, system-ui, sans-serif'
-const FONT_SANS = 'Inter, system-ui, sans-serif'
+const FONT_DISPLAY = "'Geologica Variable', Geologica, Inter, system-ui, sans-serif"
+const FONT_SANS = "'Inter Variable', Inter, system-ui, sans-serif"
 
 export type ResultCardOptions = {
   /** Название теста, например «Уровень тревоги» */

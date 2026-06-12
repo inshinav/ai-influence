@@ -1,11 +1,24 @@
 import type { Therapist } from '../types'
+// Фото захостены локально: без внешнего hotlink-домена, стабильно и быстро в РФ
+import p47 from '../assets/therapists/p47.jpg'
+import p12 from '../assets/therapists/p12.jpg'
+import p32 from '../assets/therapists/p32.jpg'
+import p44 from '../assets/therapists/p44.jpg'
+import p13 from '../assets/therapists/p13.jpg'
+import p5 from '../assets/therapists/p5.jpg'
+import p3 from '../assets/therapists/p3.jpg'
+import p16 from '../assets/therapists/p16.jpg'
+import p8 from '../assets/therapists/p8.jpg'
+import p24 from '../assets/therapists/p24.jpg'
+import p53 from '../assets/therapists/p53.jpg'
+import p49 from '../assets/therapists/p49.jpg'
 
-/** 12 психологов. Фото — pravatar с зафиксированными id; при ошибке загрузки — инициалы на градиенте. */
+/** 12 психологов. Фото — локальные ассеты; при ошибке загрузки — инициалы на градиенте. */
 export const therapists: Therapist[] = [
   {
     id: 'anna-savelyeva',
     name: 'Анна Савельева',
-    photo: 'https://i.pravatar.cc/400?img=47',
+    photo: p47,
     gender: 'f',
     method: 'КПТ',
     experienceYears: 9,
@@ -20,7 +33,7 @@ export const therapists: Therapist[] = [
   {
     id: 'mikhail-gordeev',
     name: 'Михаил Гордеев',
-    photo: 'https://i.pravatar.cc/400?img=12',
+    photo: p12,
     gender: 'm',
     method: 'Гештальт',
     experienceYears: 12,
@@ -35,7 +48,7 @@ export const therapists: Therapist[] = [
   {
     id: 'olga-reznik',
     name: 'Ольга Резник',
-    photo: 'https://i.pravatar.cc/400?img=32',
+    photo: p32,
     gender: 'f',
     method: 'Системная',
     experienceYears: 14,
@@ -50,7 +63,7 @@ export const therapists: Therapist[] = [
   {
     id: 'daria-klimova',
     name: 'Дарья Климова',
-    photo: 'https://i.pravatar.cc/400?img=44',
+    photo: p44,
     gender: 'f',
     method: 'КПТ',
     experienceYears: 6,
@@ -65,7 +78,7 @@ export const therapists: Therapist[] = [
   {
     id: 'sergey-vetrov',
     name: 'Сергей Ветров',
-    photo: 'https://i.pravatar.cc/400?img=13',
+    photo: p13,
     gender: 'm',
     method: 'Психоанализ',
     experienceYears: 15,
@@ -80,7 +93,7 @@ export const therapists: Therapist[] = [
   {
     id: 'ekaterina-lavrova',
     name: 'Екатерина Лаврова',
-    photo: 'https://i.pravatar.cc/400?img=5',
+    photo: p5,
     gender: 'f',
     method: 'Гештальт',
     experienceYears: 8,
@@ -95,7 +108,7 @@ export const therapists: Therapist[] = [
   {
     id: 'ilya-baranov',
     name: 'Илья Баранов',
-    photo: 'https://i.pravatar.cc/400?img=3',
+    photo: p3,
     gender: 'm',
     method: 'КПТ',
     experienceYears: 7,
@@ -110,7 +123,7 @@ export const therapists: Therapist[] = [
   {
     id: 'marina-osipova',
     name: 'Марина Осипова',
-    photo: 'https://i.pravatar.cc/400?img=16',
+    photo: p16,
     gender: 'f',
     method: 'Психоанализ',
     experienceYears: 11,
@@ -125,7 +138,7 @@ export const therapists: Therapist[] = [
   {
     id: 'pavel-sumarokov',
     name: 'Павел Сумароков',
-    photo: 'https://i.pravatar.cc/400?img=8',
+    photo: p8,
     gender: 'm',
     method: 'Системная',
     experienceYears: 10,
@@ -140,7 +153,7 @@ export const therapists: Therapist[] = [
   {
     id: 'vera-shestakova',
     name: 'Вера Шестакова',
-    photo: 'https://i.pravatar.cc/400?img=24',
+    photo: p24,
     gender: 'f',
     method: 'КПТ',
     experienceYears: 5,
@@ -155,7 +168,7 @@ export const therapists: Therapist[] = [
   {
     id: 'andrey-merkulov',
     name: 'Андрей Меркулов',
-    photo: 'https://i.pravatar.cc/400?img=53',
+    photo: p53,
     gender: 'm',
     method: 'Гештальт',
     experienceYears: 9,
@@ -170,7 +183,7 @@ export const therapists: Therapist[] = [
   {
     id: 'natalia-bessonova',
     name: 'Наталья Бессонова',
-    photo: 'https://i.pravatar.cc/400?img=49',
+    photo: p49,
     gender: 'f',
     method: 'Системная',
     experienceYears: 13,

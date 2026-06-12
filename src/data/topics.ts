@@ -34,9 +34,10 @@ export const topicById = (id: TopicId): Topic => topics.find((t) => t.id === id)
 /** Короткие подписи для чипов в hero (компактнее полных названий) */
 export const heroChips: { id: TopicId; label: string }[] = [
   { id: 'anxiety', label: 'Тревога' },
+  // Самый инклюзивный вход — вторым: для тех, кто не может назвать состояние
+  { id: 'unknown', label: '«Просто тяжело»' },
   { id: 'relationships', label: 'Отношения' },
   { id: 'burnout', label: 'Выгорание' },
   { id: 'self-esteem', label: 'Самооценка' },
   { id: 'loss', label: 'Потеря и перемены' },
-  { id: 'unknown', label: '«Просто тяжело»' },
 ]

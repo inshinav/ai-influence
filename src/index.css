@@ -1,3 +1,9 @@
+/* Шрифты — самостоятельный хостинг (woff2 с того же origin, без блокирующего
+   запроса к Google Fonts; кириллические сабсеты подцепляются по unicode-range) */
+@import '@fontsource-variable/geologica';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/caveat';
+
 @import 'tailwindcss';
 
 /* ── Бренд-система «Ясное небо 2.0» ───────────────────────────────
@@ -26,9 +32,9 @@
   --color-sun-deep: #135f96;
   --color-peach: #5fc2f0; /* бывшие рассветные градиенты → лазурь */
 
-  --font-display: 'Geologica', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-hand: 'Caveat', 'Segoe Script', cursive;
+  --font-display: 'Geologica Variable', 'Geologica', 'Inter Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand: 'Caveat Variable', 'Caveat', 'Segoe Script', cursive;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 

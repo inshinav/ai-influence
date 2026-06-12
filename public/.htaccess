@@ -16,3 +16,8 @@ AddDefaultCharset utf-8
   ExpiresByType application/javascript "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 month"
 </IfModule>
+
+# Сжатие текстовых ресурсов (если на хостинге не включено глобально)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

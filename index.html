@@ -3,17 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
       content="Концепт-редизайн Ясно: подбор психолога за 2 минуты — сначала подборка, регистрация потом."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&family=Caveat:wght@500..700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Ночь до первого пейнта: ночному посетителю не вспыхивает белый экран.
+         Логика зеркалит CareContext.initialNight (?hour= уважается для QA). -->
+    <script>
+      ;(function () {
+        try {
+          var p = new URLSearchParams(location.search).get('hour')
+          var h = p !== null && p !== '' && !isNaN(+p) ? +p : new Date().getHours()
+          if (h >= 22 || h < 5 || matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('night')
+          }
+        } catch (e) {
+          /* тему выставит React */
+        }
+      })()
+    </script>
+    <style>
+      html { background: #ffffff; }
+      html.night { background: #0f151e; }
+    </style>
     <title>Ясно — подбор психолога за 2 минуты (концепт)</title>
   </head>
   <body>

@@ -160,10 +160,10 @@ const DUST: DustMote[] = [
 ]
 
 /** Слой пылинок: медленный дрейф вверх с пульсом прозрачности; calm — статика */
-function DustLayer({ calm }: { calm: boolean }) {
+function DustLayer({ calm, count = DUST.length }: { calm: boolean; count?: number }) {
   return (
     <div aria-hidden className="absolute inset-0">
-      {DUST.map((d, i) => {
+      {DUST.slice(0, count).map((d, i) => {
         const className = `absolute rounded-full blur-[1px] ${
           d.tone === 'azure' ? 'bg-azure/40' : 'bg-white/60'
         }`
@@ -194,6 +194,18 @@ export default function DawnBackdrop() {
   const calmMotion = useCalmMotion()
   const [prevPhase, setPrevPhase] = useState<DawnPhase | null>(null)
   const lastPhaseRef = useRef<DawnPhase>(phase)
+
+  /* Тач-устройства: вечный drift трёх пятен 50vw с blur(100px) + 16 пылинок
+     ест GPU и батарею ровно у того трафика, который нам дороже всего (мобайл
+     ночью). Статичные пятна выглядят почти так же — движение оставляем десктопу. */
+  const [lowPower] = useState(() => {
+    try {
+      return window.matchMedia('(pointer: coarse)').matches
+    } catch {
+      return false
+    }
+  })
+  const ambient = !calmMotion && !lowPower
 
   // Курсор-параллакс: сырые смещения от центра окна; пружины — в каждом пятне
   const mx = useMotionValue(0)
@@ -238,7 +250,7 @@ export default function DawnBackdrop() {
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden">
       {/* Текущая фаза — всегда видима */}
-      <BlobLayer phase={phase} animated={!calmMotion} calm={calmMotion} mx={mx} my={my} />
+      <BlobLayer phase={phase} animated={ambient} calm={calmMotion} mx={mx} my={my} />
 
       {/* Предыдущая фаза: медленно гаснет поверх текущей */}
       {prevPhase !== null && !calmMotion && (
@@ -255,7 +267,7 @@ export default function DawnBackdrop() {
       )}
 
       {/* Пыль в солнечном луче — между пятнами и вуалью */}
-      <DustLayer calm={calmMotion} />
+      <DustLayer calm={calmMotion || lowPower} count={lowPower ? 6 : DUST.length} />
 
       {/* Температурная вуаль фазы — поверх пятен, под зерном */}
       <div

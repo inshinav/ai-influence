@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import type { QuizLaunch, Therapist, TopicId } from './types'
 import Header from './components/Header'
 import Hero from './components/Hero'
@@ -16,7 +16,10 @@ import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 import StickyCTA from './components/StickyCTA'
 import CarePanel from './care/CarePanel'
-import QuizOverlay from './quiz/QuizOverlay'
+
+/** Квиз — самый тяжёлый кусок: грузим лениво, префетчим на idle, чтобы клик открывал мгновенно */
+const QuizOverlay = lazy(() => import('./quiz/QuizOverlay'))
+const prefetchQuiz = () => import('./quiz/QuizOverlay')
 
 /**
  * Драматургия страницы — лестница уверенности: каждая секция снимает
@@ -25,6 +28,13 @@ import QuizOverlay from './quiz/QuizOverlay'
  */
 export default function App() {
   const [launch, setLaunch] = useState<QuizLaunch | null>(null)
+
+  // Префетч квиза после первого пейнта — бандл лендинга остаётся лёгким
+  useEffect(() => {
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number }
+    if (w.requestIdleCallback) w.requestIdleCallback(() => void prefetchQuiz())
+    else window.setTimeout(() => void prefetchQuiz(), 1500)
+  }, [])
 
   const openQuiz = useCallback((source: string, topic?: TopicId) => {
     setLaunch({ kind: 'quiz', topic, source })
@@ -62,7 +72,9 @@ export default function App() {
       <Footer />
       <StickyCTA hidden={launch !== null} onOpenQuiz={() => openQuiz('sticky_cta')} />
       <CarePanel />
-      <QuizOverlay launch={launch} onClose={() => setLaunch(null)} />
+      <Suspense fallback={null}>
+        <QuizOverlay launch={launch} onClose={() => setLaunch(null)} />
+      </Suspense>
     </>
   )
 }
