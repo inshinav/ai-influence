@@ -7,12 +7,15 @@ export type Review = {
   occupation: string
   topic: TopicId
   topicLabel: string
+  /** «4 месяца в терапии» — конкретика вместо безвременного глянца */
+  therapyTime: string
   text: string
 }
 
 export const reviews: Review[] = [
   {
     id: 'r1',
+    therapyTime: '5 месяцев в терапии',
     name: 'Мария',
     age: 29,
     occupation: 'продакт-менеджер',
@@ -22,6 +25,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'r2',
+    therapyTime: '3 месяца в терапии',
     name: 'Дмитрий',
     age: 34,
     occupation: 'разработчик',
@@ -31,6 +35,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'r3',
+    therapyTime: 'полгода в терапии',
     name: 'Алина',
     age: 26,
     occupation: 'графический дизайнер',
@@ -40,6 +45,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'r4',
+    therapyTime: '4 месяца в терапии',
     name: 'Сергей',
     age: 41,
     occupation: 'предприниматель',
@@ -48,7 +54,18 @@ export const reviews: Review[] = [
     text: 'Мы с женой записались «для двоих» после года тихих ужинов. Сложно было решиться — казалось, терапия для пар на грани развода. А это оказался просто разговор, в котором нас наконец двое слышат друг друга. Ходим четвёртый месяц.',
   },
   {
+    id: 'r6',
+    therapyTime: '2 месяца в терапии',
+    name: 'Олег',
+    age: 37,
+    occupation: 'инженер',
+    topic: 'unknown',
+    topicLabel: '«Просто тяжело»',
+    text: 'Скажу честно: с первым психологом не совпали — мне было слишком медленно. Написал в поддержку, бесплатно подобрали другого, и вот с ним пошло. Если бы знал, что менять специалиста — это нормально и просто, начал бы на год раньше.',
+  },
+  {
     id: 'r5',
+    therapyTime: '7 месяцев в терапии',
     name: 'Ксения',
     age: 31,
     occupation: 'учительница',

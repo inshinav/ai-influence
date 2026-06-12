@@ -67,7 +67,7 @@ export default function SelectionFunnel() {
   const finished = effectiveStage >= STAGES.length
 
   return (
-    <section id="selection" className="pt-20 pb-8 md:pt-28 md:pb-10">
+    <section id="selection" className="bg-mist/50 pt-20 pb-8 md:pt-28 md:pb-10">
       <div className="container-x">
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={VIEWPORT_ONCE}>
           <p className="eyebrow">Отбор</p>
@@ -105,7 +105,7 @@ export default function SelectionFunnel() {
                   key={i}
                   className={`size-3 rounded-full transition-[background-color,box-shadow] duration-500 md:size-3.5 ${
                     stage <= effectiveStage
-                      ? 'bg-mist'
+                      ? 'bg-ink/10'
                       : finished
                         ? 'bg-sky shadow-[0_0_12px_rgba(39,155,224,0.6)]'
                         : 'bg-sky'

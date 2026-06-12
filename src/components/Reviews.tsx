@@ -10,7 +10,7 @@ import { reviews, type Review } from '../data/reviews'
 /** Приглушённый сосед на сцене: декорация без интерактива */
 function SideReviewCard({ review }: { review: Review }) {
   return (
-    <figure className="card scale-[0.92] p-6 opacity-45 blur-[1px]">
+    <figure className="card scale-[0.92] p-6 opacity-45">
       <blockquote className="line-clamp-4 text-[15px] leading-relaxed">{review.text}</blockquote>
       <figcaption className="mt-4 text-[13px] font-medium text-ink-soft">
         {review.name}, {review.age}
@@ -38,7 +38,7 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
   }
 
   return (
-    <section className="py-20 md:py-28">
+    <section id="reviews" className="py-20 md:py-28">
       <div className="container-x">
         <motion.div
           variants={reveal}
@@ -87,6 +87,7 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
                   </span>
                   <span className="text-[14.5px] font-medium text-ink-soft">
                     {review.name}, {review.age}, {review.occupation}
+                    <span className="font-normal"> · {review.therapyTime}</span>
                   </span>
                   <span className="rounded-full bg-sky-soft px-2.5 py-1 text-[12.5px] text-ink">
                     {review.topicLabel}
@@ -127,18 +128,23 @@ export default function Reviews({ onOpenQuiz }: { onOpenQuiz: () => void }) {
                 key={r.id}
                 type="button"
                 aria-label={`Отзыв ${i + 1}`}
-                className={`size-2 rounded-full transition-[background-color,transform] ${
-                  i === index ? 'scale-125 bg-sky-deep' : 'bg-ink/20 hover:bg-ink/40'
-                }`}
+                className="-m-1 flex size-7 items-center justify-center"
                 onClick={() => setIndex([i, i > index ? 1 : -1])}
-              />
+              >
+                <span
+                  aria-hidden
+                  className={`size-2 rounded-full transition-[background-color,transform] ${
+                    i === index ? 'scale-125 bg-sky-deep' : 'bg-ink/20 hover:bg-ink/40'
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
 
         {/* Мостик к подбору */}
         <div className="mt-10 flex justify-center">
-          <button type="button" className="btn-secondary" onClick={handleQuizCta}>
+          <button type="button" className="btn-primary" onClick={handleQuizCta}>
             {`Хочу так же${NBSP}— подобрать психолога`}
           </button>
         </div>

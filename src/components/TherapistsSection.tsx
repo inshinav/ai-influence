@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import type { Therapist, TopicId } from '../types'
 import { useCalmMotion } from '../care/CareContext'
 import { therapists } from '../data/therapists'
+import { topics } from '../data/topics'
 import { reveal, VIEWPORT_ONCE } from '../lib/motionPresets'
 import { NBSP } from '../lib/format'
 import { track } from '../lib/analytics'
@@ -12,12 +13,10 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 type Filter = 'all' | TopicId | 'couple'
 
+/** Фильтры собираются из единого источника тем — рассинхрон с квизом исключён */
 const filterOptions: { id: Filter; label: string }[] = [
   { id: 'all', label: 'Все' },
-  { id: 'anxiety', label: 'Тревога' },
-  { id: 'relationships', label: 'Отношения' },
-  { id: 'burnout', label: 'Выгорание' },
-  { id: 'self-esteem', label: 'Самооценка' },
+  ...topics.map((t) => ({ id: t.id as Filter, label: t.label })),
   { id: 'couple', label: 'Для двоих' },
 ]
 
@@ -66,6 +65,7 @@ export default function TherapistsSection({
           <h2 className="mt-3 text-4xl md:text-5xl">{'Знакомьтесь — до записи'}</h2>
           <p className="mt-4 max-w-xl text-lg text-ink-soft">
             Открытые анкеты: метод, опыт, темы и ближайшее свободное время.
+            Каждый из них прошёл отбор, где остаются 9 из 100, — ниже покажем, как он устроен.
           </p>
         </motion.div>
 

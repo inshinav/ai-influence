@@ -58,6 +58,17 @@ export default function FAQ() {
             )
           })}
         </div>
+
+        {/* FAQ — не тупик: живой выход в поддержку вместо мёртвой зоны перед пиком */}
+        <p className="mt-8 max-w-2xl text-[15px] text-ink-soft">
+          {'Не нашли свой вопрос? Поддержка отвечает круглосуточно: '}
+          <a
+            href="mailto:care@yasno.example"
+            className="text-ink underline underline-offset-4 transition-colors hover:text-sky-deep"
+          >
+            care@yasno.example
+          </a>
+        </p>
       </div>
     </section>
   )

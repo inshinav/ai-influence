@@ -61,7 +61,7 @@ export default function FinalCTA({ onOpenQuiz }: { onOpenQuiz: () => void }) {
           >
             {'Подобрать психолога — 2 минуты'}
           </button>
-          <span className="hand text-[22px]">и без регистрации</span>
+          <span className="hand text-[22px]">без пароля и предоплаты</span>
         </motion.div>
       </motion.div>
     </section>

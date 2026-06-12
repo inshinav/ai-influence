@@ -10,8 +10,8 @@ import { reveal, revealParent, VIEWPORT_ONCE } from '../lib/motionPresets'
  */
 
 const STATS: { value: number; suffix: string; label: string; main?: boolean }[] = [
-  { value: 81, suffix: '%', label: 'чувствуют результат уже после пятой сессии', main: true },
-  { value: 420_000, suffix: '+', label: 'человек уже выбрали Ясно' },
+  { value: 420_000, suffix: '+', label: 'человек уже выбрали Ясно — вы не один такой', main: true },
+  { value: 81, suffix: '%', label: 'чувствуют результат уже после пятой сессии' },
   { value: 4_800, suffix: '', label: 'проверенных специалистов' },
   { value: 7, suffix: ' лет', label: 'средний опыт психолога' },
 ]
@@ -58,9 +58,9 @@ function StatCell({ stat, run }: { stat: (typeof STATS)[number]; run: boolean })
           aria-hidden
           className="absolute -inset-8 rounded-full bg-sky/15 blur-3xl"
         />
-        <p className="relative font-display text-[clamp(88px,11vw,150px)] font-bold leading-none tracking-[-0.04em] text-ink">
-          {display}
-          <span className="text-sky">%</span>
+        <p className="relative font-display text-[clamp(56px,8vw,110px)] font-bold leading-none tracking-[-0.04em] text-ink">
+          {format(display)}
+          <span className="text-sky">+</span>
         </p>
         <p className="relative mt-3 max-w-[300px] text-[17px] leading-snug text-ink-soft">
           {stat.label}
@@ -116,8 +116,7 @@ export default function BigStat() {
           className="mt-12 flex items-center gap-2.5 border-t border-line pt-6"
         >
           <span className="relative flex size-2 shrink-0" aria-hidden>
-            <span className="absolute inline-flex size-full rounded-full bg-ok/50 motion-safe:animate-ping" />
-            <span className="relative inline-flex size-2 rounded-full bg-ok" />
+            <span className="relative inline-flex size-2 rounded-full bg-sky" />
           </span>
           <span className="h-[20px] overflow-hidden text-[14px] text-ink-soft" aria-live="off">
             <AnimatePresence mode="wait" initial={false}>
@@ -134,6 +133,10 @@ export default function BigStat() {
             </AnimatePresence>
           </span>
         </motion.div>
+
+        <motion.p variants={reveal} className="mt-4 text-[12.5px] text-ink-soft/80">
+          {'По внутренним данным и опросам клиентов Ясно. Как считали — расскажем в FAQ и поддержке.'}
+        </motion.p>
       </motion.div>
     </section>
   )

@@ -55,16 +55,17 @@ export default function App() {
         <PressMarquee />
         {/* «Сложно начать»: подбор за 2 минуты, видно до регистрации */}
         <HowItWorks />
+        {/* «Не уверен, с чего начать» — ДО каталога: сперва помогаем понять себя */}
+        <ClearingSection onOpenQuiz={(topic) => openQuiz('clearing_test', topic)} />
         {/* «Кот в мешке»: открытые анкеты до записи */}
         <TherapistsSection onBook={bookTherapist} onOpenQuiz={() => openQuiz('therapists_cta')} />
-        {/* Почувствовать продукт до покупки */}
-        <BreathWidget onOpenQuiz={() => openQuiz('breath_widget')} />
-        <ClearingSection onOpenQuiz={(topic) => openQuiz('clearing_test', topic)} />
-        {/* «Дорого» и «не поможет»: прозрачность отбора и цены */}
+        {/* «Дорого» и «не поможет»: прозрачность отбора и цены — единый акт доверия */}
         <SelectionFunnel />
         <Pricing onOpenQuiz={() => openQuiz('pricing_cta')} />
         {/* «Не поможет»: живые истории результата */}
         <Reviews onOpenQuiz={() => openQuiz('reviews_cta')} />
+        {/* Декомпрессия перед решением: почувствовать заботу телом */}
+        <BreathWidget onOpenQuiz={() => openQuiz('breath_widget')} />
         <FAQ />
         {/* Пик уверенности: лёгкий быстрый старт */}
         <FinalCTA onOpenQuiz={() => openQuiz('final_cta')} />
