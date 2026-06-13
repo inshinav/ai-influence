@@ -1323,6 +1323,8 @@ p {
   place-items: center;
 }
 .feed-panel {
+  min-width: 0;
+  overflow: hidden;
   padding: clamp(20px, 2.4vw, 26px);
 }
 .panel-head {
@@ -1355,6 +1357,7 @@ p {
 .clip-rail {
   display: flex;
   gap: 10px;
+  max-width: 100%;
   margin-bottom: 18px;
   padding-bottom: 6px;
   overflow-x: auto;
@@ -1469,6 +1472,7 @@ p {
   font-size: 13.5px;
   font-weight: 700;
   line-height: 1.32;
+  overflow-wrap: anywhere;
 }
 .brief-beats {
   display: grid;
@@ -1481,6 +1485,7 @@ p {
   background: rgba(255, 255, 255, 0.6);
   color: var(--ink-2);
   font-size: 13.5px;
+  overflow-wrap: anywhere;
 }
 .metric-line {
   display: flex;
