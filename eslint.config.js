@@ -30,9 +30,4 @@ export default defineConfig([
       ],
     },
   },
-  {
-    // Файлы контекста/утилит осознанно экспортируют хук + компонент вместе
-    files: ['src/care/CareContext.tsx', 'src/quiz/controls.tsx'],
-    rules: { 'react-refresh/only-export-components': 'off' },
-  },
 ])

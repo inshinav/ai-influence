@@ -25,7 +25,7 @@ dist-ssr
 
 yasno-beget.zip
 
-# Артефакты research-агентов
+# Артефакты research- и QA-агентов
 _yasno_*
 _extract.py
 tmp_*
@@ -33,3 +33,4 @@ tmp_*
 .chrome-visual-qa*/
 .edge-visual-qa*/
 qa-visual/
+.codex-*

@@ -1,32 +1,23 @@
-/** Типографика русского языка: неразрывные пробелы, цены, склонения. */
+// Форматирование чисел в русской типографике: NBSP как разделитель разрядов,
+// проценты с запятой. Один источник правды, чтобы метрики везде выглядели одинаково.
 
-export const NBSP = ' '
+const NBSP = ' '
 
-/** 3150 → «3 150 ₽» (неразрывные пробелы) */
-export function formatPrice(price: number): string {
-  const grouped = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, NBSP)
-  return `${grouped}${NBSP}₽`
+/** Целое число с неразрывными пробелами между разрядами: 12000 → «12 000». */
+export function formatInt(value: number): string {
+  return Math.round(value)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, NBSP)
 }
 
-/** Универсальное склонение: plural(3, ['психолог', 'психолога', 'психологов']) */
-export function plural(n: number, forms: [string, string, string]): string {
-  const mod10 = n % 10
-  const mod100 = n % 100
-  if (mod10 === 1 && mod100 !== 11) return forms[0]
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return forms[1]
-  return forms[2]
+/** Процент: 8.4 → «8,4%», 61 → «61%». Десятичная запятая по-русски. */
+export function formatPct(value: number): string {
+  const rounded = Math.round(value * 10) / 10
+  const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1).replace('.', ',')
+  return `${text}%`
 }
 
-/** Склонение: 1 год / 2 года / 5 лет */
-export function pluralYears(n: number): string {
-  const mod10 = n % 10
-  const mod100 = n % 100
-  if (mod10 === 1 && mod100 !== 11) return `${n}${NBSP}год`
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${n}${NBSP}года`
-  return `${n}${NBSP}лет`
-}
-
-/** «9 лет практики» */
-export function experienceLabel(years: number): string {
-  return `${pluralYears(years)} практики`
+/** Рубли: 690 → «690 ₽». */
+export function formatRub(value: number): string {
+  return `${formatInt(value)}${NBSP}₽`
 }

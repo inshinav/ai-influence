@@ -2,35 +2,28 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e1726" />
+    <meta name="color-scheme" content="light" />
     <meta
       name="description"
-      content="Концепт-редизайн Ясно: подбор психолога за 2 минуты — сначала подборка, регистрация потом."
+      content="Я-Ферма — концепт собственной сети AI-инфлюенсеров для «Ясно»: бережный вертикальный контент о тревоге, отношениях и выгорании, который мягко знакомит людей с терапией. Не официальный сайт Ясно."
     />
-    <!-- Ночь до первого пейнта: ночному посетителю не вспыхивает белый экран.
-         Логика зеркалит CareContext.initialNight (?hour= уважается для QA). -->
-    <script>
-      ;(function () {
-        try {
-          var p = new URLSearchParams(location.search).get('hour')
-          var forced = p !== null && p !== '' && !isNaN(+p)
-          var h = forced ? +p : new Date().getHours()
-          var night = h >= 22 || h < 5
-          // Явный ?hour= (QA) главнее системной тёмной темы
-          if (night || (!forced && matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('night')
-          }
-        } catch (e) {
-          /* тему выставит React */
-        }
-      })()
-    </script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Я-Ферма — AI creator OS для бережного роста «Ясно»" />
+    <meta
+      property="og:description"
+      content="Концепт сети AI-авторов, которые публикуют бережный вертикальный контент и мягко знакомят аудиторию с «Ясно». Интерактивная продуктовая презентация — не официальный сайт."
+    />
+    <meta property="og:locale" content="ru_RU" />
+    <meta name="twitter:card" content="summary_large_image" />
     <style>
-      html { background: #ffffff; }
-      html.night { background: #0f151e; }
+      html {
+        background: #f3f7fb;
+      }
     </style>
-    <title>Ясно — подбор психолога за 2 минуты (концепт)</title>
+    <title>Я-Ферма — AI creator OS для бережного роста «Ясно» (концепт)</title>
   </head>
   <body>
     <div id="root"></div>
