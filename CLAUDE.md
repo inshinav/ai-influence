@@ -1,85 +1,71 @@
-# Ясно — концепт-прототип (контекст для агента)
+# Я-Ферма — концепт (контекст для агента)
 
-Концепт-редизайн сервиса онлайн-психотерапии «Ясно» (yasno.live) для демонстрации
-продуктовых гипотез на интервью (Growth Marketing Lead). Не официальный сайт,
-все данные mock, без бэкенда. Деплой: https://inshinlab.com/yasno/ (Beget).
+Интерактивный концепт growth-гипотезы для сервиса психотерапии «Ясно»: собственная
+сеть AI-инфлюенсеров, которые публикуют бережный вертикальный контент и мягко
+знакомят аудиторию с «Ясно». Не официальный сайт, все данные — демо, без бэкенда.
+Деплой в подпапку (`base: /ai-influence/`).
 
 ## Команды
 
-- `npm run dev` — dev-сервер на :5173 (служебная страница всех состояний — `/qa`,
-  форс фазы суток — `?hour=0–23`)
-- `npm run build` — tsc + vite, должен проходить без ошибок и предупреждений
-- `npm run lint` — ESLint, должен быть чистым
-- Деплой: содержимое `dist/` (включая `.htaccess`) → `public_html/yasno` на Beget;
-  готовый архив собирается так: `Compress-Archive -Path (Get-ChildItem dist -Force |
-  % FullName) -DestinationPath yasno-beget.zip`. В vite.config `base: './'` —
-  не менять, сайт живёт в подпапке.
+- `npm run dev` — dev-сервер на :5173 (путь `/ai-influence/`)
+- `npm run build` — `tsc -b && vite build`, должен проходить без ошибок и предупреждений
+- `npm run lint` — ESLint, должен оставаться чистым
+- Деплой: содержимое `dist/` (включая `.htaccess`) → подпапка хостинга
 
 ## Стек и архитектура
 
-Vite + React 18 + TypeScript strict + Tailwind v4 (плагин @tailwindcss/vite,
-токены в `@theme` в src/index.css) + motion v12 (`motion/react`) + lucide-react.
-Без UI-китов, без роутера (страница `/qa` — проверка pathname в main.tsx).
+Vite + React 18 + TypeScript strict + Tailwind v4 (`@tailwindcss/vite`; токены —
+CSS-переменными в `:root` в `src/index.css`, не в `@theme`) + motion v12
+(`motion/react`) + lucide-react. Без UI-китов, без роутера — единственная страница.
 
-- `src/App.tsx` — порядок секций = драматургия снятия страхов, у секций
-  микро-CTA `onOpenQuiz` (лестница входов в воронку)
-- `src/quiz/` — квиз 6 шагов: QuizOverlay (оркестратор, state-машина stages;
-  живой счётчик countEligible; запуск с чипа темы стартует с шага 2) → steps/* →
-  MatchingAnimation (цитирует ответы) → Results (честный percent 45–97 | null) →
-  SlotPicker → SignupGate (телефон опционален) → Confirmation. Квиз/BreathScene/
-  QAPage — lazy-чанки, квиз префетчится на idle
-- `src/clearing/` — «Расчистка»: тесты-разговор с отражениями на каждый ответ,
-  «запотевшим окном» (ClearWindow, туман НЕ на вопросах), веткой поддержки
-  (SupportScreen) и PNG-карточкой результата (canvas, без библиотек)
-- `src/care/` — «Панель заботы» (CareContext): тихий режим/контраст/крупный
-  текст/меньше анимации/звук; состояние ТОЛЬКО в React (localStorage запрещён)
-- `src/lib/` — matching (прозрачный скоринг + quoteFromAnswers), slots
-  (ЕДИНЫЙ источник расписания: buildDays/timesForDay/nextSlotLabel — карточки,
-  результаты и пикер обязаны совпадать), dawn (фазы суток, heroLine у всех фаз),
-  motionPresets (SPRING 120/18, blur-in reveal), sound (Web Audio, off
-  по умолчанию), haptics, clarity, analytics (track → console), format, ics
-- Фото психологов — локальные ассеты (src/assets/therapists), без hotlink
+- `src/App.tsx` — только композиция секций (драматургия скролла: человек → авторы →
+  лента → конвейер → консоль → операции → гипотезы → экономика → дашборд → этика).
+- `src/data/aiFarm.ts` — **единственный источник контента**. `personas`, `clips`,
+  `topics`, `formats`, `pipelineSteps`, `hypotheses`, `dashboard`, `pilotTrend`,
+  `economicsCurve`, `ethics`, `strategicSignals`, `pilotRunway`, `viewerScene`,
+  тексты секций `sections`, сводка `system`. Счётчики/графики/бейджи выводятся из
+  этих данных — жёстко зашитых чисел в компонентах быть не должно.
+- `src/components/` — компоненты секций. Общая «витрина телефона» — `Phone.tsx`
+  (истинно-чёрный экран 9:16, статус-бар, AI-метка, реальное видео из
+  `public/examples` с fallback на синтетику). Видимая AI-метка — `AiPill.tsx`.
+- `src/lib/` — `console.ts` (генерация черновика + safety-санитайзер), `format.ts`
+  (числа в русской типографике), `motion.ts` (пресеты движения), `useCountUp.ts`
+  (считалка), `paths.ts`.
+- `src/index.css` — дизайн-система: токены (палитра sky-base, шкала радиусов
+  `--r-*`, четырёхуровневые тени `--sh-1..4`, blur), типографика через `clamp()`,
+  стили секций, mobile-first адаптив (единый `--gutter`, брейкпоинты 1040/768/560).
 
-## Бренд «Ясное небо 2.0» (НЕ менять без задачи)
+## Бренд и визуальный язык
 
-Белый фон + прохладный --mist #F4F7FA; фирменный голубой --sky #279BE0;
-CTA на --sky-deep #1873B5 (AA 5.0:1 с белым — не светлить); --azure/--sky-soft
-для градиентов неба; тёплый --dawn #FFD9A8 дозированно («dawn = человеческое»:
-аватары, тёплые края). Шрифты самохостятся через fontsource — семейства
-'Geologica Variable' (display), 'Inter Variable' (body), 'Caveat Variable' —
-рукописные завитки (`.hand`, компоненты Scribble: Underline/Arrow/Spark).
-
-Ночная тема (html.night): `bg-paper` = поверхность (ночью #0F151E),
-`white` = свет/текст на акцентах (НЕ флипает: сферы, солнце, облака, CTA).
-Инверсии — парой ink↔paper (chip-active, выбранные опции): работают в обеих
-темах. Включение: фаза 22–5 (`?hour=` форсит и главнее системной тёмной темы) /
-prefers-color-scheme / луна в Header / тумблер Панели заботы. Inline-скрипт
-в index.html ставит класс до пейнта — зеркалит CareContext.initialNight,
-менять только синхронно.
-Старые имена токенов paper/sun/sun-deep/peach — алиасы на новый бренд.
-Готовые классы: btn-primary/btn-secondary/chip/chip-active/card/card-hover/
-glass/eyebrow/hand/container-x/grain/fog-veil/clarity-reveal.
+Calm-tech creator OS: мягкий дневной свет, истинно-чёрное вертикальное видео, много
+воздуха. Холодная sky-база (`--sky #2a9ee6`, CTA `--sky-deep #1373b4` — AA с белым),
+тепло приходит **от цвета авторов** (`--accent`/`--glow` у каждого персонажа), а не
+от перекраски палитры. Один рукописный акцент — `.hand` (Caveat). Шкала радиусов:
+чипы 9px, карточки 14px, поверхности 18px, кнопки/пиллы 999px.
 
 ## Железные правила
 
-1. `useCalmMotion()` из care/CareContext — ЕДИНСТВЕННЫЙ способ узнать «движение
-   выключено» (не useReducedMotion напрямую). calm=true глушит всё декоративное.
-2. Никаких тёмных паттернов: таймеров, «осталось N мест», exit-попапов. Никогда.
-3. Русская типографика: «ёлочки», длинное «—», NBSP (U+00A0) в числах
-   «3 150 ₽» и перед «—». В JSX NBSP часто живут внутри {' '}-выражений —
-   это не баги, не «чинить».
-4. Тесты — скрининг, не диагноз (дисклеймеры обязательны); ответы тестов
-   не покидают браузер.
-5. Анимации только transform/opacity/filter; пружины из motionPresets.
-6. TS strict + ESLint: import type (verbatimModuleSyntax); ref НЕ передавать
-   напрямую детям AnimatePresence (заворачивать во внутренний div); setState
-   не вызывать синхронно в эффекте (отложить setTimeout 0 или derive).
-7. Билд и линт должны оставаться чистыми после каждой задачи; коммиты
-   осмысленными порциями на русском.
+1. **Этика зашита в данные/типы, а не в подвал.** `disclosure` у автора обязателен и
+   рендерится видимым `AiPill` на каждом появлении. У роликов — структурные
+   `safetyChecks`; у тем — `forbidden`-формулировки. Генератор «Консоли» обязан
+   прогонять выдачу через `sanitize()` из `lib/console.ts`.
+2. **Никаких тёмных паттернов**: таймеров, «осталось N мест», exit-попапов,
+   эксплуатации уязвимости, медицинских обещаний. Никогда.
+3. **Русская типографика**: «ёлочки», длинное «—», NBSP в числах. Числа форматируются
+   через `lib/format.ts` (`formatPct`/`formatInt`/`formatRub`).
+4. **Анимации** — только `transform/opacity/filter`; пресеты из `lib/motion.ts`.
+   Уважать `prefers-reduced-motion`: декоративное глушится, генерация и считалки
+   показывают финал сразу.
+5. **TS strict + ESLint чистые после каждой задачи.** `import type`
+   (verbatimModuleSyntax). НЕ вызывать `setState` синхронно в теле `useEffect`
+   (derive или перемонтаж через `key`). Файл-компонент экспортирует только
+   компоненты (хелперы — в `src/lib/*.ts`).
+6. Контент/персонажей/ролики/метрики менять ТОЛЬКО в `src/data/aiFarm.ts` —
+   интерфейс перестроится сам.
 
 ## Ограничение отладки
 
-Встроенная preview-панель держит окно скрытым: requestAnimationFrame не тикает,
-скриншоты таймаутятся, exit-анимации AnimatePresence «виснут». Это среда, не баг.
-Функциональность проверять через DOM/console (`[track]`-события), визуал —
-в реальном браузере (`Start-Process "http://localhost:5173"`).
+Встроенная preview-панель держит окно скрытым: `requestAnimationFrame` не тикает,
+скриншоты ловят устаревшие/переходные кадры. Это среда, не баг. Раскладку и стили
+проверять через DOM/`getComputedStyle` (eval/inspect), а финальный визуал — в
+реальном браузере.
