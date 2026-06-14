@@ -16,13 +16,16 @@ type AccentStyle = CSSProperties & {
   '--ny'?: string
 }
 
-// Узлы раскладываются по эллипсу вокруг центрального хаба «Ясно».
+// Узлы раскладываются по окружности вокруг центрального хаба «Ясно».
+// Единый радиус + квадратный бокс (.creator-map aspect-ratio:1/1 в CSS) гарантируют,
+// что провода SVG входят ровно в центр аватара (координаты узлов и линий — общие).
+const RADIUS = 35
 const NODES = personas.map((persona, index) => {
   const angle = (index / personas.length) * Math.PI * 2 - Math.PI / 2
   return {
     persona,
-    x: 50 + Math.cos(angle) * 35,
-    y: 50 + Math.sin(angle) * 37,
+    x: 50 + Math.cos(angle) * RADIUS,
+    y: 50 + Math.sin(angle) * RADIUS,
   }
 })
 
@@ -42,7 +45,7 @@ export function NetworkSection() {
 
         <div className="network-grid">
           <motion.div className="creator-map surface" {...reveal}>
-            <svg className="map-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <svg className="map-wires" viewBox="0 0 100 100" aria-hidden="true">
               {NODES.map(({ persona, x, y }) => (
                 <line
                   key={persona.id}
@@ -51,7 +54,7 @@ export function NetworkSection() {
                   x2="50"
                   y2="50"
                   className={persona.id === activeId ? 'wire is-active' : 'wire'}
-                  style={{ stroke: persona.color }}
+                  style={persona.id === activeId ? { stroke: persona.color } : undefined}
                 />
               ))}
             </svg>

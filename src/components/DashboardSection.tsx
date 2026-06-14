@@ -77,12 +77,13 @@ export function DashboardSection() {
               ))}
             </motion.div>
 
-            <div className="trend-chart" aria-label="График досмотра">
+            <div className="trend-chart" aria-label={`График досмотра, ${range === 'daily' ? 'по дням' : 'по неделям'}, максимум ${max}%`}>
               {bars.map((value, index) => (
                 <motion.span
                   key={`${range}-${index}`}
-                  initial={{ height: 0 }}
-                  animate={{ height: `${(value / max) * 100}%` }}
+                  style={{ height: `${(value / max) * 100}%` }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
                 />
               ))}

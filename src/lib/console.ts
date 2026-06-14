@@ -1,9 +1,9 @@
 // Локальный генератор примера ролика для «Консоли автора».
-// Без внешних API: собирает черновик из данных персонажа, темы и формата.
-// Перед выдачей черновик проходит safety-санитайзер: запрещённые формулировки
-// (topics[topic].forbidden) физически не могут попасть в результат — если шаблон
-// случайно их содержит, фраза заменяется безопасной. Safety-чеки честные:
-// они отражают реально применённые ограничения.
+// Без внешних API. Сборка проходит safety-санитайзер (замена запрещённых для темы
+// формулировок), а затем safety-гейт РЕАЛЬНО сканирует финальный текст по трём
+// словарям — запрещённое темы / давление / диагнозы-манипуляции — и выставляет
+// чеки по факту скана. Это не декорация: каждая галка выводится из проверки,
+// и при перехвате формулировки чек уходит в «ревизию».
 
 import { formats, personas, topics } from '../data/aiFarm'
 import type { FormatId, PersonaId, SafetyTag, TopicId } from '../data/aiFarm'
@@ -17,21 +17,34 @@ export type ConsoleDraft = {
   voice: string
   care: string
   checks: SafetyCheck[]
+  /** Сколько запрещённых формулировок санитайзер перехватил и заменил. */
+  intercepted: number
 }
+
+// Запрещено во всех темах: давление/ургентность и диагнозы/манипуляции.
+const PRESSURE = ['срочно', 'немедленно', 'только сегодня', 'осталось', 'успей', 'купи']
+const MANIPULATION = ['у тебя депрессия', 'у тебя расстройство', 'диагноз', 'гаранти', 'вылечит', '100%']
 
 function personaById(id: PersonaId) {
   return personas.find((p) => p.id === id) ?? personas[0]
 }
 
-/** Убираем запрещённые для темы формулировки — гарантия, а не украшение. */
-function sanitize(text: string, topic: TopicId): string {
+function hits(text: string, list: string[]): number {
+  const low = text.toLowerCase()
+  return list.reduce((n, phrase) => (low.includes(phrase.toLowerCase()) ? n + 1 : n), 0)
+}
+
+/** Заменяет запрещённые для темы формулировки на безопасную. Возвращает текст и число замен. */
+function sanitize(text: string, topic: TopicId): { text: string; replaced: number } {
   let safe = text
+  let replaced = 0
   for (const phrase of topics[topic].forbidden) {
     if (safe.toLowerCase().includes(phrase.toLowerCase())) {
       safe = 'можно мягко назвать состояние и не оставаться с этим одному'
+      replaced += 1
     }
   }
-  return safe
+  return { text: safe, replaced }
 }
 
 export function buildConsoleDraft(
@@ -56,20 +69,51 @@ export function buildConsoleDraft(
     `split-screen: внутренний голос и спокойная альтернатива, мягкий CTA`,
   ]
 
-  const hook = sanitize(hooks[variant % hooks.length], topicId)
+  let intercepted = 0
+  const clean = (line: string) => {
+    const r = sanitize(line, topicId)
+    intercepted += r.replaced
+    return r.text
+  }
 
+  const hook = clean(hooks[variant % hooks.length])
   const script = [
     `0–3 сек: узнаваемая сцена, ${openings[variant % openings.length]}.`,
     `4–14 сек: ${persona.voice} тон, ${format.pattern}.`,
     '15–24 сек: микро-поворот без обещания результата — «можно заметить, что именно сейчас тяжелее всего».',
     'финал: «если это повторяется, с этим можно прийти к специалисту на „Ясно“».',
-  ].map((line) => sanitize(line, topicId))
+  ].map(clean)
+
+  // Safety-гейт сканирует ИТОГОВЫЙ текст — чеки честные, выведены из проверки.
+  const full = [hook, ...script].join(' ')
+  const forbiddenLeft = hits(full, topic.forbidden)
+  const pressureLeft = hits(full, PRESSURE)
+  const manipLeft = hits(full, MANIPULATION)
 
   const checks: SafetyCheck[] = [
-    { tag: 'ai-label', label: 'AI-природа автора обозначена', passed: true },
-    { tag: 'no-medical-promise', label: 'нет обещаний лечения и диагнозов', passed: true },
-    { tag: 'no-pressure', label: 'CTA мягкий, без таймеров и давления', passed: true },
-    { tag: 'no-manipulation', label: 'без эксплуатации уязвимости', passed: true },
+    {
+      tag: 'ai-label',
+      label: persona.disclosure ? `AI-метка автора: ${persona.disclosure}` : 'AI-метка не указана',
+      passed: Boolean(persona.disclosure),
+    },
+    {
+      tag: 'no-medical-promise',
+      label:
+        intercepted > 0
+          ? `перехвачено запрещённых формулировок: ${intercepted}`
+          : `тема проверена по ${topic.forbidden.length} запрещённым формулировкам — чисто`,
+      passed: forbiddenLeft === 0,
+    },
+    {
+      tag: 'no-pressure',
+      label: pressureLeft === 0 ? 'CTA без таймеров и давления' : 'найдено давление — на ревизию',
+      passed: pressureLeft === 0,
+    },
+    {
+      tag: 'no-manipulation',
+      label: manipLeft === 0 ? 'без диагнозов и манипуляций' : 'найден диагноз/манипуляция — на ревизию',
+      passed: manipLeft === 0,
+    },
   ]
 
   return {
@@ -79,5 +123,6 @@ export function buildConsoleDraft(
     voice: `Голос: ${persona.voice}. Длина: ${format.length}.`,
     care: topic.care,
     checks,
+    intercepted,
   }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
-import { Check, Copy, Cpu, HeartHandshake, Mic2, RefreshCw, ShieldCheck, SlidersHorizontal, UserRound } from 'lucide-react'
+import { AlertTriangle, Check, Copy, Cpu, HeartHandshake, Mic2, RefreshCw, ShieldCheck, SlidersHorizontal, UserRound } from 'lucide-react'
 import { formats, personas, sections, topics } from '../data/aiFarm'
 import type { FormatId, Persona, PersonaId, TopicId } from '../data/aiFarm'
 import { buildConsoleDraft } from '../lib/console'
@@ -160,6 +160,8 @@ function DraftView({ draft, persona, reduce }: { draft: ConsoleDraft; persona: P
     )
   }
 
+  const allPass = draft.checks.every((check) => check.passed)
+
   return (
     <motion.div
       className="console-output surface"
@@ -207,18 +209,20 @@ function DraftView({ draft, persona, reduce }: { draft: ConsoleDraft; persona: P
       <div className={`safety-gate${showChecks ? ' is-open' : ''}`}>
         <p className="gate-head">
           <ShieldCheck size={15} />
-          Safety-гейт {showChecks ? '· пройден' : '· проверка…'}
+          Safety-гейт {showChecks ? (allPass ? '· пройден' : '· на ревизии') : '· проверка…'}
+          {showChecks && draft.intercepted > 0 && <span className="gate-count">перехвачено: {draft.intercepted}</span>}
         </p>
         {showChecks && (
           <ul className="gate-checks">
             {draft.checks.map((check, index) => (
               <motion.li
                 key={check.tag}
+                className={check.passed ? 'is-pass' : 'is-revise'}
                 initial={reduce ? false : { opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: reduce ? 0 : 0.12 * index, duration: 0.3 }}
               >
-                <Check size={13} strokeWidth={3} />
+                {check.passed ? <Check size={13} strokeWidth={3} /> : <AlertTriangle size={13} />}
                 {check.label}
               </motion.li>
             ))}

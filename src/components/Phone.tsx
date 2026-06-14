@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
-import { Bookmark, Heart, Share2 } from 'lucide-react'
+import { Bookmark, Eye, Share2 } from 'lucide-react'
 import type { Persona } from '../data/aiFarm'
 import { publicExamplePath } from '../lib/paths'
 import { AiPill } from './AiPill'
@@ -67,7 +67,7 @@ export function Phone({
         {showRail && (
           <div className="phone-rail" aria-hidden="true">
             <span>
-              <Heart size={18} />
+              <Eye size={18} />
               <small>{metrics?.retention ?? ''}</small>
             </span>
             <span className="phone-rail-save">

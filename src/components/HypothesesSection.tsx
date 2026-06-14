@@ -31,12 +31,12 @@ export function HypothesesSection() {
           </motion.div>
 
           <motion.div className="hypothesis-panel surface" {...reveal}>
-            <div className="hyp-tabs" role="tablist" aria-label="Гипотезы">
+            <div className="hyp-tabs" aria-label="Гипотезы">
               {hypotheses.map((item, index) => (
                 <button
                   key={item.title}
-                  role="tab"
-                  aria-selected={active === index}
+                  aria-pressed={active === index}
+                  aria-label={`Гипотеза ${index + 1}: ${item.title}`}
                   className={active === index ? 'is-selected' : ''}
                   onClick={() => setActive(index)}
                 >

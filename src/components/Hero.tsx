@@ -22,7 +22,7 @@ function HeroStage() {
         creator OS · живая симуляция
       </div>
 
-      <div className="hero-phones">
+      <div className="hero-phones" aria-hidden="true">
         {heroClips.map((clip, index) => {
           const persona = personas.find((p) => p.id === clip.personaId) ?? personas[0]
           return (
@@ -99,7 +99,8 @@ export function Hero() {
           <ul className="trust-row" aria-label="Этические ограничения">
             {hero.trust.map((note, index) => (
               <li key={note}>
-                {index === 1 ? <Sparkles size={14} /> : <ShieldCheck size={14} />}
+                {/* щит — на safety-дисклеймерах; Sparkles — на TikTok-гипотезе */}
+                {index === 2 ? <Sparkles size={14} /> : <ShieldCheck size={14} />}
                 {note}
               </li>
             ))}

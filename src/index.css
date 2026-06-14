@@ -79,8 +79,12 @@
   --sky: #2a9ee6;
   --sky-deep: #1373b4;
   --mint: #18b08c;
+  --mint-ink: #146A52;
   --dawn: #ffce8a;
+  --dawn-ink: #9A5B16;
   --danger: #e8714e;
+  /* тёмный текст поверх светлого --accent (аватары) */
+  --ink-on-accent: #0E2238;
 
   /* radius scale */
   --r-chip: 9px;
@@ -201,7 +205,7 @@ p {
 
 .hand {
   font-family: 'Caveat Variable', 'Geologica Variable', cursive;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* ── layout primitives ─────────────────────────────────────────────────────── */
@@ -417,6 +421,7 @@ p {
 .brand {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   gap: 11px;
 }
 .brand-mark {
@@ -666,7 +671,7 @@ p {
   height: 30px;
   place-items: center;
   border-radius: 50%;
-  color: #0e2238;
+  color: var(--ink-on-accent);
   background: color-mix(in srgb, var(--accent) 42%, white);
   font-size: 12px;
   font-weight: 800;
@@ -1122,7 +1127,9 @@ p {
 }
 .creator-map {
   position: relative;
-  min-height: 500px;
+  /* квадратный бокс → провода SVG (viewBox 0 0 100 100) попадают в центры узлов */
+  aspect-ratio: 1 / 1;
+  min-height: 420px;
   overflow: hidden;
   background:
     radial-gradient(80% 60% at 50% 50%, rgba(42, 158, 230, 0.06), transparent 70%),
@@ -1135,12 +1142,14 @@ p {
   height: 100%;
 }
 .map-wires .wire {
+  /* неактивные провода — один спокойный sky; цвет автора только на активном (S9) */
+  stroke: var(--sky);
   stroke-width: 0.4;
-  opacity: 0.28;
+  opacity: 0.16;
   transition: opacity 0.3s var(--ease), stroke-width 0.3s var(--ease);
 }
 .map-wires .wire.is-active {
-  stroke-width: 0.8;
+  stroke-width: 0.9;
   opacity: 0.9;
 }
 .map-hub {
@@ -1200,7 +1209,7 @@ p {
   height: 40px;
   place-items: center;
   border-radius: 50%;
-  color: #0e2238;
+  color: var(--ink-on-accent);
   background: color-mix(in srgb, var(--accent) 42%, white);
   font-family: 'Geologica Variable', sans-serif;
   font-weight: 760;
@@ -1239,7 +1248,7 @@ p {
   height: 64px;
   place-items: center;
   border-radius: 20px;
-  color: #0e2238;
+  color: var(--ink-on-accent);
   background: color-mix(in srgb, var(--accent) 46%, white);
   box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.5);
   font-family: 'Geologica Variable', sans-serif;
@@ -1340,8 +1349,8 @@ p {
 }
 .feed-nav button {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -1397,10 +1406,14 @@ p {
   height: 30px;
   place-items: center;
   border-radius: 50%;
-  color: #0e2238;
-  background: color-mix(in srgb, var(--accent) 42%, white);
+  color: var(--ink-on-accent);
+  /* нейтральный sky по умолчанию — цвет автора проявляется только на активной карточке (S9) */
+  background: color-mix(in srgb, var(--sky) 16%, white);
   font-weight: 800;
   font-size: 13px;
+}
+.clip-card.is-active .clip-avatar {
+  background: color-mix(in srgb, var(--accent) 42%, white);
 }
 .clip-saves {
   display: inline-flex;
@@ -1428,6 +1441,9 @@ p {
   display: block;
   height: 100%;
   border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--sky) 55%, var(--sky-deep));
+}
+.clip-card.is-active .clip-bar span {
   background: color-mix(in srgb, var(--accent) 80%, var(--sky-deep));
 }
 .clip-brief {
@@ -1508,7 +1524,7 @@ p {
   margin-top: 12px;
   padding: 8px 12px;
   border-radius: var(--r-pill);
-  color: #146a52;
+  color: var(--mint-ink);
   background: rgba(24, 176, 140, 0.12);
   font-size: 12.5px;
   font-weight: 650;
@@ -1523,7 +1539,7 @@ p {
   padding: 6px 10px;
   border: 1px solid rgba(24, 176, 140, 0.16);
   border-radius: var(--r-pill);
-  color: #146a52;
+  color: var(--mint-ink);
   background: rgba(255, 255, 255, 0.72);
   font-size: 11.5px;
   font-weight: 720;
@@ -1661,7 +1677,7 @@ p {
   gap: 6px;
   padding: 6px 11px;
   border-radius: var(--r-pill);
-  color: #9a5b16;
+  color: var(--dawn-ink);
   background: rgba(255, 206, 138, 0.26);
   font-size: 12px;
   font-weight: 750;
@@ -1756,7 +1772,7 @@ p {
   gap: 7px;
 }
 .segmented button {
-  min-height: 42px;
+  min-height: 44px;
   padding: 9px 8px;
   border: 1px solid var(--line);
   border-radius: var(--r-chip);
@@ -1892,7 +1908,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #146a52;
+  color: var(--mint-ink);
   font-size: 13px;
   font-weight: 800;
 }
@@ -1913,6 +1929,21 @@ p {
   flex: none;
   color: var(--mint);
 }
+.gate-checks li.is-revise {
+  color: var(--dawn-ink);
+}
+.gate-checks li.is-revise svg {
+  color: var(--danger);
+}
+.gate-count {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--danger) 16%, white);
+  color: var(--dawn-ink);
+  font-size: 11px;
+  font-weight: 750;
+}
 .output-foot {
   display: flex;
   flex-wrap: wrap;
@@ -1932,6 +1963,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 44px;
   padding: 8px 13px;
   border: 1px solid var(--line);
   border-radius: var(--r-pill);
@@ -2095,8 +2127,8 @@ p {
   margin-bottom: 20px;
 }
 .hyp-tabs button {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--line);
   border-radius: var(--r-chip);
   color: var(--ink);
@@ -2263,6 +2295,7 @@ p {
   background: rgba(255, 255, 255, 0.7);
 }
 .range-toggle button {
+  min-height: 44px;
   padding: 7px 14px;
   border-radius: var(--r-pill);
   color: var(--muted);
@@ -2334,6 +2367,7 @@ p {
   min-width: 6px;
   border-radius: 6px 6px 3px 3px;
   background: linear-gradient(180deg, var(--sky), var(--mint));
+  transform-origin: bottom;
 }
 .roadmap-list {
   display: grid;
@@ -2402,7 +2436,7 @@ p {
   gap: 5px;
   padding: 5px 10px;
   border-radius: var(--r-pill);
-  color: #146a52;
+  color: var(--mint-ink);
   background: rgba(24, 176, 140, 0.1);
   font-size: 11px;
   font-weight: 750;
@@ -2515,6 +2549,45 @@ p {
   .viewer-stage {
     gap: 24px;
   }
+  /* S6 — на мобильном одна чистая витрина-телефон по центру, без перекрытия трёх абсолютных */
+  .hero-stage {
+    min-height: auto;
+    margin-top: 4px;
+  }
+  .hero-ribbon {
+    position: static;
+    transform: none;
+    margin: 0 auto 16px;
+  }
+  .hero-phones {
+    position: static;
+    inset: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+  }
+  .hero-phone {
+    position: static;
+  }
+  .hero-phone--1,
+  .hero-phone--3 {
+    display: none;
+  }
+  .hero-phone--2 {
+    margin: 0;
+    transform: none;
+    left: auto;
+    top: auto;
+  }
+  .hero-phone--2 .phone {
+    --pw: 208px;
+    --cap: 12px;
+  }
+  .hero-roster {
+    position: static;
+    transform: none;
+    margin: 16px auto 0;
+  }
   .feed-panel {
     order: 1;
   }
@@ -2526,6 +2599,7 @@ p {
   .creator-map {
     display: flex;
     gap: 12px;
+    aspect-ratio: auto;
     min-height: 0;
     padding: 14px;
     overflow-x: auto;

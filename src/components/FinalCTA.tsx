@@ -14,7 +14,7 @@ export function FinalCTA() {
           </div>
           <a className="btn btn-primary btn-lg" href="#console">
             <Sparkles size={18} />
-            Вернуться в консоль
+            Собрать свой пример ролика
           </a>
         </motion.div>
 

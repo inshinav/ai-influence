@@ -64,14 +64,13 @@ export function FeedSection() {
               </div>
             </div>
 
-            <div className="clip-rail" role="tablist" aria-label="Ролики">
+            <div className="clip-rail" aria-label="Ролики">
               {clips.map((item, itemIndex) => {
                 const itemPersona = personaById(item.personaId)
                 return (
                   <button
                     key={item.id}
-                    role="tab"
-                    aria-selected={itemIndex === index}
+                    aria-pressed={itemIndex === index}
                     className={`clip-card${itemIndex === index ? ' is-active' : ''}`}
                     style={{ '--accent': itemPersona.color, '--glow': itemPersona.glow } as AccentStyle}
                     onClick={() => setIndex(itemIndex)}

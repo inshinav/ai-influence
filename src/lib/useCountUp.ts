@@ -11,8 +11,7 @@ export function useCountUp(target: number, active: boolean, durationMs = 1100): 
   const [value, setValue] = useState(0)
   const frame = useRef(0)
   const started = useRef(false)
-  // Считаем один раз за рендер; при reduce-motion значение выводится напрямую (derive),
-  // чтобы не дёргать setState синхронно в эффекте.
+  // При reduce-motion значение выводится напрямую (derive), без setState в эффекте.
   const reduced = prefersReducedMotion()
 
   useEffect(() => {
